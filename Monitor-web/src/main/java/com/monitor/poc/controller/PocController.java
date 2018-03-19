@@ -70,7 +70,12 @@ public class PocController {
 				String result = HttpClientUtil.httpGet(PropertiesUtil.getValue("microservice.url"), para);
 				ResultData<List<TracknumEntity>> parseObject = JSON.parseObject(result, 
 						new TypeReference<ResultData<List<TracknumEntity>>>(){});
-				model.addAttribute("loglist", parseObject.getSerializableData());
+				if(parseObject.getCode()>0){
+					model.addAttribute("loglist", parseObject.getSerializableData());
+				}else{
+					model.addAttribute("loglist", null);
+				}
+				
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
