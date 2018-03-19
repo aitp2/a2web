@@ -1,12 +1,60 @@
- <section class="content-header">
-		<span class=" btn-default">时间：</span>
-		<div class="btn-group">
-                <button type="button" class="btn btn-default" style="background-color:#00c0ef">当天</button>
-                <button type="button" class="btn btn-default">当月</button>
-                <button type="button" class="btn btn-default">季度</button>
-        </div>
-    </section>
+	<!-- Content Header (Page header) -->
+	<section class="content-header">
+		<h1>
+			订单查询 <small>日志</small>
+		</h1>
+		<ol class="breadcrumb">
+			<li><a href="${basePath}"><i class="fa fa-dashboard"></i> 首页</a></li>
+			<li><a href="#">监控查询</a></li>
+			<li class="active">订单查询</li>
+		</ol>
+	</section> 
 
+	<!-- Main content -->
+	<section class="content">
+		<div class="row">
+			<div class="col-xs-12">
+				<div class="box"><br>
+					<!-- /.box-header -->
+					<div class="col-md-3" style="width:40%;">
+					<div class="box box-primar direct-chat direct-chat-primary">
+							<div class="input-group">
+							  <input type="text" name="message" id="tracknum" placeholder="订单编号 ..." class="form-control">
+								  <span class="input-group-btn">
+									<button type="submit" class="btn btn-primary btn-flat" style="background-color:#c1c5c6;" data-btn-type="search" ><i class="fa fa-search"></i></button>
+								  </span>
+							</div>
+					  </div>
+		  			</div>
+					
+					<div class="box-body">
+						<table id="user_table" class="table table-bordered table-striped table-hover">
+						</table>
+					</div>
+					
+					<!-- /.box-body -->
+				</div>
+			</div>
+			<!-- /.col -->
+		</div>
+		<!-- /.row -->
+		
+		
+					
+	</section>
 
-    
-    <iframe src="http://localhost:9090/monitorWithoutMenu?status=JINGGAO" name="iframe_a" style="width: 1000px;height:2500px;border:0px"></iframe> 
+	<script>  
+		$(function() { 
+			//button event
+			$('button[data-btn-type]').click(function() {alert('1'); 
+				var action = $(this).attr('data-btn-type');alert('');     
+				switch (action) {
+				case 'search':
+					window.location.href="/Monitor/orderStatus/"+${"#tracknum"}.value;                  
+					break;
+				}
+
+			});
+			//form_init();
+		})
+	</script>

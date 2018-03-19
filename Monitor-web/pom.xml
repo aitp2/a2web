@@ -177,6 +177,20 @@
             <groupId>org.scribe</groupId>
             <artifactId>scribe</artifactId>
         </dependency>
+		
+		<dependency>
+		    <groupId>org.apache.httpcomponents</groupId> 
+		    <artifactId>httpclient</artifactId> 
+		    <version>4.5.5</version>
+		</dependency>
+		
+		<!-- fastjson配置 -->
+		<dependency>
+		    <groupId>com.alibaba</groupId>
+		    <artifactId>fastjson</artifactId>
+		    <version>1.2.23</version>
+		</dependency>
+	
     </dependencies>
 
     <build>
