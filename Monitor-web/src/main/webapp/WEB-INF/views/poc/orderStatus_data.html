@@ -1,0 +1,93 @@
+	<!-- Content Header (Page header) -->
+	<section class="content-header">
+		<h1>
+			订单查询 <small>日志</small>
+		</h1>
+		<ol class="breadcrumb">
+			<li><a href="${basePath}"><i class="fa fa-dashboard"></i> 首页</a></li>
+			<li><a href="#">监控查询</a></li>
+			<li class="active">订单查询</li>
+		</ol>
+	</section> 
+
+	<!-- Main content -->
+	<section class="content">
+		<div class="row">
+			<div class="col-xs-12">
+				<div class="box"><br>
+					<!-- /.box-header -->
+					<div class="col-md-3" style="width:40%;">
+					<div class="box box-primar direct-chat direct-chat-primary">
+							<div class="input-group">
+							  <input type="text" name="message" placeholder="${tracknum}" class="form-control">
+								  <span class="input-group-btn">
+									<button type="submit" class="btn btn-primary btn-flat" style="background-color:#c1c5c6;" data-btn-type="search" ><i class="fa fa-search"></i></button>
+								  </span>
+							</div>
+					  </div>
+		  			</div>
+					
+					<div class="box-body">
+						<table id="user_table" class="table table-bordered table-striped table-hover">
+						</table>
+					</div>
+					
+					<div id="logtimeline" class="box-body">	
+						<ul class="timeline">
+					
+						    <!-- timeline time label -->
+						    <li class="time-label">
+						        <span class="bg-red">
+						            ${tracknum}  log event
+						        </span>
+						    </li>
+						    <!-- /.timeline-label -->
+						
+						    <!-- timeline item -->
+						    <#list loglist as tracknumEntity>
+						    <li>
+						        <!-- timeline icon -->
+						        <i class="fa fa-clock-o bg-gray"></i>
+						        <div class="timeline-item">
+						            <span class="time"><i class="fa fa-clock-o"></i> ${tracknumEntity.logtime}</span>
+						
+						            <h3 class="timeline-header">系统来源：<a href="#">${tracknumEntity.logsource}</a>  时间：${tracknumEntity.logtime}</h3>
+						
+						            <div class="timeline-body">
+						                ${tracknumEntity.message}
+						            </div>
+						
+						        </div>
+						    </li>
+						    </#list> 
+						    <!-- END timeline item -->
+						
+						</ul>
+					
+					</div>
+					<!-- /.box-body -->
+				</div>
+			</div>
+			<!-- /.col -->
+		</div>
+		<!-- /.row -->
+		
+		
+					
+	</section>
+
+	<script>  
+		$(function() { 
+			//button event
+			$('button[data-btn-type]').click(function() {
+				var action = $(this).attr('data-btn-type');
+				switch (action) {
+				case 'search':
+					$('#logtimeline')[0].style.display="";                       
+					break;
+				}
+
+			});
+			//form_init();
+		})
+	</script>
