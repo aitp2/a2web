@@ -5,13 +5,14 @@
       </ol>
     </section>
 
-    <!-- Main content -->
+      <!-- Main content -->
     <section class="content-header">
-		<span class=" btn-default">时间：</span>
+		<span class=" btn-default">请选择:</span>
 		<div class="btn-group">
-                <button type="button" class="btn btn-default" style="background-color:#00c0ef">当天</button>
+                <button type="button" class="btn btn-default" style="background-color:#00c0ef">当日</button>
                 <button type="button" class="btn btn-default">当月</button>
                 <button type="button" class="btn btn-default">季度</button>
+                <button type="button" class="btn btn-default">年</button>
         </div>
     </section>
     <section class="content">
@@ -19,9 +20,9 @@
         <!-- ./col -->
         <div class="col-lg-3 col-xs-6">
           <!-- small box -->
-          <div class="small-box bg-green">
+          <div class="small-box bg-aqua">
             <div class="inner">
-              <h3>¥24100.56万</h3>
+              <h3>¥2410.56万</h3>
               <p>销售总金额</p>
             </div>
             <div class="icon">
@@ -35,9 +36,9 @@
         
         <div class="col-lg-3 col-xs-6">
           <!-- small box -->
-          <div class="small-box bg-green">
+          <div class="small-box bg-aqua">
             <div class="inner">
-              <h3>2190单</h3>
+              <h3>219单</h3>
               <p>订单总数量</p>
             </div>
             <div class="icon">
@@ -51,9 +52,9 @@
         
         <div class="col-lg-3 col-xs-6">
           <!-- small box -->
-          <div class="small-box bg-green">
+          <div class="small-box bg-aqua">
             <div class="inner">
-              <h3>87276件</h3>
+              <h3>8727612件</h3>
               <p>商品总数量</p>
             </div>
             <div class="icon">
@@ -68,142 +69,279 @@
       </div>
       
           <div class="col-md-8">
-        
-        <!-- TABLE: LATEST ORDERS -->
+          
+        	<!-- LINE CHART -->
           <div class="box box-info">
             <div class="box-header with-border">
-              <h3 class="box-title">订单销量省区排行榜</h3>
+              <h3 class="box-title">销售额</h3>
 
-              <div class="box-tools">
+              <div class="box-tools pull-right">
+                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+                </button>
+                <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
               </div>
+            </div>
+            <div class="box-body">
+              <div class="chart">
+                <canvas id="lineChart" style="height:250px"></canvas>
+              </div>
+            </div>
+            <!-- /.box-body -->
+          </div>
+          <!-- /.box -->
+          <span class=" btn-default">请选择:</span>
+		<div class="btn-group">
+                <button type="button" class="btn btn-default" style="background-color:#00c0ef">当日</button>
+                <button type="button" class="btn btn-default">当月</button>
+                <button type="button" class="btn btn-default">季度</button>
+                <button type="button" class="btn btn-default">年</button>
+        </div>
+        </div>
+        
+    <div class="col-md-6">
+		 <div class="row">
+		    <div class="box">
+            <div class="box-header with-border">
+              <h3 class="box-title">大区销售排行</h3>
             </div>
             <!-- /.box-header -->
             <div class="box-body">
-              <div class="table-responsive">
-                <table class="table no-margin" >
-                  <thead>
-                  <tr>
-                    <th>排名</th>
-                    <th>省区</th>
-                    <th>订单数量</th>
-                    <th>商品数量</th>
-                    <th>销售总金额</th>
-                  </tr>
-                  </thead>
-                  <tbody>
-                  <tr>
-                  	<td>1</td>
-                    <td><a href="＃">广东</a></td>
-                    <td>121</td>
-                    <td>9322</td>
-                    <td>¥400000</td>
-                  </tr>
-                  <tr>
-                  	<td>2</td>
-                    <td><a href="＃">浙江</a></td>
-                    <td>56</td>
-                    <td>3223</td>
-                    <td>¥40000</td>
-                  </tr>
-                  <tr>
-                  	<td>3</td>
-                    <td><a href="＃">四川</a></td>
-                    <td>36</td>
-                    <td>211</td>
-                    <td>¥30000</td>
-                  </tr>
-                  <tr>
-                  	<td>4</td>
-                    <td><a href="＃">辽宁</a></td>
-                    <td>22</td>
-                    <td>322</td>
-                    <td>¥25000</td>
-                  </tr>
-                  <tr>
-                  	<td>5</td>
-                    <td><a href="＃">天津</a></td>
-                    <td>12</td>
-                    <td>11</td>
-                    <td>¥5000</td>
-                  </tr>
-                  </tbody>
-                </table>
-              </div>
-              <!-- /.table-responsive -->
+              <table class="table table-bordered">
+                <tr>
+                  <th style="width: 60px">排名</th>
+                  <th>大区名称</th>
+                  <th>销售额</th>
+                  <th style="width: 40px">占比</th>
+                </tr>
+                <tr>
+                  <td>1.</td>
+                  <td>广东</td>
+                  <td>
+                    <div class="progress progress-xs">
+                      <div class="progress-bar progress-bar-danger" style="width: 55%"></div>
+                    </div>
+                  </td>
+                  <td><span class="badge bg-red">55%</span></td>
+                </tr>
+                <tr>
+                  <td>2.</td>
+                  <td>浙江</td>
+                  <td>
+                    <div class="progress progress-xs">
+                      <div class="progress-bar progress-bar-yellow" style="width: 70%"></div>
+                    </div>
+                  </td>
+                  <td><span class="badge bg-yellow">70%</span></td>
+                </tr>
+                <tr>
+                  <td>3.</td>
+                  <td>四川</td>
+                  <td>
+                    <div class="progress progress-xs progress-striped active">
+                      <div class="progress-bar progress-bar-primary" style="width: 30%"></div>
+                    </div>
+                  </td>
+                  <td><span class="badge bg-light-blue">30%</span></td>
+                </tr>
+                <tr>
+                  <td>4.</td>
+                  <td>辽宁</td>
+                  <td>
+                    <div class="progress progress-xs progress-striped active">
+                      <div class="progress-bar progress-bar-success" style="width: 90%"></div>
+                    </div>
+                  </td>
+                  <td><span class="badge bg-green">90%</span></td>
+                </tr>
+              </table>
             </div>
             <!-- /.box-body -->
-            <!-- /.box-footer -->
+            <div class="box-footer clearfix">
+              <ul class="pagination pagination-sm no-margin pull-right">
+                <li><a href="#">&laquo;</a></li>
+                <li><a href="#">1</a></li>
+                <li><a href="#">2</a></li>
+                <li><a href="#">3</a></li>
+                <li><a href="#">&raquo;</a></li>
+              </ul>
+            </div>
           </div>
+          <!-- /.box -->
           
+		    </div>
         </div>
-        
-    <div class="col-md-8">
-        
-        <!-- TABLE: LATEST ORDERS -->
-          <div class="box box-info">
+        <div class="col-md-6">
+		 <div class="row">
+		    <div class="box">
             <div class="box-header with-border">
               <h3 class="box-title">商品销量排行榜</h3>
-
-              <div class="box-tools">
-              </div>
             </div>
             <!-- /.box-header -->
             <div class="box-body">
-              <div class="table-responsive">
-                <table class="table no-margin" >
-                  <thead>
-                  <tr>
-                    <th>排名</th>
-                    <th>商品</th>
-                    <th>销售数量</th>
-                    <th>价格</th>
-                    <th>销售总金额</th>
-                  </tr>
-                  </thead>
-                  <tbody>
-                  <tr>
-                  	<td>1</td>
-                    <td><a href="＃">超威微烟清香型艾草植物小圈3+1蚊香30圈*18盒</a></td>
-                    <td>100000</td>
-                    <td>¥40.00</td>
-                    <td>¥4000000</td>
-                  </tr>
-                  <tr>
-                  	<td>2</td>
-                    <td><a href="＃">立白全效馨香洗护合一洗衣液(我是歌手版)2kg*6瓶</a></td>
-                    <td>100000</td>
-                    <td>¥40.00</td>
-                    <td>¥4000000</td>
-                  </tr>
-                  <tr>
-                  	<td>3</td>
-                    <td><a href="＃">超威杀蚊气雾剂(青柠檬印铁)600ml</a></td>
-                    <td>10000</td>
-                    <td>¥30.00</td>
-                    <td>¥300000</td>
-                  </tr>
-                  <tr>
-                  	<td>4</td>
-                    <td><a href="＃">超威贝贝健无烟蚊香36单盘*18盒</a></td>
-                    <td>1000</td>
-                    <td>¥25.00</td>
-                    <td>¥250000</td>
-                  </tr>
-                  <tr>
-                  	<td>5</td>
-                    <td><a href="＃">超威杀蟑气雾剂(黄柠檬)600ml*12瓶</a></td>
-                    <td>100</td>
-                    <td>¥50.00</td>
-                    <td>¥5000</td>
-                  </tr>
-                  </tbody>
-                </table>
-              </div>
-              <!-- /.table-responsive -->
+              <table class="table table-bordered">
+                <tr>
+                  <th style="width: 60px">排名</th>
+                  <th>产品名称</th>
+                  <th>销量</th>
+                  <th style="width: 40px">占比</th>
+                </tr>
+                <tr>
+                  <td>1.</td>
+                  <td>超威微烟清香型艾草植物小圈3+1蚊香30圈*18盒</td>
+                  <td>
+                    <div class="progress progress-xs">
+                      <div class="progress-bar progress-bar-danger" style="width: 55%"></div>
+                    </div>
+                  </td>
+                  <td><span class="badge bg-red">55%</span></td>
+                </tr>
+                <tr>
+                  <td>2.</td>
+                  <td>立白全效馨香洗护合一洗衣液(我是歌手版)2kg*6瓶</td>
+                  <td>
+                    <div class="progress progress-xs">
+                      <div class="progress-bar progress-bar-yellow" style="width: 70%"></div>
+                    </div>
+                  </td>
+                  <td><span class="badge bg-yellow">70%</span></td>
+                </tr>
+                <tr>
+                  <td>3.</td>
+                  <td>超威杀蚊气雾剂(青柠檬印铁)600ml</td>
+                  <td>
+                    <div class="progress progress-xs progress-striped active">
+                      <div class="progress-bar progress-bar-primary" style="width: 30%"></div>
+                    </div>
+                  </td>
+                  <td><span class="badge bg-light-blue">30%</span></td>
+                </tr>
+                <tr>
+                  <td>4.</td>
+                  <td>超威贝贝健无烟蚊香36单盘*18盒</td>
+                  <td>
+                    <div class="progress progress-xs progress-striped active">
+                      <div class="progress-bar progress-bar-success" style="width: 90%"></div>
+                    </div>
+                  </td>
+                  <td><span class="badge bg-green">90%</span></td>
+                </tr>
+              </table>
             </div>
             <!-- /.box-body -->
-            <!-- /.box-footer -->
+            <div class="box-footer clearfix">
+              <ul class="pagination pagination-sm no-margin pull-right">
+                <li><a href="#">&laquo;</a></li>
+                <li><a href="#">1</a></li>
+                <li><a href="#">2</a></li>
+                <li><a href="#">3</a></li>
+                <li><a href="#">&raquo;</a></li>
+              </ul>
+            </div>
           </div>
+          <!-- /.box -->
           
+		    </div>
         </div>
     </section>
+    <!-- /.content -->
+  <!-- /.content-wrapper -->
+  
+  <!-- jQuery 3 -->
+<script src="../bower_components/jquery/dist/jquery.min.js"></script>
+<!-- Bootstrap 3.3.7 -->
+<script src="../bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+<!-- Slimscroll -->
+<script src="../bower_components/jquery-slimscroll/jquery.slimscroll.min.js"></script>
+<!-- FastClick -->
+<script src="../bower_components/fastclick/lib/fastclick.js"></script>
+<!-- AdminLTE App -->
+<script src="../dist/js/adminlte.min.js"></script>
+<!-- AdminLTE for demo purposes -->
+<script src="../dist/js/demo.js"></script>
+<!-- ChartJS -->
+<script src="../bower_components/Chart.js/Chart.js"></script>
+<!-- page script -->
+<script>
+  $(function () {
+    /* ChartJS
+     * -------
+     * Here we will create a few charts using ChartJS
+     */
+
+    var areaChartData = {
+      labels  : ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+      datasets: [
+        {
+          label               : 'Electronics',
+          fillColor           : 'rgba(210, 214, 222, 1)',
+          strokeColor         : 'rgba(210, 214, 222, 1)',
+          pointColor          : 'rgba(210, 214, 222, 1)',
+          pointStrokeColor    : '#c1c7d1',
+          pointHighlightFill  : '#fff',
+          pointHighlightStroke: 'rgba(220,220,220,1)',
+          data                : [65, 59, 80, 81, 56, 55, 40]
+        },
+        {
+          label               : 'Digital Goods',
+          fillColor           : 'rgba(60,141,188,0.9)',
+          strokeColor         : 'rgba(60,141,188,0.8)',
+          pointColor          : '#3b8bba',
+          pointStrokeColor    : 'rgba(60,141,188,1)',
+          pointHighlightFill  : '#fff',
+          pointHighlightStroke: 'rgba(60,141,188,1)',
+          data                : [28, 48, 40, 19, 86, 27, 90]
+        }
+      ]
+    }
+
+    var areaChartOptions = {
+      //Boolean - If we should show the scale at all
+      showScale               : true,
+      //Boolean - Whether grid lines are shown across the chart
+      scaleShowGridLines      : false,
+      //String - Colour of the grid lines
+      scaleGridLineColor      : 'rgba(0,0,0,.05)',
+      //Number - Width of the grid lines
+      scaleGridLineWidth      : 1,
+      //Boolean - Whether to show horizontal lines (except X axis)
+      scaleShowHorizontalLines: true,
+      //Boolean - Whether to show vertical lines (except Y axis)
+      scaleShowVerticalLines  : true,
+      //Boolean - Whether the line is curved between points
+      bezierCurve             : true,
+      //Number - Tension of the bezier curve between points
+      bezierCurveTension      : 0.3,
+      //Boolean - Whether to show a dot for each point
+      pointDot                : false,
+      //Number - Radius of each point dot in pixels
+      pointDotRadius          : 4,
+      //Number - Pixel width of point dot stroke
+      pointDotStrokeWidth     : 1,
+      //Number - amount extra to add to the radius to cater for hit detection outside the drawn point
+      pointHitDetectionRadius : 20,
+      //Boolean - Whether to show a stroke for datasets
+      datasetStroke           : true,
+      //Number - Pixel width of dataset stroke
+      datasetStrokeWidth      : 2,
+      //Boolean - Whether to fill the dataset with a color
+      datasetFill             : true,
+      //String - A legend template
+      legendTemplate          : '<ul class="<%=name.toLowerCase()%>-legend"><% for (var i=0; i<datasets.length; i++){%><li><span style="background-color:<%=datasets[i].lineColor%>"></span><%if(datasets[i].label){%><%=datasets[i].label%><%}%></li><%}%></ul>',
+      //Boolean - whether to maintain the starting aspect ratio or not when responsive, if set to false, will take up entire container
+      maintainAspectRatio     : true,
+      //Boolean - whether to make the chart responsive to window resizing
+      responsive              : true
+    }
+
+
+    //-------------
+    //- LINE CHART -
+    //--------------
+    var lineChartCanvas          = $('#lineChart').get(0).getContext('2d')
+    var lineChart                = new Chart(lineChartCanvas)
+    var lineChartOptions         = areaChartOptions
+    lineChartOptions.datasetFill = false
+    lineChart.Line(areaChartData, lineChartOptions)
+
+  })
+</script>
