@@ -7,87 +7,135 @@
 
     <!-- Main content -->
     <section class="content">
-		<div class="col-md-6">
-          <div class="box box-default">
-            <div class="box-header with-border">
-              <i class="fa fa-warning"></i>
-              <h3 class="box-title">警示板</h3>
+    <div class="row">
+    <div class="col-md-3 col-sm-6 col-xs-12">
+          <div class="info-box">
+            <span class="info-box-icon bg-aqua"><i class="ion ion-ios-gear-outline"></i></span>
+
+            <div class="info-box-content">
+              <span class="info-box-text">B2B门口正常访问</span>
             </div>
-            <!-- /.box-header -->
-            <div class="box-body">
-              <div class="alert alert-warning alert-dismissible">
-                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                <h4><i class="icon fa fa-warning"></i> 注意!</h4>
-                门户与仓储系统接口连接超时
+          </div>
+    </div>
+        <div class="col-md-3 col-sm-6 col-xs-12">
+          <div class="info-box">
+            <span class="info-box-icon bg-aqua"><i class="ion ion-ios-gear-outline"></i></span>
+
+            <div class="info-box-content">
+              <span class="info-box-text">支付网关正常访问</span>
+            </div>
+          </div>
+    </div>
+        <div class="col-md-3 col-sm-6 col-xs-12">
+          <div class="info-box">
+            <span class="info-box-icon bg-aqua"><i class="ion ion-ios-gear-outline"></i></span>
+
+            <div class="info-box-content">
+              <span class="info-box-text">仓库系统正常</span>
+            </div>
+          </div>
+    </div>
+    </div>
+    <div class="row">
+    	<div class="col-md-6">
+    	<div class="box box-primary">
+            <div class="box-header with-border">
+              <i class="fa fa-bar-chart-o"></i>
+
+              <h3 class="box-title">响应时间</h3>
+
+              <div class="box-tools pull-right">
+                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+                </button>
+                <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
               </div>
-              
+            </div>
+            <div class="box-body">
+              <div id="line-chart" style="height: 300px;"></div>
+            </div>
+            <!-- /.box-body-->
+          </div>
+          </div>
+          <div class="col-md-6">
+           <div class="box box-danger">
+            <div class="box-header with-border">
+              <h3 class="box-title">exception排行</h3>
+
+              <div class="box-tools pull-right">
+                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+                </button>
+                <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+              </div>
+            </div>
+            <div class="box-body">
+              <canvas id="pieChart" style="height:250px"></canvas>
             </div>
             <!-- /.box-body -->
           </div>
-          <!-- /.box -->
-        </div>
-        <div class="row">
-        
-        </div>
-        <div class="row">
-        <!-- ./col -->
-        <section class="content-header">
-		<span class=" btn-default">时间：</span>
-		<div class="btn-group">
-                <button type="button" class="btn btn-default" style="background-color:#00c0ef">当天</button>
-                <button type="button" class="btn btn-default">当月</button>
-                <button type="button" class="btn btn-default">季度</button>
-        </div>
-    </section>
-        <div class="col-lg-3 col-xs-6">
-          <!-- small box -->
-          <div class="small-box bg-red">
-            <div class="inner">
-              <h3>共1条异常</h3>
-
-              <p>订单</p>
-            </div>
-            <div class="icon">
-              <i class="ion ion-pie-graph"></i>
-            </div>
-            <a href="orderStatus.html?role=operator" class="small-box-footer">
-              More info <i class="fa fa-arrow-circle-right"></i>
-            </a>
           </div>
-        </div>
-        <!-- ./col -->
-        
-        <div class="col-lg-3 col-xs-6">
-          <!-- small box -->
-          <div class="small-box bg-aqua">
-            <div class="inner">
-              <h3>共2条异常</h3>
+    </div>
+	<div class="row">
+      <div class="col-md-8">
+          <div class="callout callout-success">
+             <h4>购物车状态正常</h4>
+           </div>
+      </div>
+     <div class="col-md-8">
+          <div class="callout callout-success">
+             <h4>订单状态正常</h4>
+      	</div>
+      </div>
+      </div>
+      <div class="row">
+      <div class="col-md-8">
+      	<div class="box box-success">
+            <div class="box-header with-border">
+              <h3 class="box-title">Visitors Report</h3>
 
-              <p>购物车</p>
+              <div class="box-tools pull-right">
+                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+                </button>
+                <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+              </div>
             </div>
-            <div class="icon">
-              <i class="fa fa-shopping-cart"></i>
+            <!-- /.box-header -->
+            <div class="box-body no-padding">
+              <div class="row">
+                <div class="col-md-9 col-sm-8">
+                  <div class="pad">
+                    <!-- Map will be created here -->
+                    <div id="world-map-markers" style="height: 325px;"></div>
+                  </div>
+                </div>
+                <!-- /.col -->
+                <div class="col-md-3 col-sm-4">
+                  <div class="pad box-pane-right bg-green" style="min-height: 280px">
+                    <div class="description-block margin-bottom">
+                      <div class="sparkbar pad" data-color="#fff">90,70,90,70,75,80,70</div>
+                      <h5 class="description-header">8390</h5>
+                      <span class="description-text">Visits</span>
+                    </div>
+                    <!-- /.description-block -->
+                    <div class="description-block margin-bottom">
+                      <div class="sparkbar pad" data-color="#fff">90,50,90,70,61,83,63</div>
+                      <h5 class="description-header">30%</h5>
+                      <span class="description-text">Referrals</span>
+                    </div>
+                    <!-- /.description-block -->
+                    <div class="description-block">
+                      <div class="sparkbar pad" data-color="#fff">90,50,90,70,61,83,63</div>
+                      <h5 class="description-header">70%</h5>
+                      <span class="description-text">Organic</span>
+                    </div>
+                    <!-- /.description-block -->
+                  </div>
+                </div>
+                <!-- /.col -->
+              </div>
+              <!-- /.row -->
             </div>
-            <a href="cartStatus.html?role=operator" class="small-box-footer">
-              More info <i class="fa fa-arrow-circle-right"></i>
-            </a>
+            <!-- /.box-body -->
           </div>
-        </div>
-        <div class="col-lg-3 col-xs-6">
-          <!-- small box -->
-          <div class="small-box bg-yellow">
-            <div class="inner">
-              <h3>4条异常</h3>
-
-              <p>产品</p>
-            </div>
-            <div class="icon">
-              <i class="ion ion-bag"></i>
-            </div>
-            <a href="productStatus.html?role=operator" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
-          </div>
-        </div>
-        <!-- ./col -->
-       		
+      </div>
       </div>
     </section>
