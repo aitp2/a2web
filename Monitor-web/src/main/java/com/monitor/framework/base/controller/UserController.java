@@ -31,6 +31,25 @@ public class UserController {
     @Resource
     private UserService userService;
 
+    
+    @RequestMapping(method = RequestMethod.GET, value = "/overview")
+    private String overview() {
+
+        return "poc/businessoverview";
+    }
+    
+    @RequestMapping(method = RequestMethod.GET, value = "/statusoverview")
+    private String statusoverview() {
+
+        return "poc/statusoverview";
+    }
+    
+    @RequestMapping(method = RequestMethod.GET, value = "/systemstatus")
+    private String systemstatus() {
+
+        return "poc/systemoverview";
+    }
+    
     /**
      * 用户列表
      */
