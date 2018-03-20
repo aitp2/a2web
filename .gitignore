@@ -23,10 +23,3 @@ pom.xml
 pom.xml
 Monitor-web/pom.xml
 Monitor-framework/pom.xml
-Monitor-framework/bin/target/classes/META-INF/MANIFEST.MF
-Monitor-framework/bin/target/classes/META-INF/maven/com.monitor/Monitor-framework/pom.properties
-*.component
-Monitor-web/bin/src/main/resources/jdbc.properties
-Monitor-web/.settings/org.eclipse.wst.common.component
-Monitor-web/.settings/org.eclipse.wst.common.component
-Monitor-web/.settings/org.eclipse.wst.common.component
