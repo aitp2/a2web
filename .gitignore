@@ -23,3 +23,8 @@ pom.xml
 pom.xml
 Monitor-web/pom.xml
 Monitor-framework/pom.xml
+Monitor-web/.project
+Monitor-framework/bin/target/classes/META-INF/maven/com.monitor/Monitor-framework/pom.properties
+Monitor-framework/bin/target/classes/META-INF/MANIFEST.MF
+Monitor-web/.project
+Monitor-web/.project
