@@ -1,27 +1,25 @@
-<section class="content-header">
-		<span class=" btn-default">时间：</span>
-		<div class="btn-group">
-                <button type="button" class="btn btn-default" style="background-color:#00c0ef">当天</button>
-                <button type="button" class="btn btn-default">当月</button>
-                <button type="button" class="btn btn-default">季度</button>
-        </div>
+ <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+		<p class=" text-light-blue">请选择 当日 当月 季度 年</p>
     </section>
+
     <!-- Main content -->
-    <section class="content container-fluid">
       <!--------------------------
         | Your Page Content Here |
         -------------------------->
-			
-			<div class="alert alert-danger alert-dismissible">
-                
-                <h4><i class="icon fa fa-ban"></i> 共有</h4>
-				<h4>4条异常记录，请及时查看！</h4>
-               
-            </div>
+    <!-- Main content -->
+    <section class="content container-fluid">
+		<div class="callout" style="background-color:#dd4b39;border-color:#00000073">
+		  <h4 style="color:#fff">！产品状态异常。请及时查看</h4>
+
+          <p style="color:#fff">当前共有9条产品异常记录待处理</p>
+        </div>
 			<!--搜索框-->
 			<div class="row">
-				<div class="col-md-3" style="width:20%;">
-					<span class="info-box-number" ><p align="center">产品编号</p></span>
+				<div class="col-md-3" style="width:10%;">
+					<span class="info-box-number" ><p class="text-light-blue" align="center">产品查询</p></span>
 				</div>
 			
 				<div class="col-md-3" style="width:30%;">
@@ -29,59 +27,104 @@
 				  <div class="box box-primar direct-chat direct-chat-primary">
 					<form action="#" method="post">
 						<div class="input-group">
-						  <input type="text" name="message" placeholder="Search ..." class="form-control">
+						  <input type="text" name="message" placeholder="Search ..." class="form-control" style="border-color:#3c8dbc">
 							  <span class="input-group-btn">
-								<button type="submit" class="btn btn-primary btn-flat" style="background-color:#c1c5c6;"><i class="fa fa-search"></i></button>
+								<button type="submit" class="btn btn-primary btn-flat" style="background-color:#3c8dbc;"><i class="fa fa-search"></i></button>
 							  </span>
 						</div>
 					</form>
 				  </div>
 				</div>
-								
-			</div>
-			
-			<div class="table-responsive">
-                <table class="table no-margin">
-                  <thead>
-                  <tr>
-                    <th>产品编号</th>
-                    <th>价格</th>
-                    <th>异常</th>
-                    <th>时间</th>
-					<th>操作</th>
-                  </tr>
-                  </thead>
-                  <tbody>
-                  <tr>
-					<td>000011</th>
-                    <td>￥121</th>
-                    <td>库存</th>
-                    <td>2.21</th>
-					<td><a href="javascript:void(0);">查看日志</a></td>
-                  </tr>
-				 <tr>
-					<td>000021</th>
-                    <td>￥21</th>
-                    <td>库存</th>
-                    <td>2.21</th>
-					<td><a href="javascript:void(0);">查看日志</a></td>
-                  </tr>
-				  <tr>
-					<td>000031</th>
-                    <td>￥321</th>
-                    <td>库存</th>
-                    <td>1.21</th>
-					<td><a href="javascript:void(0);">查看日志</a></td>
-                  </tr>
-				  <tr>
-					<td>000041</th>
-                    <td>￥421</th>
-                    <td>库存</th>
-                    <td>2.1</th>
-					<td><a href="javascript:void(0);">查看日志</a></td>
-                  </tr>
-				  
-				  </tbody>
-				  </table>
-			<div>				
+				
+			</div>	
+		
+		
+		<div class="col-xs-12">
+          <div class="box">
+
+            <!-- /.box-header -->
+            <div class="box-body">
+              <div id="example2_wrapper" class="dataTables_wrapper form-inline dt-bootstrap"><div class="row"><div class="col-sm-6"></div><div class="col-sm-6"></div></div><div class="row"><div class="col-sm-12"><table id="example2" class="table table-bordered table-hover dataTable" role="grid" aria-describedby="example2_info">
+                <thead>
+                <tr role="row">
+					<th class="sorting_asc" tabindex="0" aria-controls="example2" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Product number: activate to sort column descending">产品编号</th>
+					<th class="sorting" tabindex="0" aria-controls="example2" rowspan="1" colspan="1" aria-label="Date: activate to sort column ascending">日期</th>
+					<th class="sorting" tabindex="0" aria-controls="example2" rowspan="1" colspan="1" aria-label="Price(s): activate to sort column ascending">产品单价</th>
+					<th class="sorting" tabindex="0" aria-controls="example2" rowspan="1" colspan="1" aria-label="RCA(s): activate to sort column ascending">异常原因</th>
+					<th class="sorting" tabindex="0" aria-controls="example2" rowspan="1" colspan="1" aria-label="Action: activate to sort column ascending">操作</th>
+				</tr>
+                </thead>
+                <tbody>
+ 
+                <tr role="row" class="odd">
+                  <td class="sorting_1">000001</td>
+                  <td>2017-12-21 18:36:36</td>
+				  <td>$11</td>
+                  <td>库存不足</td>
+                  <td><a href="#">查看操作日志</a></td>
+                </tr>
+                <tr role="row" class="odd">
+                  <td class="sorting_1">100001</td>
+                  <td>2017-12-21 18:36:36</td>
+				  <td>$21</td>
+                  <td>库存不足</td>
+                  <td><a href="#">查看操作日志</a></td>
+                </tr>
+                <tr role="row" class="odd">
+                  <td class="sorting_1">200001</td>
+                  <td>2017-12-21 18:36:36</td>
+				  <td>$13</td>
+                  <td>库存不足</td>
+                  <td><a href="#">查看操作日志</a></td>
+                </tr>
+                <tr role="row" class="odd">
+                  <td class="sorting_1">111222</td>
+                  <td>2017-12-21 18:36:36</td>
+				  <td>$32</td>
+                  <td>库存不足</td>
+                  <td><a href="#">查看操作日志</a></td>
+                </tr>
+                <tr role="row" class="odd">
+                  <td class="sorting_1">123456</td>
+                  <td>2017-12-21 18:36:36</td>
+				  <td>$43</td>
+                  <td>库存不足</td>
+                  <td><a href="#">查看操作日志</a></td>
+                </tr>
+                <tr role="row" class="odd">
+                  <td class="sorting_1">213456</td>
+                  <td>2017-12-21 18:36:36</td>
+				  <td>$11</td>
+                  <td>库存不足</td>
+                  <td><a href="#">查看操作日志</a></td>
+                </tr>
+                <tr role="row" class="odd">
+                  <td class="sorting_1">235641</td>
+                  <td>2017-12-21 18:36:36</td>
+				  <td>$11</td>
+                  <td>库存不足</td>
+                  <td><a href="#">查看操作日志</a></td>
+                </tr>
+                <tr role="row" class="odd">
+                  <td class="sorting_1">023145</td>
+                  <td>2017-12-21 18:36:36</td>
+				  <td>$11</td>
+                  <td>库存不足</td>
+                  <td><a href="#">查看操作日志</a></td>
+                </tr>
+                
+
+				</tbody>
+                <tfoot>
+                </tfoot>
+              </table></div></div><div class="row"><div class="col-sm-5"><div class="dataTables_info" id="example2_info" role="status" aria-live="polite">Showing 1 to 10 of 57 entries</div></div><div class="col-sm-7"><div class="dataTables_paginate paging_simple_numbers" id="example2_paginate"><ul class="pagination"><li class="paginate_button previous disabled" id="example2_previous"><a href="#" aria-controls="example2" data-dt-idx="0" tabindex="0">Previous</a></li><li class="paginate_button active"><a href="#" aria-controls="example2" data-dt-idx="1" tabindex="0">1</a></li><li class="paginate_button "><a href="#" aria-controls="example2" data-dt-idx="2" tabindex="0">2</a></li><li class="paginate_button "><a href="#" aria-controls="example2" data-dt-idx="3" tabindex="0">3</a></li><li class="paginate_button "><a href="#" aria-controls="example2" data-dt-idx="4" tabindex="0">4</a></li><li class="paginate_button "><a href="#" aria-controls="example2" data-dt-idx="5" tabindex="0">5</a></li><li class="paginate_button "><a href="#" aria-controls="example2" data-dt-idx="6" tabindex="0">6</a></li><li class="paginate_button next" id="example2_next"><a href="#" aria-controls="example2" data-dt-idx="7" tabindex="0">Next</a></li></ul></div></div></div></div>
+            </div>
+            <!-- /.box-body -->
+          </div>
+          <!-- /.box -->
+
+        </div>
     </section>
+    <!-- /.content -->
+  <!-- /.content-wrapper -->
+</div>
