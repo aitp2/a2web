@@ -1,237 +1,119 @@
-<section class="content-header">
-		<span class=" btn-default">时间：</span>
-		<div class="btn-group">
-                <button type="button" class="btn btn-default" style="background-color:#00c0ef">当天</button>
-                <button type="button" class="btn btn-default">当月</button>
-                <button type="button" class="btn btn-default">季度</button>
-        </div>
+
+  <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+		<p class=" text-light-blue">请选择 当日 当月 季度 年</p>
     </section>
-    <!-- Main content -->
-    <section class="content container-fluid">
+
       <!--------------------------
         | Your Page Content Here |
         -------------------------->
-			
-			<div class="alert alert-danger alert-dismissible">
-                
-                <h4><i class="icon fa fa-ban"></i> 共有</h4>
-				<h4>4条异常记录，请及时查看！</h4>
-               
-            </div>
+    <!-- Main content -->
+    <section class="content container-fluid">
+		<div class="callout" style="background-color:#00a65a;border-color:#00000073">
+		  <h4 style="color:#fff">购物车状态正常!</h4>
+
+          <p style="color:#fff">当前共有0条购物车异常记录待处理</p>
+        </div>
 			<!--搜索框-->
 			<div class="row">
-				<div class="col-md-3" style="width:20%;">
-					<span class="info-box-number" ><p align="RIGHT">用户</p></span>
+				<div class="col-md-3" style="width:10%;">
+					<span class="info-box-number" ><p class="text-light-blue" align="center">经销商查询</p></span>
 				</div>
 			
 				<div class="col-md-3" style="width:30%;">
 				  <!-- DIRECT CHAT PRIMARY -->				  
 				  <div class="box box-primar direct-chat direct-chat-primary">
-					<form action="#" method="post" id="searchbutton">
+					<form action="#" method="post">
 						<div class="input-group">
-						  <input type="text" name="message" placeholder="Search ..." class="form-control" id="searchtext">
+						  <input type="text" name="message" placeholder="Search ..." class="form-control" style="border-color:#3c8dbc">
 							  <span class="input-group-btn">
-								<span type="text" class="btn btn-primary btn-flat" style="background-color:#c1c5c6;"><i class="fa fa-search"></i></span>
+								<button type="submit" class="btn btn-primary btn-flat" style="background-color:#3c8dbc;"><i class="fa fa-search"></i></button>
 							  </span>
 						</div>
 					</form>
 				  </div>
 				</div>
-								
-			</div>
-			<div class="table-responsive user_all" style="display:none">
-                <table class="table no-margin" >
-                  <thead>
-                  <tr>
-                    <th>用户</th>
-                    <th>日期</th>
-                    <th>异常原因</th>
-                    <th>操作</th>
-                  </tr>
-                  </thead>
-                  <tbody>
-				  
-                  <tr>
-                  	<td class="user">用户A</td>
-                    <td>2.11</td>
-                    <td>促销异常</td>
-                    <td><a href="javascript:void(0);">查看日志</a></td>
-                  </tr>
-				  
-				  <tr>
-                  	<td class="user">用户A</td>
-                    <td>2.1</td>
-                    <td>促销异常</td>
-                    <td><a href="javascript:void(0);">查看日志</a></td>
-                  </tr>
+				
+			</div>	
+		
+		
+		<div class="col-xs-12">
+          <div class="box">
 
-				  <tr>
-                  	<td class="user">用户B</td>
-                    <td>2.21</td>
-                    <td>促销异常</td>
-                    <td><a href="javascript:void(0);">查看日志</a></td>
-                  </tr>
-				  
-				  <tr>
-                  	<td class="user">用户B</td>
-                    <td>2.13</td>
-                    <td>促销异常</td>
-                    <td><a href="javascript:void(0);">查看日志</a></td>
-                  </tr>
-				  
-				  </tbody>
-				  </table>
-			</div>
+            <!-- /.box-header -->
+            <div class="box-body">
+              <div id="example2_wrapper" class="dataTables_wrapper form-inline dt-bootstrap"><div class="row"><div class="col-sm-6"></div><div class="col-sm-6"></div></div><div class="row"><div class="col-sm-12"><table id="example2" class="table table-bordered table-hover dataTable" role="grid" aria-describedby="example2_info">
+                <thead>
+                <tr role="row">
+					<th class="sorting_asc" tabindex="0" aria-controls="example2" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Rendering engine: activate to sort column descending">经销商</th>
+					<th class="sorting" tabindex="0" aria-controls="example2" rowspan="1" colspan="1" aria-label="Browser: activate to sort column ascending">日期</th>
+					<th class="sorting" tabindex="0" aria-controls="example2" rowspan="1" colspan="1" aria-label="Platform(s): activate to sort column ascending">异常原因</th>
+					<th class="sorting" tabindex="0" aria-controls="example2" rowspan="1" colspan="1" aria-label="Engine version: activate to sort column ascending">操作</th>
+				</tr>
+                </thead>
+                <tbody>
+ 
+                <tr role="row" class="odd">
+                  <td class="sorting_1">Gecko</td>
+                  <td>2017-12-21 18:36:36</td>
+                  <td>购物车产品无法带出促销</td>
+                  <td><a href="#">查看操作日志</a></td>
+                </tr>
+                <tr role="row" class="odd">
+                  <td class="sorting_1">Eva</td>
+                  <td>2017-12-22 18:36:36</td>
+                  <td>购物车产品无法带出促销</td>
+                  <td><a href="#">查看操作日志</a></td>
+                </tr>
+                <tr role="row" class="odd">
+                  <td class="sorting_1">Jack</td>
+                  <td>2017-12-23 18:36:36</td>
+                  <td>购物车产品无法带出促销</td>
+                  <td><a href="#">查看操作日志</a></td>
+                </tr>
+                <tr role="row" class="odd">
+                  <td class="sorting_1">Penny</td>
+                  <td>2017-12-24 18:36:36</td>
+                  <td>购物车产品无法带出促销</td>
+                  <td><a href="#">查看操作日志</a></td>
+                </tr>
+                <tr role="row" class="odd">
+                  <td class="sorting_1">Micheal</td>
+                  <td>2017-12-25 18:36:36</td>
+                  <td>购物车产品无法带出促销</td>
+                  <td><a href="#">查看操作日志</a></td>
+                </tr>
+                <tr role="row" class="odd">
+                  <td class="sorting_1">Tom</td>
+                  <td>2017-12-26 18:36:36</td>
+                  <td>购物车产品无法带出促销</td>
+                  <td><a href="#">查看操作日志</a></td>
+                </tr>
+                <tr role="row" class="odd">
+                  <td class="sorting_1">Alan</td>
+                  <td>2017-12-27 18:36:36</td>
+                  <td>购物车产品无法带出促销</td>
+                  <td><a href="#">查看操作日志</a></td>
+                </tr>
+                <tr role="row" class="odd">
+                  <td class="sorting_1">Nina</td>
+                  <td>2017-12-28 18:36:36</td>
+                  <td>购物车产品无法带出促销</td>
+                  <td><a href="#">查看操作日志</a></td>
+                </tr>
 
-			<div class="table-responsive user_a" style="display:none">
-                <table class="table no-margin" >
-                  <thead>
-                  <tr>
-                    <th>用户</th>
-                    <th>日期</th>
-                    <th>异常原因</th>
-                    <th>操作</th>
-                  </tr>
-                  </thead>
-                  <tbody>
-				  
-                  <tr>
-                  	<td class="user">用户A</td>
-                    <td>2.11</td>
-                    <td>促销异常</td>
-                    <td><a href="javascript:void(0);">查看日志</a></td>
-                  </tr>
-				  
-				  <tr>
-                  	<td class="user">用户A</td>
-                    <td>2.1</td>
-                    <td>促销异常</td>
-                    <td><a href="javascript:void(0);">查看日志</a></td>
-                  </tr>
-				  </tbody>
-				  </table>
-			</div>
+				</tbody>
+                <tfoot>
+                </tfoot>
+              </table></div></div><div class="row"><div class="col-sm-5"><div class="dataTables_info" id="example2_info" role="status" aria-live="polite">Showing 1 to 10 of 57 entries</div></div><div class="col-sm-7"><div class="dataTables_paginate paging_simple_numbers" id="example2_paginate"><ul class="pagination"><li class="paginate_button previous disabled" id="example2_previous"><a href="#" aria-controls="example2" data-dt-idx="0" tabindex="0">Previous</a></li><li class="paginate_button active"><a href="#" aria-controls="example2" data-dt-idx="1" tabindex="0">1</a></li><li class="paginate_button "><a href="#" aria-controls="example2" data-dt-idx="2" tabindex="0">2</a></li><li class="paginate_button "><a href="#" aria-controls="example2" data-dt-idx="3" tabindex="0">3</a></li><li class="paginate_button "><a href="#" aria-controls="example2" data-dt-idx="4" tabindex="0">4</a></li><li class="paginate_button "><a href="#" aria-controls="example2" data-dt-idx="5" tabindex="0">5</a></li><li class="paginate_button "><a href="#" aria-controls="example2" data-dt-idx="6" tabindex="0">6</a></li><li class="paginate_button next" id="example2_next"><a href="#" aria-controls="example2" data-dt-idx="7" tabindex="0">Next</a></li></ul></div></div></div></div>
+            </div>
+            <!-- /.box-body -->
+          </div>
+          <!-- /.box -->
 
-			<div class="table-responsive user_b" style="display:none">
-                <table class="table no-margin" >
-                  <thead>
-                  <tr>
-                    <th>用户</th>
-                    <th>日期</th>
-                    <th>异常原因</th>
-                    <th>操作</th>
-                  </tr>
-                  </thead>
-                  <tbody>
-				  
-				  <tr>
-                  	<td class="user">用户B</td>
-                    <td>2.21</td>
-                    <td>促销异常</td>
-                    <td><a href="javascript:void(0);">查看日志</a></td>
-                  </tr>
-				  
-				  <tr>
-                  	<td class="user">用户B</td>
-                    <td>2.13</td>
-                    <td>促销异常</td>
-                    <td><a href="javascript:void(0);">查看日志</a></td>
-                  </tr>
-
-				  </tbody>
-				  </table>
-			</div>
-			
-			<div class="sapce_div" style="height:30px">
-			</div>
-			
-			<div class="table-responsive log_text_a1" style="display:none">
-                <table class="table no-margin" >
-                  <thead>
-                  <tr>
-					<th>用户</th>
-                    <th>Cart ID</th>					
-                    <th>日志信息</th>
-                  </tr>
-                  </thead>
-                  <tbody>
-				  
-				  <tr>
-					<td class="text-left">用户A</td>
-                  	<td>100001</td>
-                    <td>[2018-03-01T10:46:32,475][INFO ][o.e.c.m.MetaDataMappingService] [U00YHiH] [monitorpoc-2018.03.01/EdlebSlJTHqGsC3_IdxiEg] create_mapping [doc]<br>
-						[error][status][plugin:elasticsearch@6.1.2] Status changed from green to red cart id : 100001 产品库存不足，请查看<br>
-						ERROR [hybrisHTTP11] nested exception is java.lang.NullPointerException] with root cause...
-					</td>
-                  </tr>				  
-				  </tbody>
-				  </table>
-			</div>			
-			<div class="table-responsive log_text_a2" style="display:none">
-                <table class="table no-margin" >
-                  <thead>
-                  <tr>
-					<th>用户</th>
-                    <th>Cart ID</th>					
-                    <th>日志信息</th>
-                  </tr>
-                  </thead>
-                  <tbody>
-				  
-				  <tr>
-					<td class="text-left">用户A</td>
-                  	<td>100012</td>
-                    <td>[2018-03-01T10:46:32,475][INFO ][o.e.c.m.MetaDataMappingService] [U00YHiH] [monitorpoc-2018.03.01/EdlebSlJTHqGsC3_IdxiEg] create_mapping [doc]<br>
-						[error][status][plugin:elasticsearch@6.1.2] Status changed from green to red cart id : 100012 产品促销异常，请查看
-					</td>
-                  </tr>				  
-				  </tbody>
-				  </table>
-			</div>			
-
-			<div class="table-responsive log_text_b1" style="display:none">
-                <table class="table no-margin" >
-                  <thead>
-                  <tr>
-					<th>用户</th>
-                    <th>Cart ID</th>
-                    <th>日志信息</th>
-                  </tr>
-                  </thead>
-                  <tbody>
-				  
-				  <tr>
-					<td class="text-left">用户B</td>
-                  	<td>110055</td>
-                    <td>[2018-03-01T10:46:32,475][INFO ][o.e.c.m.MetaDataMappingService] [U00YHiH] [monitorpoc-2018.03.01/EdlebSlJTHqGsC3_IdxiEg] create_mapping [doc]<br>
-						[error][status][plugin:elasticsearch@6.1.2] Status changed from green to red cart id : 110055 产品促销异常，请查看<br>						
-					</td>
-                  </tr>				  
-				  </tbody>
-				  </table>
-			</div>			
-			<div class="table-responsive log_text_b2" style="display:none">
-                <table class="table no-margin" >
-                  <thead>
-                  <tr>
-					<th>用户</th>
-                    <th>Cart ID</th>
-                    <th>日志信息</th>
-                  </tr>
-                  </thead>
-                  <tbody>
-				  
-				  <tr>
-					<td class="text-left">用户B</td>
-                  	<td>120052</td>
-                    <td>[2018-03-01T10:46:32,475][INFO ][o.e.c.m.MetaDataMappingService] [U00YHiH] [monitorpoc-2018.03.01/EdlebSlJTHqGsC3_IdxiEg] create_mapping [doc]<br>
-						[error][status][plugin:elasticsearch@6.1.2] Status changed from green to red cart id : 120052 产品库存不足，请查看<br>
-						ERROR [hybrisHTTP11] nested exception is java.lang.NullPointerException] with root cause...
-					</td>
-                  </tr>				  
-				  </tbody>
-				  </table>
-			</div>			
-
-
+        </div>
     </section>
+    <!-- /.content -->
+</div>
+<!-- ./wrapper -->

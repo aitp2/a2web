@@ -1,3 +1,4 @@
+
 	<!-- Content Header (Page header) -->
 	<section class="content-header">
 		<h1>
@@ -22,12 +23,12 @@
 							  <input type="text" name="message" id="tracknum" placeholder="订单编号 ..." class="form-control">
 								  <span class="input-group-btn">
 									<button type="submit" class="btn btn-primary btn-flat" style="background-color:#c1c5c6;" data-btn-type="search" ><i class="fa fa-search"></i></button>
+								  	
 								  </span>
 							</div>
 					  </div>
 		  			</div>
-					
-					<div class="box-body">
+					<div class="box-body" id="logtimeline">
 						<table id="user_table" class="table table-bordered table-striped table-hover">
 						</table>
 					</div>
@@ -43,18 +44,20 @@
 					
 	</section>
 
-	<script>  
-		$(function() { 
-			//button event
-			$('button[data-btn-type]').click(function() {alert('1'); 
-				var action = $(this).attr('data-btn-type');alert('');     
-				switch (action) {
-				case 'search':
-					window.location.href="/Monitor/orderStatus/"+${"#tracknum"}.value;                  
-					break;
-				}
 
-			});
-			//form_init();
-		})
+	<script>  
+	
+	$(function() { 
+		//button event
+		$('button[data-btn-type]').click(function() {
+			var action = $(this).attr('data-btn-type');
+			switch (action) {
+			case 'search':
+				loadPage("/Monitor/poc/orderStatus/"+$("#tracknum").val());                
+				break;
+			}
+
+		});
+		//form_init();
+	})
 	</script>
