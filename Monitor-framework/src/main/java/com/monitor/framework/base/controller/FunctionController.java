@@ -37,8 +37,7 @@ public class FunctionController {
     @ResponseBody
     public List<Function> getAll() {
 
-        String hql = "from Function order by levelCode asc";
-        return functionService.find(hql.toString());
+        return functionService.getAll();
     }
 
     /**

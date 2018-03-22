@@ -41,9 +41,11 @@
   <!-- Theme style -->
   <link rel="stylesheet" href="${basePath}/resources/adminlte/dist/css/AdminLTE.min.css">
   <link rel="stylesheet" href="${basePath}/resources/adminlte/dist/css/skins/_all-skins.css">
+  
+
 
 </head>
-<body class="hold-transition skin-blue sidebar-mini sidebar-collapse">
+<body class="hold-transition skin-blue sidebar-mini ">
 <a name="main"></a>
 <div class="wrapper">
 
@@ -59,7 +61,7 @@
     <!-- Header Navbar: style can be found in header.less -->
     <nav class="navbar navbar-static-top">
       <!-- Sidebar toggle button-->
-      <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
+      <a href="#" class="sidebar-toggle" data-toggle="oncanvas" role="button">
         <span class="sr-only">Toggle navigation</span>
       </a>
 
@@ -584,6 +586,9 @@ var basePath="${basePath}";//给外部js文件传递路径参数
 <script type="text/javascript" src="${basePath}/resources/common/js/base-modal.js"></script>
 <script type="text/javascript" src="${basePath}/resources/common/js/base-form.js"></script>
 <script type="text/javascript" src="${basePath}/resources/common/js/base-datasource.js"></script>
+<script type="text/javascript" src="${basePath}/resources/adminlte/plugins/jvectormap/jquery-jvectormap-1.2.2.min.js"></script>
+<script type="text/javascript" src="${basePath}/resources/adminlte/plugins/jvectormap/jquery-jvectormap-world-mill-en.js"></script>
+<script type="text/javascript" src="${basePath}/resources/adminlte/plugins/jvectormap/jquery-jvectormap-cn-mill.js"></script>
 <!-- 加入页面的的脚本 -->
 <script>
    //加载菜单
@@ -598,7 +603,7 @@ var basePath="${basePath}";//给外部js文件传递路径参数
 					           '<i class="fa fa-angle-left pull-right"></i>\n'+
 				            '</span></a>');
 			  $li.append($menu_f);
-			  $menu_f_ul=$('<ul class="treeview-menu"></ul>');
+			  $menu_f_ul=$('<ul class="treeview-menu menu-open" style="display: block;"></ul>');
 			  $li.append($menu_f_ul);
 			  $("ul.sidebar-menu").append($li); 
 		  } 
@@ -618,7 +623,8 @@ var basePath="${basePath}";//给外部js文件传递路径参数
 		   loadPage($(this).data("url"));
 		   $("ul.treeview-menu li").removeClass("active");
 		   $(this).parent().addClass("active");
-	   });  
+	   });
+	   
    });
 
 </script>

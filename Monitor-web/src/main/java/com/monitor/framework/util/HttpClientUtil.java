@@ -35,8 +35,10 @@ public class HttpClientUtil {
         URIBuilder uri = new URIBuilder(url);
 
         //设置参数
-        for(String key : para.keySet()){
-        	uri.addParameter(key, para.get(key));
+        if(para != null){
+        	for(String key : para.keySet()){
+            	uri.addParameter(key, para.get(key));
+            }
         }
 
         //创建httpGet对象
