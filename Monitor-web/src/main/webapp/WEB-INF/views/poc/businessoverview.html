@@ -99,7 +99,7 @@
         	<!-- LINE CHART -->
           <div class="box box-info">
             <div class="box-header with-border">
-              <h3 class="box-title">销售额</h3>
+              <h3 class="box-title">订单数量</h3>
 
               <div class="box-tools pull-right">
                 <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
@@ -141,56 +141,47 @@
                 </tr>
                 <tr>
                   <td>1.</td>
-                  <td>广东</td>
+                  <td>${(orovinceOrder1.name)!}</td>
                   <td>
                     <div class="progress progress-xs">
-                      <div class="progress-bar progress-bar-danger" style="width: 55%"></div>
+                      <div class="progress-bar progress-bar-danger" style="width: ${(orovinceOrder1.percentage)!}%"></div>
                     </div>
                   </td>
-                  <td><span class="badge bg-red">55%</span></td>
+                  <td><span class="badge bg-red">${(orovinceOrder1.percentage)!}%</span></td>
                 </tr>
                 <tr>
                   <td>2.</td>
-                  <td>浙江</td>
+                  <td>${(orovinceOrder2.name)!}</td>
                   <td>
                     <div class="progress progress-xs">
-                      <div class="progress-bar progress-bar-yellow" style="width: 70%"></div>
+                      <div class="progress-bar progress-bar-yellow" style="width: ${(orovinceOrder2.percentage)!}%"></div>
                     </div>
                   </td>
-                  <td><span class="badge bg-yellow">70%</span></td>
+                  <td><span class="badge bg-yellow">${(orovinceOrder2.percentage)!}%</span></td>
                 </tr>
                 <tr>
                   <td>3.</td>
-                  <td>四川</td>
+                  <td>${(orovinceOrder3.name)!}</td>
                   <td>
                     <div class="progress progress-xs progress-striped active">
-                      <div class="progress-bar progress-bar-primary" style="width: 30%"></div>
+                      <div class="progress-bar progress-bar-primary" style="width: ${(orovinceOrder3.percentage)!}%"></div>
                     </div>
                   </td>
-                  <td><span class="badge bg-light-blue">30%</span></td>
+                  <td><span class="badge bg-light-blue">${(orovinceOrder3.percentage)!}%</span></td>
                 </tr>
                 <tr>
                   <td>4.</td>
-                  <td>辽宁</td>
+                  <td>${(orovinceOrder4.name)!}</td>
                   <td>
                     <div class="progress progress-xs progress-striped active">
-                      <div class="progress-bar progress-bar-success" style="width: 90%"></div>
+                      <div class="progress-bar progress-bar-success" style="width: ${(orovinceOrder4.percentage)!}%"></div>
                     </div>
                   </td>
-                  <td><span class="badge bg-green">90%</span></td>
+                  <td><span class="badge bg-green">${(orovinceOrder4.percentage)!}%</span></td>
                 </tr>
               </table>
             </div>
             <!-- /.box-body -->
-            <div class="box-footer clearfix">
-              <ul class="pagination pagination-sm no-margin pull-right">
-                <li><a href="#">&laquo;</a></li>
-                <li><a href="#">1</a></li>
-                <li><a href="#">2</a></li>
-                <li><a href="#">3</a></li>
-                <li><a href="#">&raquo;</a></li>
-              </ul>
-            </div>
           </div>
           <!-- /.box -->
           
@@ -213,56 +204,47 @@
                 </tr>
                 <tr>
                   <td>1.</td>
-                  <td>超威微烟清香型艾草植物小圈3+1蚊香30圈*18盒</td>
+                  <td>${(productOrder1.name)!}</td>
                   <td>
                     <div class="progress progress-xs">
-                      <div class="progress-bar progress-bar-danger" style="width: 55%"></div>
+                      <div class="progress-bar progress-bar-danger" style="width: ${(productOrder1.percentage)!}%"></div>
                     </div>
                   </td>
-                  <td><span class="badge bg-red">55%</span></td>
+                  <td><span class="badge bg-red">${(productOrder1.percentage)!}%</span></td>
                 </tr>
                 <tr>
                   <td>2.</td>
-                  <td>立白全效馨香洗护合一洗衣液(我是歌手版)2kg*6瓶</td>
+                  <td>${(productOrder2.name)!}</td>
                   <td>
                     <div class="progress progress-xs">
-                      <div class="progress-bar progress-bar-yellow" style="width: 70%"></div>
+                      <div class="progress-bar progress-bar-yellow" style="width: ${(productOrder2.percentage)!}%"></div>
                     </div>
                   </td>
-                  <td><span class="badge bg-yellow">70%</span></td>
+                  <td><span class="badge bg-yellow">${(productOrder2.percentage)!}%</span></td>
                 </tr>
                 <tr>
                   <td>3.</td>
-                  <td>超威杀蚊气雾剂(青柠檬印铁)600ml</td>
+                  <td>${(productOrder3.name)!}</td>
                   <td>
                     <div class="progress progress-xs progress-striped active">
-                      <div class="progress-bar progress-bar-primary" style="width: 30%"></div>
+                      <div class="progress-bar progress-bar-primary" style="width: ${(productOrder3.percentage)!}%"></div>
                     </div>
                   </td>
-                  <td><span class="badge bg-light-blue">30%</span></td>
+                  <td><span class="badge bg-light-blue">${(productOrder3.percentage)!}%</span></td>
                 </tr>
                 <tr>
                   <td>4.</td>
-                  <td>超威贝贝健无烟蚊香36单盘*18盒</td>
+                  <td>${(productOrder4.name)!}</td>
                   <td>
                     <div class="progress progress-xs progress-striped active">
-                      <div class="progress-bar progress-bar-success" style="width: 90%"></div>
+                      <div class="progress-bar progress-bar-success" style="width: ${(productOrder4.percentage)!}%"></div>
                     </div>
                   </td>
-                  <td><span class="badge bg-green">90%</span></td>
+                  <td><span class="badge bg-green">${(productOrder4.percentage)!}%</span></td>
                 </tr>
               </table>
             </div>
             <!-- /.box-body -->
-            <div class="box-footer clearfix">
-              <ul class="pagination pagination-sm no-margin pull-right">
-                <li><a href="#">&laquo;</a></li>
-                <li><a href="#">1</a></li>
-                <li><a href="#">2</a></li>
-                <li><a href="#">3</a></li>
-                <li><a href="#">&raquo;</a></li>
-              </ul>
-            </div>
           </div>
           <!-- /.box -->
           
