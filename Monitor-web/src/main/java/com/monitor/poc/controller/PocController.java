@@ -1,6 +1,7 @@
 package com.monitor.poc.controller;
 
 import java.io.UnsupportedEncodingException;
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -39,10 +40,34 @@ public class PocController {
 	 private static final String queryJinggaoData = "queryJinggaoData";
 	 private static final String queryOrderStatusData = "queryOrderStatusData";
 	 private static final String queryJinggaoDataByProvince = "queryJinggaoDataByProvince";
+	 private static final String queryAllOrder = "queryAllOrder";
 	 
 	 @RequestMapping(value = "businessoverview", method = RequestMethod.GET)
-	 public String businessoverview() {
-
+	 public String businessoverview(Model model) {
+		 try {
+		 String result_queryAllData = HttpClientUtil.httpGet(PropertiesUtil.getValue("microservice.url")+queryAllOrder, null);
+		 ResultData<List<OrderStatusMonitorDTO>> parseObject_queryAllData = JSON.parseObject(result_queryAllData, 
+					new TypeReference<ResultData<List<OrderStatusMonitorDTO>>>(){});
+		 if(parseObject_queryAllData.getCode()>0){
+			 //总金额
+			 BigDecimal totalprice = new BigDecimal("0");
+			 BigDecimal kedanjia = new BigDecimal("0");
+			 BigDecimal ordernum = new BigDecimal("0");
+			 for(OrderStatusMonitorDTO orderStatusMonitorDTO:parseObject_queryAllData.getSerializableData()){
+				 totalprice = totalprice.add(new BigDecimal(orderStatusMonitorDTO.getTotalPrice()));
+				 ordernum = ordernum.add(new BigDecimal("1"));
+			 }
+			 kedanjia = totalprice.divide(ordernum, 2, BigDecimal.ROUND_DOWN);
+			 //总数量
+			 
+			 //客单价
+				model.addAttribute("totalprice", totalprice);
+				model.addAttribute("ordernum", ordernum);
+				model.addAttribute("kedanjia", kedanjia);
+			}
+		 } catch (Exception e) {
+				e.printStackTrace();
+			 }
 		 return BUSINESSOVERVIEW;
 	 }
 	 
@@ -79,6 +104,28 @@ public class PocController {
 				}else{
 					model.addAttribute("orderStatusList", null);
 				}
+			 
+			 String result_queryAllData = HttpClientUtil.httpGet(PropertiesUtil.getValue("microservice.url")+queryAllOrder, null);
+			 ResultData<List<OrderStatusMonitorDTO>> parseObject_queryAllData = JSON.parseObject(result_queryAllData, 
+						new TypeReference<ResultData<List<OrderStatusMonitorDTO>>>(){});
+			 if(parseObject_queryAllData.getCode()>0){
+				 //总金额
+				 BigDecimal totalprice = new BigDecimal("0");
+				 BigDecimal kedanjia = new BigDecimal("0");
+				 BigDecimal ordernum = new BigDecimal("0");
+				 for(OrderStatusMonitorDTO orderStatusMonitorDTO:parseObject_queryAllData.getSerializableData()){
+					 totalprice = totalprice.add(new BigDecimal(orderStatusMonitorDTO.getTotalPrice()));
+					 ordernum = ordernum.add(new BigDecimal("1"));
+				 }
+				 kedanjia = totalprice.divide(ordernum, 2, BigDecimal.ROUND_DOWN);
+				 //总数量
+				 
+				 //客单价
+					model.addAttribute("totalprice", totalprice);
+					model.addAttribute("ordernum", ordernum);
+					model.addAttribute("kedanjia", kedanjia);
+				}
+			 
 		 } catch (Exception e) {
 			e.printStackTrace();
 		 }
