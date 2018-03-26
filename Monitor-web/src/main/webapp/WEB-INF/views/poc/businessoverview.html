@@ -25,6 +25,7 @@
           <div class="small-box bg-aqua">
             <div class="inner">
               <h3>${totalprice!}元</h3>
+              <input id="totalprice" type="hidden" value="${totalprice!}"/>
               <p>销售额</p>
             </div>
             <div class="icon">
@@ -39,6 +40,7 @@
           <div class="small-box bg-aqua">
             <div class="inner">
               <h3>${ordernum!}单</h3>
+              <input id="ordernumber" type="hidden" value="${ordernum!}"/>
               <p>订单数量</p>
             </div>
             <div class="icon">
@@ -109,7 +111,7 @@
             </div>
             <div class="box-body">
               <div class="chart">
-                <canvas id="lineChart" style="height:250px"></canvas>
+                <canvas id="orderlineChart" style="height:250px"></canvas>
               </div>
             </div>
             <!-- /.box-body -->
@@ -254,20 +256,19 @@
     <!-- /.content -->
   <!-- /.content-wrapper -->
   
-  <!-- jQuery 3 -->
-<script src="../bower_components/jquery/dist/jquery.min.js"></script>
-<!-- Bootstrap 3.3.7 -->
-<script src="../bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
-<!-- Slimscroll -->
-<script src="../bower_components/jquery-slimscroll/jquery.slimscroll.min.js"></script>
+<!-- jQuery 2.2.3 -->
+<script src="${basePath}/resources/adminlte/plugins/jQuery/jquery-2.2.3.min.js"></script>
+<!-- Bootstrap 3.3.6 -->
+<script src="${basePath}/resources/adminlte/bootstrap/js/bootstrap.min.js"></script>
+<!-- ChartJS 1.0.1 -->
+<script src="${basePath}/resources/adminlte/plugins/chartjs/Chart.min.js"></script>
 <!-- FastClick -->
-<script src="../bower_components/fastclick/lib/fastclick.js"></script>
+<script src=".${basePath}/resources/adminlte/plugins/fastclick/fastclick.js"></script>
 <!-- AdminLTE App -->
-<script src="../dist/js/adminlte.min.js"></script>
+<script src="${basePath}/resources/adminlte/dist/js/app.min.js"></script>
 <!-- AdminLTE for demo purposes -->
-<script src="../dist/js/demo.js"></script>
-<!-- ChartJS -->
-<script src="../bower_components/Chart.js/Chart.js"></script>
+<script src="${basePath}/resources/adminlte/dist/js/demo.js"></script>
+
 <!-- page script -->
 <script>
   $(function () {
@@ -275,20 +276,23 @@
      * -------
      * Here we will create a few charts using ChartJS
      */
+    
+    var orderTotal = document.getElementById("totalprice").value
+    var orderNumberTotal = document.getElementById("ordernumber").value
 
     var areaChartData = {
       labels  : ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
       datasets: [
-        {
-          label               : 'Electronics',
-          fillColor           : 'rgba(210, 214, 222, 1)',
-          strokeColor         : 'rgba(210, 214, 222, 1)',
-          pointColor          : 'rgba(210, 214, 222, 1)',
-          pointStrokeColor    : '#c1c7d1',
-          pointHighlightFill  : '#fff',
-          pointHighlightStroke: 'rgba(220,220,220,1)',
-          data                : [65, 59, 80, 81, 56, 55, 40]
-        },
+//         {
+//           label               : 'Electronics',
+//           fillColor           : 'rgba(210, 214, 222, 1)',
+//           strokeColor         : 'rgba(210, 214, 222, 1)',
+//           pointColor          : 'rgba(210, 214, 222, 1)',
+//           pointStrokeColor    : '#c1c7d1',
+//           pointHighlightFill  : '#fff',
+//           pointHighlightStroke: 'rgba(220,220,220,1)',
+//           data                : [65, 59, 80, 81, 56, 55, 40]
+//         },
         {
           label               : 'Digital Goods',
           fillColor           : 'rgba(60,141,188,0.9)',
@@ -297,10 +301,26 @@
           pointStrokeColor    : 'rgba(60,141,188,1)',
           pointHighlightFill  : '#fff',
           pointHighlightStroke: 'rgba(60,141,188,1)',
-          data                : [28, 48, 40, 19, 86, 27, 90]
+          data                : [28, 48, 40, 19, 86, 27, orderTotal]
         }
       ]
     }
+    
+    var areOrderNumberChartData = {
+        labels  : ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+        datasets: [
+          {
+           label               : 'Electronics',
+           fillColor           : 'rgba(210, 214, 222, 1)',
+           strokeColor         : 'rgba(210, 214, 222, 1)',
+           pointColor          : 'rgba(210, 214, 222, 1)',
+           pointStrokeColor    : '#c1c7d1',
+           pointHighlightFill  : '#fff',
+           pointHighlightStroke: 'rgba(220,220,220,1)',
+           data                : [65, 59, 80, 81, 56, 55, orderNumberTotal]
+          }
+        ]
+      }
 
     var areaChartOptions = {
       //Boolean - If we should show the scale at all
@@ -346,10 +366,13 @@
     //- LINE CHART -
     //--------------
     var lineChartCanvas          = $('#lineChart').get(0).getContext('2d')
+    var orderlineChartCanvas          = $('#orderlineChart').get(0).getContext('2d')
     var lineChart                = new Chart(lineChartCanvas)
+    var orderlineChart                = new Chart(orderlineChartCanvas)
     var lineChartOptions         = areaChartOptions
     lineChartOptions.datasetFill = false
     lineChart.Line(areaChartData, lineChartOptions)
+    orderlineChart.Line(areOrderNumberChartData, lineChartOptions)
 
   })
 </script>
