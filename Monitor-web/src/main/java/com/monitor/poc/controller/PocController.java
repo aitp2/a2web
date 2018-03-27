@@ -47,6 +47,8 @@ public class PocController {
 	private static final String queryJinggaoDataByProvince = "queryJinggaoDataByProvince";
 	private static final String queryAllOrder = "queryAllOrder";
 	private static final String queryAllProduct = "queryAllProduct";
+	private static final String queryJinggaoShuliang ="queryJinggaoShuliang";
+	
 
 	@RequestMapping(value = "businessoverview", method = RequestMethod.GET)
 	public String businessoverview(Model model) {
@@ -143,7 +145,7 @@ public class PocController {
 					pp.setPercentage(pp.getTotalprice()
 							.divide(totalprice, 2, BigDecimal.ROUND_DOWN)
 							.multiply(new BigDecimal("100")).toString());
-					model.addAttribute("productOrder" + i, pp);
+					model.addAttribute("productOrder" + j, pp);
 					j = j + 1;
 				}
 			}
@@ -188,6 +190,12 @@ public class PocController {
 					PropertiesUtil.getValue("microservice.url")
 							+ queryJinggaoData, null);
 			model.addAttribute("jinggaoData", result_queryJinggaoData);
+			
+			// queryJinggaoShuliang
+			String result_queryJinggaoShuliang = HttpClientUtil.httpGet(
+					PropertiesUtil.getValue("microservice.url")
+							+ queryJinggaoShuliang, null);
+			model.addAttribute("jinggaoShuliang", result_queryJinggaoShuliang);
 
 			// queryJinggaoDataByProvince
 			String result_queryJinggaoDataByProvince = HttpClientUtil.httpGet(

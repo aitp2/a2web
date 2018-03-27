@@ -226,7 +226,7 @@
                 <div class="ant-steps-item-description">
                  <div class="textSecondary___3ifTy stepDescription___2JfeS">
                   <div>
-                   ${orderStatusMonitorDTO.createTime}
+                   ${(orderStatusMonitorDTO.createTime)!}
                   </div>
                  </div>
                 </div>
@@ -252,7 +252,7 @@
                 <div class="ant-steps-item-description">
                  <div class="textSecondary___3ifTy stepDescription___2JfeS">
                   <div>
-                   ${orderStatusMonitorDTO.payTime}
+                   ${(orderStatusMonitorDTO.payTime)!}
                   </div>
                  </div>
                 </div>
@@ -284,7 +284,7 @@
                 <div class="ant-steps-item-description">
                  <div class="textSecondary___3ifTy stepDescription___2JfeS">
                   <div>
-                   ${orderStatusMonitorDTO.sendTime}
+                   ${(orderStatusMonitorDTO.sendTime)!}
                   </div>
                  </div>
                 </div>
@@ -315,7 +315,7 @@
                 <div class="ant-steps-item-description">
                  <div class="textSecondary___3ifTy stepDescription___2JfeS">
                   <div>
-                   ${orderStatusMonitorDTO.receviedTime}
+                   ${(orderStatusMonitorDTO.receviedTime)!}
                   </div>
                  </div>
                 </div>
@@ -346,6 +346,7 @@
     
     <script>
 	   //map
+	   var cityAreaData = ${jinggaoShuliang!};
 	   var dataStatus =${jinggaoData!};
 	               $('#china-map-markers').vectorMap({
 	              	map: 'cn_mill',
@@ -370,6 +371,13 @@
 	                    },
 	                    selectedHover: {}
 	                  },
+	                  series: {
+	                      markers: [{
+	                        attribute: 'r',
+	                        scale: [5, 15],
+	                        values: cityAreaData
+	                      }]
+	                    },
 	                  markerStyle      : {
 	                    initial: {
 	                      fill  : '#DD4B39',
