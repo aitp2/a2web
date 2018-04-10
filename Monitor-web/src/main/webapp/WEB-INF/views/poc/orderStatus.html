@@ -1,4 +1,8 @@
-
+  <!-- daterange picker -->
+  <script src="${basePath}/resources/adminlte/plugins/daterangepicker/moment.min.js"></script>
+  <link rel="stylesheet" href="${basePath}/resources/adminlte/plugins/daterangepicker/daterangepicker.css">
+  <script src="${basePath}/resources/adminlte/plugins/daterangepicker/daterangepicker.js"></script>
+  
 	<!-- Content Header (Page header) -->
 	<section class="content-header">
 		<h1>
@@ -17,17 +21,29 @@
 			<div class="col-xs-12">
 				<div class="box"><br>
 					<!-- /.box-header -->
-					<div class="col-md-3" style="width:40%;">
-					<div class="box box-primar direct-chat direct-chat-primary">
-							<div class="input-group">
-							  <input type="text" name="message" id="tracknum" placeholder="订单编号 ..." class="form-control">
-								  <span class="input-group-btn">
-									<button type="submit" class="btn btn-primary btn-flat" style="background-color:#c1c5c6;" data-btn-type="search" ><i class="fa fa-search"></i></button>
-								  	
-								  </span>
-							</div>
-					  </div>
+					<div class="col-md-3" style="width:25%;">
+						  <input type="text" name="message" id="tracknum" placeholder="订单编号 (必填)" class="form-control">
 		  			</div>
+		  			
+					<div class="col-md-3" style="width:25%;">
+						 <div class="input-group">
+		                  <div class="input-group-addon">
+		                    <i class="fa fa-clock-o"></i>
+		                  </div>
+		                  <input type="text" class="form-control pull-right" name="datefilter" id="reservationtime">
+		                </div>
+		  			</div>
+		  			
+		  			<div class="col-md-1" style="width:10%;">
+						<div class="input-group">
+							  <span class="input-group-btn">
+								<button type="submit" class="btn btn-primary btn-flat" style="background-color:#3c8dbc;" data-btn-type="search" ><i class="fa fa-search"></i></button>
+							  	
+							  </span>
+							  
+						</div>
+		  			</div>
+		  			
 					<div class="box-body" id="logtimeline">
 						<table id="user_table" class="table table-bordered table-striped table-hover">
 						</table>
@@ -47,17 +63,75 @@
 
 	<script>  
 	
+	var formatDateTime = function (date) {  
+        var y = date.getFullYear();  
+        var m = date.getMonth() + 1;  
+        m = m < 10 ? ('0' + m) : m;  
+        var d = date.getDate();  
+        d = d < 10 ? ('0' + d) : d;  
+        var h = date.getHours();  
+        h=h < 10 ? ('0' + h) : h;  
+        var minute = date.getMinutes();  
+        minute = minute < 10 ? ('0' + minute) : minute;  
+        var second=date.getSeconds();  
+        second=second < 10 ? ('0' + second) : second;  
+        return y + '-' + m + '-' + d+'T'+h+':'+minute+':'+second;  
+    }; 
+    
 	$(function() { 
+		 var starttime = formatDateTime(new Date(
+		          new Date(new Date().toLocaleDateString()).getTime()
+		        )); // 当天0点
+		  var endtime = formatDateTime(new Date( // 当天23:59
+		          new Date(new Date().toLocaleDateString()).getTime() +
+		            24 * 60 * 60 * 1000 -
+		            1
+		        ));
+		$('#reservationtime').daterangepicker({ 
+			timePicker: true, 
+			timePickerIncrement: 1, 
+			timePicker24Hour:true,
+			timePickerSeconds:true,
+		    startDate: starttime,
+		    endDate: endtime,
+			locale: {
+				format: 'YYYY-MM-DD HH:mm:ss',
+				applyLabel: '确定',
+		        cancelLabel: '清空',
+		        fromLabel: '起始时间',
+	           toLabel: '结束时间',
+	           customRangeLabel: '自定义',
+	           daysOfWeek: ['日', '一', '二', '三', '四', '五', '六'],
+	           monthNames: ['一月', '二月', '三月', '四月', '五月', '六月',
+	               '七月', '八月', '九月', '十月', '十一月', '十二月'],
+	           firstDay: 1
+			} 
+		},function(start, end, label) {
+			starttime = start.format('YYYY-MM-DDTHH:mm:ss');
+			endtime = end.format('YYYY-MM-DDTHH:mm:ss');
+			console.log('New date range selected: ' + start.format('YYYY-MM-DDTHH:mm:ss') + ' to ' + end.format('YYYY-MM-DDTHH:mm:ss') + ' (predefined range: ' + label + ')');
+		})
+		$('input[name="datefilter"]').on('cancel.daterangepicker', function(ev, picker) {
+		      $(this).val('');
+		      starttime = "";
+		      endtime = "";
+		  });
 		//button event
 		$('button[data-btn-type]').click(function() {
 			var action = $(this).attr('data-btn-type');
 			switch (action) {
 			case 'search':
-				loadPage("/Monitor/poc/orderStatus/"+$("#tracknum").val());                
+				if($("#tracknum").val() ==''){
+					alert("请输入订单编号");
+				}else{
+					console.log("GG" + $("#reservationtime").val());
+					loadPage("/Monitor/poc/orderStatus/"+$("#tracknum").val()+"?starttime="+starttime+"&endtime="+endtime);     
+				}
 				break;
 			}
 
 		});
 		//form_init();
 	})
+	
 	</script>

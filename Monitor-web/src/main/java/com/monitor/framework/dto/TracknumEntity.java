@@ -11,6 +11,8 @@ public class TracknumEntity implements Serializable{
 	private String orderCode;
 	
 	private String message;
+	
+	private String error;
 
 	public String getLogsource() {
 		return logsource;
@@ -42,6 +44,14 @@ public class TracknumEntity implements Serializable{
 
 	public void setMessage(String message) {
 		this.message = message;
+	}
+
+	public String getError() {
+		return error;
+	}
+
+	public void setError(String error) {
+		this.error = error;
 	}
 
 }

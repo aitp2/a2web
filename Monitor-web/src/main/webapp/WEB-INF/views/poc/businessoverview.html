@@ -269,6 +269,9 @@
 <!-- AdminLTE for demo purposes -->
 <script src="${basePath}/resources/adminlte/dist/js/demo.js"></script>
 
+<script type="text/javascript" src="${basePath}/resources/adminlte/plugins/jvectormap/jquery-jvectormap-1.2.2.min.js"></script>
+<script type="text/javascript" src="${basePath}/resources/adminlte/plugins/jvectormap/jquery-jvectormap-cn-mill.js"></script>
+
 <!-- page script -->
 <script>
   $(function () {
@@ -301,7 +304,7 @@
           pointStrokeColor    : 'rgba(60,141,188,1)',
           pointHighlightFill  : '#fff',
           pointHighlightStroke: 'rgba(60,141,188,1)',
-          data                : [28, 48, 40, 19, 86, 27, orderTotal]
+          data                : [2800, 4800, 4000, 1900, 8600, 2700, 3566]
         }
       ]
     }
@@ -313,7 +316,7 @@
            label               : 'Electronics',
            fillColor           : 'rgba(210, 214, 222, 1)',
            strokeColor         : 'rgba(210, 214, 222, 1)',
-           pointColor          : 'rgba(210, 214, 222, 1)',
+           pointColor          : '#3b8bba',
            pointStrokeColor    : '#c1c7d1',
            pointHighlightFill  : '#fff',
            pointHighlightStroke: 'rgba(220,220,220,1)',

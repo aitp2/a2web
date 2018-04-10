@@ -41,7 +41,7 @@ public class PocController {
 	private static final String PRODUCTSTATUS = "poc/productStatus";
 	private static final String ORDERSTATUS_DATA = "poc/orderStatus_data";
 
-	private static final String queryByTracknum = "queryByTracknum";
+	private static final String queryByTracknumAndTime = "queryByTracknumAndTime";
 	private static final String queryJinggaoData = "queryJinggaoData";
 	private static final String queryOrderStatusData = "queryOrderStatusData";
 	private static final String queryJinggaoDataByProvince = "queryJinggaoDataByProvince";
@@ -322,20 +322,42 @@ public class PocController {
 
 	@RequestMapping(value = "orderStatus/{tracknum}", method = RequestMethod.GET)
 	public String orderStatusByTracknum(Model model,
-			@PathVariable("tracknum") String tracknum) {
+			@PathVariable("tracknum") String tracknum,
+			@RequestParam(value = "starttime", required = false) String starttime,
+			@RequestParam(value = "endtime", required = false) String endtime) {
+		model.addAttribute("starttime", starttime);
+		model.addAttribute("endtime", endtime);
+		if(starttime == null || starttime.equals("")){
+			starttime = "1997-01-01 00:00:00";
+		}
+		if(endtime == null || endtime.equals("")){
+			endtime = "2997-01-01 00:00:00";
+		}
+		starttime = starttime.replace("T", " ");
+		endtime = endtime.replace("T", " ");
 		if (tracknum != null && !tracknum.equals("")) {
 			Map<String, String> para = new HashMap<String, String>();
 			para.put("tracknum", tracknum);
+			para.put("starttime", starttime);
+			para.put("endtime", endtime);
 			try {
 				String result = HttpClientUtil.httpGet(
 						PropertiesUtil.getValue("microservice.url")
-								+ queryByTracknum, para);
+								+ queryByTracknumAndTime, para);
 				ResultData<List<TracknumEntity>> parseObject = JSON
 						.parseObject(
 								result,
 								new TypeReference<ResultData<List<TracknumEntity>>>() {
 								});
 				if (parseObject.getCode() > 0) {
+					for(TracknumEntity te:parseObject.getSerializableData()){
+						if(te.getMessage().contains("error")||te.getMessage().contains("Error")
+								||te.getMessage().contains("Exception")||te.getMessage().contains("exception")){
+							te.setError("true");
+						}else{
+							te.setError("false");
+						}
+					}
 					model.addAttribute("loglist",
 							parseObject.getSerializableData());
 				} else {

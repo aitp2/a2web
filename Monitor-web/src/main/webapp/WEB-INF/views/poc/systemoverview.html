@@ -1,5 +1,7 @@
 <link rel="stylesheet" href="${basePath}/resources/common/css/antdesign.css">
- 
+    <script type="text/javascript" src="${basePath}/resources/adminlte/plugins/jvectormap/jquery.vector-map.js"></script>
+<script type="text/javascript" src="${basePath}/resources/adminlte/plugins/jvectormap/china-zh.js"></script>
+    
  <section class="content-header">
       <ol class="breadcrumb">
         <li><a href="../starter.html"><i class="fa fa-dashboard"></i> 主页</a></li>
@@ -78,7 +80,7 @@
     </div>
 	
 	
-	      <div class="row">
+      <div class="row">
       <div class="col-md-8">
       	<div class="box box-success">
             <div class="box-header with-border">
@@ -93,15 +95,15 @@
             <!-- /.box-header -->
             <div class="box-body no-padding">
               <div class="row">
-                <div class="col-md-9 col-sm-8">
+                <div class="col-md-10 col-sm-7">
                   <div class="pad">
                     <!-- Map will be created here -->
-                    <div id="china-map-markers" style="height: 450px;"></div>
+                    <div id="china-map-markers" style="width:920px; height: 670px;"></div>
                   </div>
                 </div>
                 <!-- /.col -->
-                <div class="col-md-3 col-sm-4">
-                  <div class="pad box-pane-right bg-green" style="min-height: 150px">
+                <div class="col-md-2 col-sm-3">
+                  <div class="pad box-pane-right bg-green" style="min-height: 123px">
                     <div class="description-block margin-bottom">
                       <h2 class="">${正常订单!}</h2>
                       <span class="description-text">正常订单</span>
@@ -109,7 +111,7 @@
                     </div>
                     
                     <!-- /.description-block -->
-                    <div class="pad box-pane-right bg-yellow" style="min-height: 150px">
+                    <div class="pad box-pane-right bg-yellow" style="min-height: 123px">
                     <div class="description-block margin-bottom">
                       <h2 class="">${预警订单!}</h2>
                       <span class="description-text">预警订单</span>
@@ -117,13 +119,37 @@
                     </div>
                     <!-- /.description-block -->
                     
-                    <div class="pad box-pane-right bg-red" style="min-height: 150px">
+                    <div class="pad box-pane-right bg-red" style="min-height: 123px">
                     <div class="description-block">
                       
                       <a href="javascript:void(0);" onclick="refleshChina()" style="color:black"><h2 class="">${警告订单!}</h2></a>
                       <span class="description-text">警告订单</span>
                     </div>
                     <!-- /.description-block -->
+                  </div>
+                  <div class="pad box-pane-right" style="background-color:#FFFFFF;min-height: 30px">
+                  	
+                  </div>
+                  		警告颜色：
+                  <div class="pad box-pane-right" style="background-color:#FFCFCA;min-height: 50px">
+                  	<div class="description-block">
+                      <span class="description-text">警告单数=1</span>
+                    </div>
+                  </div>
+                  <div class="pad box-pane-right" style="background-color:#FDA4AA;min-height: 50px">
+                  	<div class="description-block">
+                      <span class="description-text">1&lt;警告单数&lt;=10</span>
+                    </div>
+                  </div>
+                  <div class="pad box-pane-right" style="background-color:#FF6464;min-height: 50px">
+                  	<div class="description-block">
+                      <span class="description-text">10&lt;警告单数&lt;=100</span>
+                    </div>
+                  </div>
+                  <div class="pad box-pane-right" style="background-color:#FD0C06;min-height: 50px">
+                  	<div class="description-block">
+                      <span class="description-text">100&lt;警告单数</span>
+                    </div>
                   </div>
                 </div>
                 <!-- /.col -->
@@ -357,51 +383,47 @@
     
         <script>
 	   //map
-	   var dataStatus =${jinggaoData!};
-	               $('#china-map-markers').vectorMap({
-	              	map: 'cn_mill',
-	              	normalizeFunction: 'polynomial',
-	                  hoverOpacity     : 0.7,
-	                  hoverColor       : false,
-	                  backgroundColor  : 'transparent',
-	                  regionStyle      : {
-	                    initial      : {
-	                      fill            : 'rgba(210, 214, 222, 1)',
-	                      'fill-opacity'  : 1,
-	                      stroke          : 'none',
-	                      'stroke-width'  : 0,
-	                      'stroke-opacity': 1
-	                    },
-	                    hover        : {
-	                      'fill-opacity': 0.7,
-	                      cursor        : 'pointer'
-	                    },
-	                    selected     : {
-	                      fill: 'yellow'
-	                    },
-	                    selectedHover: {}
-	                  },
-	                  markerStyle      : {
-	                    initial: {
-	                      fill  : '#DD4B39',
-	                      stroke: '#111'
-	                    }
-	                  },
-	              	markersSelectable: true,  
-	              	markersSelectableOne:true,
-	              	onMarkerSelected: function(Event,  code,  isSelected,  selectedMarkers){
-	                     if(isSelected == 1){
-	              			$.each(dataStatus, function (i, items) {
-	              			if (code == i) {
-	              				loadPage("/Monitor/poc/statusoverview?province="+encodeURI(encodeURI(items.name)));
-	              			}
-	              		});
-	              		}
-	              		
-	                  },
-	                  markers          : dataStatus
-	              	 
-	              	 });
+	   //数据可以动态生成，格式自己定义，cha对应china-zh.js中省份的简称
+       var dataStatus =  ${jinggaoData!};
+		
+       $('#china-map-markers').vectorMap({ map: 'china_zh',
+           color: "#D2D6DE", //地图颜色
+           onLabelShow: function (event, label, code) {//动态显示内容
+               $.each(dataStatus, function (i, items) {
+                   if (code == items.cha) {
+                       label.html(items.name + "警告订单："+items.jinggao);
+                   }
+               });
+           },
+			onRegionClick: function(event, code){
+			    $.each(dataStatus, function (i, items) {
+		　　　　　　　　if ((code == items.cha) && (items.jinggao > 0)) {
+					$("div.jvectormap-label").remove();
+		　　　　　　　　　　loadPage("/Monitor/poc/statusoverview?province="+encodeURI(encodeURI(items.name)));
+		　　　　　　　　}
+		　　　　　　});
+			}
+       })
+
+		
+       $.each(dataStatus, function (i, items) {
+			var color= "'#D2D6DE'";
+           if (items.jinggao == 1) {
+               color = "'#FFCFCA'";
+           }
+			else if (items.jinggao > 1 && items.jinggao <= 10) {
+               color = "'#FDA4AA'";
+           }
+			else if (items.jinggao > 10 && items.jinggao <= 100) {
+               color = "'#FF6464'";
+           }else if(items.jinggao >100){
+				color = "'#FD0C06'";
+			}
+			var josnStr = "{" + items.cha + ":"+color+"}";
+           $('#china-map-markers').vectorMap('set', 'colors', eval('(' + josnStr + ')'));
+       });
+	   
+	   
           function refleshChina(){
         	  loadPage("/Monitor/poc/statusoverview"); 
           }
@@ -417,7 +439,5 @@
           function goCartStatus(){
         	  loadPage('/Monitor/poc/cartStatus');
           }
-          
-          $("div.jvectormap-label").style.display="none";
 
 </script>
