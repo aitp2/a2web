@@ -194,7 +194,7 @@
       </div>
       
       
-      <div class="row">
+     <div class="row">
         <div class="col-xs-12">
           <div class="box">
             <div class="box-header">
@@ -262,7 +262,7 @@
                 <div class="ant-steps-item-description">
                  <div class="textSecondary___3ifTy stepDescription___2JfeS">
                   <div>
-                   ${orderStatusMonitorDTO.createTime}
+                   ${(orderStatusMonitorDTO.createTime)!}
                   </div>
                  </div>
                 </div>
@@ -288,7 +288,7 @@
                 <div class="ant-steps-item-description">
                  <div class="textSecondary___3ifTy stepDescription___2JfeS">
                   <div>
-                   ${orderStatusMonitorDTO.payTime}
+                   ${(orderStatusMonitorDTO.payTime)!}
                   </div>
                  </div>
                 </div>
@@ -320,7 +320,7 @@
                 <div class="ant-steps-item-description">
                  <div class="textSecondary___3ifTy stepDescription___2JfeS">
                   <div>
-                   ${orderStatusMonitorDTO.sendTime}
+                   ${(orderStatusMonitorDTO.sendTime)!}
                   </div>
                  </div>
                 </div>
@@ -351,7 +351,7 @@
                 <div class="ant-steps-item-description">
                  <div class="textSecondary___3ifTy stepDescription___2JfeS">
                   <div>
-                   ${orderStatusMonitorDTO.receviedTime}
+                   ${(orderStatusMonitorDTO.receviedTime)!}
                   </div>
                  </div>
                 </div>
@@ -376,13 +376,14 @@
         </div>
       </div>
     </section>
-    
-      
+      </div>
     </section>
+    <!-- /.content -->
     
-    
-        <script>
+    <script>
 	   //map
+	   
+	   
 	   //数据可以动态生成，格式自己定义，cha对应china-zh.js中省份的简称
        var dataStatus =  ${jinggaoData!};
 		
@@ -439,5 +440,7 @@
           function goCartStatus(){
         	  loadPage('/Monitor/poc/cartStatus');
           }
+          
+          //$("div.jvectormap-label").style.display="none";
 
 </script>

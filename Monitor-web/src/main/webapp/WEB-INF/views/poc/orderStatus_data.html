@@ -55,9 +55,17 @@
 					
 						    <!-- timeline time label -->
 						    <li class="time-label">
-						        <span class="bg-red">
-						            <#if loglist??> tracknum : ${tracknum!}  log event <#else> tracknum :${tracknum!}  log event not exsit </#if>
-						        </span>
+						        
+						            <#if loglist??>
+						            <span class="bg-green">
+						              ${tracknum!}  log event 
+						             </span>
+						             <#else>
+						             <span class="bg-red">
+						             	${tracknum!}  log event not exsit 
+						             </span>
+						             </#if>
+						        
 						    </li>
 						    <!-- /.timeline-label -->
 						
@@ -72,13 +80,14 @@
 							
 							            <h3 class="timeline-header"> 时间：${tracknumEntity.logtime} </h3>
 							
-							            <div class="timeline-body" >
+							             <div class="box-body" > 
+							           <!-- <pre style="font-weight: 600;">-->
 							            	<#if tracknumEntity.error == 'true'>
 							            	<font color="red">${tracknumEntity.message}</font>
 							            	<#else>
 							            	${tracknumEntity.message}
 							            	</#if>
-							                
+							           <!--  </pre>    --> 
 							            </div>
 							
 							        </div>
@@ -150,6 +159,9 @@
 		      starttime = "";
 		      endtime = "";
 		  });
+		if(starttime==""){
+			$("#reservationtime").val('')
+		}
 		//button event
 		$('button[data-btn-type]').click(function() {
 			var action = $(this).attr('data-btn-type');

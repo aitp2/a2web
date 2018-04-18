@@ -74,26 +74,29 @@ public class PocController {
 			if (parseObject_queryAllData.getCode() > 0) {
 				for (OrderStatusMonitorDTO orderStatusMonitorDTO : parseObject_queryAllData
 						.getSerializableData()) {
-					totalprice = totalprice.add(new BigDecimal(
-							orderStatusMonitorDTO.getTotalPrice()));
-					ordernum = ordernum.add(new BigDecimal("1"));
-					boolean containfalg = false;
-					for (ProvinceOrder tt : list_province_order) {
-						if (tt.getName().equals(
-								orderStatusMonitorDTO.getProvince())) {
-							tt.setTotalprice(tt.getTotalprice().add(
-									new BigDecimal(orderStatusMonitorDTO
-											.getTotalPrice())));
-							containfalg = true;
+					if(orderStatusMonitorDTO.getTotalPrice() != null && !orderStatusMonitorDTO.getTotalPrice().equals("")){
+						totalprice = totalprice.add(new BigDecimal(
+								orderStatusMonitorDTO.getTotalPrice()));
+						ordernum = ordernum.add(new BigDecimal("1"));
+						boolean containfalg = false;
+						for (ProvinceOrder tt : list_province_order) {
+							if (tt.getName().equals(
+									orderStatusMonitorDTO.getProvince())) {
+								tt.setTotalprice(tt.getTotalprice().add(
+										new BigDecimal(orderStatusMonitorDTO
+												.getTotalPrice())));
+								containfalg = true;
+							}
+						}
+						if (containfalg == false) {
+							ProvinceOrder po = new ProvinceOrder();
+							po.setName(orderStatusMonitorDTO.getProvince());
+							po.setTotalprice(new BigDecimal(orderStatusMonitorDTO
+									.getTotalPrice()));
+							list_province_order.add(po);
 						}
 					}
-					if (containfalg == false) {
-						ProvinceOrder po = new ProvinceOrder();
-						po.setName(orderStatusMonitorDTO.getProvince());
-						po.setTotalprice(new BigDecimal(orderStatusMonitorDTO
-								.getTotalPrice()));
-						list_province_order.add(po);
-					}
+					
 				}
 			}
 			Collections.sort(list_province_order);
@@ -230,9 +233,11 @@ public class PocController {
 				BigDecimal ordernum = new BigDecimal("0");
 				for (OrderStatusMonitorDTO orderStatusMonitorDTO : parseObject_queryAllData
 						.getSerializableData()) {
-					totalprice = totalprice.add(new BigDecimal(
-							orderStatusMonitorDTO.getTotalPrice()));
-					ordernum = ordernum.add(new BigDecimal("1"));
+					if(orderStatusMonitorDTO.getTotalPrice() != null && !orderStatusMonitorDTO.getTotalPrice().equals("")){
+						totalprice = totalprice.add(new BigDecimal(
+								orderStatusMonitorDTO.getTotalPrice()));
+						ordernum = ordernum.add(new BigDecimal("1"));
+					}
 				}
 				kedanjia = totalprice
 						.divide(ordernum, 2, BigDecimal.ROUND_DOWN);
