@@ -1,7 +1,7 @@
   <!-- daterange picker -->
-  <script src="${basePath}/resources/adminlte/plugins/daterangepicker/moment.min.js"></script>
-  <link rel="stylesheet" href="${basePath}/resources/adminlte/plugins/daterangepicker/daterangepicker.css">
-  <script src="${basePath}/resources/adminlte/plugins/daterangepicker/daterangepicker.js"></script>
+  <script src="${resourcePath}/adminlte/plugins/daterangepicker/moment.min.js"></script>
+  <link rel="stylesheet" href="${resourcePath}/adminlte/plugins/daterangepicker/daterangepicker.css">
+  <script src="${resourcePath}/adminlte/plugins/daterangepicker/daterangepicker.js"></script>
   
 	<!-- Content Header (Page header) -->
 	<section class="content-header">
@@ -45,6 +45,7 @@
 		  			</div>
 		  			
 					<div class="box-body" id="logtimeline">
+						liby订单日志查询示例单号：00707629、00484169、00520039
 						<table id="user_table" class="table table-bordered table-striped table-hover">
 						</table>
 					</div>
@@ -79,14 +80,15 @@
     }; 
     
 	$(function() { 
-		 var starttime = formatDateTime(new Date(
-		          new Date(new Date().toLocaleDateString()).getTime()
-		        )); // 当天0点
-		  var endtime = formatDateTime(new Date( // 当天23:59
-		          new Date(new Date().toLocaleDateString()).getTime() +
-		            24 * 60 * 60 * 1000 -
-		            1
-		        ));
+		 //var starttime = formatDateTime(new Date(
+		 //         new Date(new Date().toLocaleDateString()).getTime()
+		 //       )); // 当天0点
+		  //var endtime = formatDateTime(new Date( // 当天23:59
+		  //        new Date(new Date().toLocaleDateString()).getTime() +
+		   //         24 * 60 * 60 * 1000 -
+		    //        1
+		   //     ));
+		 var starttime = "",endtime="";
 		$('#reservationtime').daterangepicker({ 
 			timePicker: true, 
 			timePickerIncrement: 1, 
@@ -116,6 +118,9 @@
 		      starttime = "";
 		      endtime = "";
 		  });
+		if(starttime==""){
+			$("#reservationtime").val('');
+		}
 		//button event
 		$('button[data-btn-type]').click(function() {
 			var action = $(this).attr('data-btn-type');

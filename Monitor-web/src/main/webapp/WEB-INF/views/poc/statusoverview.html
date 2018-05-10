@@ -1,7 +1,6 @@
-  
-   <link rel="stylesheet" href="${basePath}/resources/common/css/antdesign.css">
-   <script type="text/javascript" src="${basePath}/resources/adminlte/plugins/jvectormap/jquery.vector-map.js"></script>
-<script type="text/javascript" src="${basePath}/resources/adminlte/plugins/jvectormap/china-zh.js"></script>
+<script type="text/javascript" src="${resourcePath}/adminlte/plugins/jvectormap/jquery.vector-map.js"></script>
+<script type="text/javascript"  src="${resourcePath}/adminlte/plugins/jvectormap/china-zh.js"></script>
+   
     
   <section class="content-header">
       <ol class="breadcrumb">
@@ -212,7 +211,7 @@
              
              <div class="ant-row">
 				<div class="ant-col-xs-8 ant-col-sm-8 ant-col-md-8 ant-col-lg-8 ant-col-xl-8" style="color:black;background:#F5F5F5;height:25px" align="center" >
-	            	单号：<a href="javascript:void(0);" onclick="refleshOperate('${orderStatusMonitorDTO.orderCode}');" style="color:black">${orderStatusMonitorDTO.orderCode}</a>
+	            	单号：<a href="javascript:void(0);" onclick="refleshOperate('${orderStatusMonitorDTO.orderCode}');" style="text-decoration:underline">${orderStatusMonitorDTO.orderCode}</a>
 				</div>
 				<div class="ant-col-xs-8 ant-col-sm-8 ant-col-md-8 ant-col-lg-8 ant-col-xl-8" style="color:black;background:#F5F5F5;height:25px" align="center" >
 					用户：${orderStatusMonitorDTO.user}

@@ -1,7 +1,4 @@
-<link rel="stylesheet" href="${basePath}/resources/common/css/antdesign.css">
-    <script type="text/javascript" src="${basePath}/resources/adminlte/plugins/jvectormap/jquery.vector-map.js"></script>
-<script type="text/javascript" src="${basePath}/resources/adminlte/plugins/jvectormap/china-zh.js"></script>
-    
+   
  <section class="content-header">
       <ol class="breadcrumb">
         <li><a href="../starter.html"><i class="fa fa-dashboard"></i> 主页</a></li>
@@ -55,11 +52,24 @@
               </div>
             </div>
             <div class="box-body">
-              <div id="line-chart" style="height: 300px;"></div>
+              <div class="chart">
+                <canvas id="lineChart" style="height:280px"></canvas>
+              </div>
             </div>
+            
             <!-- /.box-body-->
           </div>
           </div>
+          
+          <section class="content-header">
+				<span class=" btn-default">请选择:</span>
+				<div class="btn-group">
+		                <button type="button" class="btn btn-default" style="background-color:#00c0ef">当日</button>
+		                <button type="button" class="btn btn-default">当月</button>
+		                <button type="button" class="btn btn-default">季度</button>
+		                <button type="button" class="btn btn-default">年</button>
+		        </div>
+		    </section>
           <div class="col-md-6">
            <div class="box box-danger">
             <div class="box-header with-border">
@@ -72,7 +82,20 @@
               </div>
             </div>
             <div class="box-body">
-              <canvas id="pieChart" style="height:300px"></canvas>
+               <table class="table table-bordered">
+                <tr>
+                  <th style="width: 60px">异常</th>
+                  <th style="width: 40px">数量</th>
+                </tr>
+                <#list exceptionAggs as exceptionDTO>
+                <tr>
+                  <td>
+                  <a href="javascript:void(0);" onclick="openExceptionLog('${(exceptionDTO.name)!}');" style="color:black;text-decoration:underline">${(exceptionDTO.name)!}</a>
+				</td>
+                  <td><span class="badge bg-red">${(exceptionDTO.count)!}</span></td>
+                </tr>
+                </#list> 
+              </table>
             </div>
             <!-- /.box-body -->
           </div>
@@ -80,367 +103,102 @@
     </div>
 	
 	
-      <div class="row">
-      <div class="col-md-8">
-      	<div class="box box-success">
-            <div class="box-header with-border">
-              <h3 class="box-title">当前订单监控</h3>
-
-              <div class="box-tools pull-right">
-                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
-                </button>
-                <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
-              </div>
-            </div>
-            <!-- /.box-header -->
-            <div class="box-body no-padding">
-              <div class="row">
-                <div class="col-md-10 col-sm-7">
-                  <div class="pad">
-                    <!-- Map will be created here -->
-                    <div id="china-map-markers" style="width:920px; height: 670px;"></div>
-                  </div>
-                </div>
-                <!-- /.col -->
-                <div class="col-md-2 col-sm-3">
-                  <div class="pad box-pane-right bg-green" style="min-height: 123px">
-                    <div class="description-block margin-bottom">
-                      <h2 class="">${正常订单!}</h2>
-                      <span class="description-text">正常订单</span>
-                    </div>
-                    </div>
-                    
-                    <!-- /.description-block -->
-                    <div class="pad box-pane-right bg-yellow" style="min-height: 123px">
-                    <div class="description-block margin-bottom">
-                      <h2 class="">${预警订单!}</h2>
-                      <span class="description-text">预警订单</span>
-                    </div>
-                    </div>
-                    <!-- /.description-block -->
-                    
-                    <div class="pad box-pane-right bg-red" style="min-height: 123px">
-                    <div class="description-block">
-                      
-                      <a href="javascript:void(0);" onclick="refleshChina()" style="color:black"><h2 class="">${警告订单!}</h2></a>
-                      <span class="description-text">警告订单</span>
-                    </div>
-                    <!-- /.description-block -->
-                  </div>
-                  <div class="pad box-pane-right" style="background-color:#FFFFFF;min-height: 30px">
-                  	
-                  </div>
-                  		警告颜色：
-                  <div class="pad box-pane-right" style="background-color:#FFCFCA;min-height: 50px">
-                  	<div class="description-block">
-                      <span class="description-text">警告单数=1</span>
-                    </div>
-                  </div>
-                  <div class="pad box-pane-right" style="background-color:#FDA4AA;min-height: 50px">
-                  	<div class="description-block">
-                      <span class="description-text">1&lt;警告单数&lt;=10</span>
-                    </div>
-                  </div>
-                  <div class="pad box-pane-right" style="background-color:#FF6464;min-height: 50px">
-                  	<div class="description-block">
-                      <span class="description-text">10&lt;警告单数&lt;=100</span>
-                    </div>
-                  </div>
-                  <div class="pad box-pane-right" style="background-color:#FD0C06;min-height: 50px">
-                  	<div class="description-block">
-                      <span class="description-text">100&lt;警告单数</span>
-                    </div>
-                  </div>
-                </div>
-                <!-- /.col -->
-              </div>
-              <!-- /.row -->
-            </div>
-            <!-- /.box-body -->
-          </div>
-      </div>
-
-		<div class="col-md-4">
-          <div class="box box-default">
-            <div class="box-header with-border">
-              <i class="fa fa-bullhorn"></i>
-
-              <h3 class="box-title">当日购物车与产品监控</h3>
-            </div>
-            <!-- /.box-header -->
-            <div class="box-body">
-              <div class="callout callout-danger">
-                <h4>产品状态异常</h4>
-
-                <p>当日存在9条产品异常记录</p>
-                  <a href="#" onClick="goProductStatus()" class="small-box-footer">
-                                                   查询产品状态监控 <i class="fa fa-arrow-circle-right"></i>
-            </a>
-              </div>
-              <div class="callout callout-success">
-                <h4>购物车状态正常</h4>
-
-                <p> </p>
-                <a href="#" onClick="goCartStatus()" class="small-box-footer">
-              	查询购物车状态监控 <i class="fa fa-arrow-circle-right"></i>
-              </div>
-            </div>
-            <!-- /.box-body -->
-          </div>
-          <!-- /.box -->
-        </div>
-
-
-      </div>
-      
-      
-     <div class="row">
-        <div class="col-xs-12">
-          <div class="box">
-            <div class="box-header">
-              <h3 class="box-title">${province!}警告订单列表</h3>
-			<!-- 
-              <div class="box-tools">
-                <div class="input-group input-group-sm" style="width: 150px;">
-                  <input type="text" name="table_search" class="form-control pull-right" placeholder="Search">
-
-                  <div class="input-group-btn">
-                    <button type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>
-                  </div>
-                </div>
-              </div>
-               -->
-            </div>
-            <!-- /.box-header -->
-            <div class="box-body table-responsive no-padding">
-            
-         <div class="ant-card ant-card-wider-padding ant-card-padding-transition" style="margin-bottom: 24px;">
-           <div class="ant-card-body">
-           
-           <#list orderStatusList as orderStatusMonitorDTO>
-            <div>
-             
-             <div class="ant-row">
-				<div class="ant-col-xs-8 ant-col-sm-8 ant-col-md-8 ant-col-lg-8 ant-col-xl-8" style="color:black;background:#F5F5F5;height:25px" align="center" >
-	            	单号：<a href="javascript:void(0);" onclick="refleshOperate('${orderStatusMonitorDTO.orderCode}');" style="color:black">${orderStatusMonitorDTO.orderCode}</a>
-				</div>
-				<div class="ant-col-xs-8 ant-col-sm-8 ant-col-md-8 ant-col-lg-8 ant-col-xl-8" style="color:black;background:#F5F5F5;height:25px" align="center" >
-					用户：${orderStatusMonitorDTO.user}
-				</div>
-				<div class="ant-col-xs-8 ant-col-sm-8 ant-col-md-8 ant-col-lg-8 ant-col-xl-8" style="color:black;background:#F5F5F5;height:25px" align="center" >
-					总价：${orderStatusMonitorDTO.totalPrice}
-				</div>
-			</div>
-             
-             
-          <div  class="ant-steps ant-steps-horizontal ant-steps-label-vertical ant-steps-dot">
-             
-             <div style="display:none" class="ant-steps-item <#if orderStatusMonitorDTO.cancelFlag == 'true'> ant-steps-item-wait</#if><#if orderStatusMonitorDTO.payStatus == '' || orderStatusMonitorDTO.payStatus == 'NOMARL'> ant-steps-item-finish</#if><#if orderStatusMonitorDTO.payStatus == 'YUJING'> ant-steps-item-orderyujing</#if> ">
-               <div class="ant-steps-item-tail"></div>
-               <div class="ant-steps-item-icon">
-                <span class="ant-steps-icon"><span class="ant-steps-icon-dot"></span></span>
-               </div>
-               <div class="ant-steps-item-content">
-                <div class="ant-steps-item-title">
-                 <a href="javascript:void(0);" onclick="refleshOperateByOrderStatus('${orderStatusMonitorDTO.orderCode}','Created');"
-                 style="color:black"></a>
-                </div>
-               </div>
-              </div>
-            
-              
-              <div class="ant-steps-item <#if orderStatusMonitorDTO.cancelFlag == 'true'> ant-steps-item-wait</#if><#if orderStatusMonitorDTO.payStatus == '' || orderStatusMonitorDTO.payStatus == 'NOMARL'> ant-steps-item-finish</#if><#if orderStatusMonitorDTO.payStatus == 'YUJING'> ant-steps-item-orderyujing</#if> ">
-               <div class="ant-steps-item-tail"></div>
-               <div class="ant-steps-item-icon">
-                <span class="ant-steps-icon"><span class="ant-steps-icon-dot"></span></span>
-               </div>
-               <div class="ant-steps-item-content">
-                <div class="ant-steps-item-title">
-                 <a href="javascript:void(0);" onclick="refleshOperateByOrderStatus('${orderStatusMonitorDTO.orderCode}','Created');" style="color:black">创建</a>
-                 <#if orderStatusMonitorDTO.cancelFlag == 'true'>(已取消)</#if>
-                </div>
-                <div class="ant-steps-item-description">
-                 <div class="textSecondary___3ifTy stepDescription___2JfeS">
-                  <div>
-                   ${(orderStatusMonitorDTO.createTime)!}
-                  </div>
-                 </div>
-                </div>
-               </div>
-              </div>
-              
-              <div class="ant-steps-item  <#if orderStatusMonitorDTO.sendStatus == 'NOMARL' > ant-steps-item-finish</#if>
-              <#if orderStatusMonitorDTO.payStatus == 'NOMARL' && orderStatusMonitorDTO.sendStatus == ''> ant-steps-item-finish</#if>
-              <#if orderStatusMonitorDTO.payStatus == ''|| orderStatusMonitorDTO.payStatus == 'YUJING'> ant-steps-item-wait</#if><#if orderStatusMonitorDTO.sendStatus == 'YUJING' > ant-steps-item-orderyujing</#if><#if orderStatusMonitorDTO.sendStatus == 'JINGGAO' > ant-steps-item-orderjinggao</#if>">
-               <div class="ant-steps-item-tail"></div>
-               <div class="ant-steps-item-icon">
-                <span class="ant-steps-icon"><span class="ant-steps-icon-dot"></span></span>
-               </div>
-               <div class="ant-steps-item-content">
-                <div class="ant-steps-item-title">
-               <#if orderStatusMonitorDTO.payStatus == 'NOMARL' >
-              	<a href="javascript:void(0);" onclick="refleshOperateByOrderStatus('${orderStatusMonitorDTO.orderCode}','Payed');" style="color:black">已支付</a>
-              	</#if>
-               <#if orderStatusMonitorDTO.payStatus == 'YUJING' >
-              	待支付
-              	</#if>
-                </div>
-                <div class="ant-steps-item-description">
-                 <div class="textSecondary___3ifTy stepDescription___2JfeS">
-                  <div>
-                   ${(orderStatusMonitorDTO.payTime)!}
-                  </div>
-                 </div>
-                </div>
-               </div>
-              </div>
-              
-              <div class="ant-steps-item  <#if orderStatusMonitorDTO.receviedStatus == 'NOMARL' > ant-steps-item-finish</#if>
-              <#if orderStatusMonitorDTO.sendStatus == 'NOMARL' && orderStatusMonitorDTO.receviedStatus == ''> ant-steps-item-finish</#if>
-              <#if orderStatusMonitorDTO.sendStatus == ''|| orderStatusMonitorDTO.sendStatus == 'YUJING' || orderStatusMonitorDTO.sendStatus == 'JINGGAO'> ant-steps-item-wait</#if><#if orderStatusMonitorDTO.receviedStatus == 'YUJING' > ant-steps-item-orderyujing</#if><#if orderStatusMonitorDTO.receviedStatus == 'JINGGAO' > ant-steps-item-orderjinggao</#if>">
-               <div class="ant-steps-item-tail"></div>
-               <div class="ant-steps-item-icon">
-                <span class="ant-steps-icon"><span class="ant-steps-icon-dot"></span></span>
-               </div>
-               <div class="ant-steps-item-content">
-                <div class="ant-steps-item-title">
-               <#if orderStatusMonitorDTO.payStatus == 'YUJING' >
-              	
-               </#if>
-               <#if orderStatusMonitorDTO.sendStatus == 'NOMARL' >
-              	<a href="javascript:void(0);" onclick="refleshOperateByOrderStatus('${orderStatusMonitorDTO.orderCode}','Sent');" style="color:black">已发货</a>
-              </#if>
-               <#if orderStatusMonitorDTO.sendStatus == 'YUJING' >
-              	待发货
-              </#if>
-              <#if orderStatusMonitorDTO.sendStatus == 'JINGGAO' >
-             	 待发货
-              </#if>
-                </div>
-                <div class="ant-steps-item-description">
-                 <div class="textSecondary___3ifTy stepDescription___2JfeS">
-                  <div>
-                   ${(orderStatusMonitorDTO.sendTime)!}
-                  </div>
-                 </div>
-                </div>
-               </div>
-              </div>
-              
-              <div class="ant-steps-item <#if orderStatusMonitorDTO.receviedStatus == 'NOMARL' > ant-steps-item-process<#else> ant-steps-item-wait</#if>">
-               <div class="ant-steps-item-tail"></div>
-               <div class="ant-steps-item-icon">
-                <span class="ant-steps-icon"><span class="ant-steps-icon-dot"></span></span>
-               </div>
-               <div class="ant-steps-item-content">
-                <div class="ant-steps-item-title">
-                 
-               <#if orderStatusMonitorDTO.payStatus == 'YUJING' >
-              	
-               </#if>
-               <#if orderStatusMonitorDTO.receviedStatus == 'YUJING' >
-              	待签收
-              </#if>
-              <#if orderStatusMonitorDTO.receviedStatus == 'JINGGAO' >
-              	待签收
-              </#if>
-              <#if orderStatusMonitorDTO.receviedStatus == 'NOMARL' >
-             	 <a href="javascript:void(0);" onclick="refleshOperateByOrderStatus('${orderStatusMonitorDTO.orderCode}','Recevied');" style="color:black">已签收</a>
-              </#if>
-                </div>
-                <div class="ant-steps-item-description">
-                 <div class="textSecondary___3ifTy stepDescription___2JfeS">
-                  <div>
-                   ${(orderStatusMonitorDTO.receviedTime)!}
-                  </div>
-                 </div>
-                </div>
-               </div>
-              </div>
-             </div>
-             
-             
-             </#list> 
-             
-             
-
-            </div>
-           </div>
-          </div>
-          
-          
-            </div>
-            <!-- /.box-body -->
-          </div>
-          <!-- /.box -->
-        </div>
-      </div>
     </section>
       </div>
     </section>
     <!-- /.content -->
-    
-    <script>
-	   //map
-	   
-	   
-	   //数据可以动态生成，格式自己定义，cha对应china-zh.js中省份的简称
-       var dataStatus =  ${jinggaoData!};
-		
-       $('#china-map-markers').vectorMap({ map: 'china_zh',
-           color: "#D2D6DE", //地图颜色
-           onLabelShow: function (event, label, code) {//动态显示内容
-               $.each(dataStatus, function (i, items) {
-                   if (code == items.cha) {
-                       label.html(items.name + "警告订单："+items.jinggao);
-                   }
-               });
-           },
-			onRegionClick: function(event, code){
-			    $.each(dataStatus, function (i, items) {
-		　　　　　　　　if ((code == items.cha) && (items.jinggao > 0)) {
-					$("div.jvectormap-label").remove();
-		　　　　　　　　　　loadPage("/Monitor/poc/statusoverview?province="+encodeURI(encodeURI(items.name)));
-		　　　　　　　　}
-		　　　　　　});
-			}
-       })
 
-		
-       $.each(dataStatus, function (i, items) {
-			var color= "'#D2D6DE'";
-           if (items.jinggao == 1) {
-               color = "'#FFCFCA'";
-           }
-			else if (items.jinggao > 1 && items.jinggao <= 10) {
-               color = "'#FDA4AA'";
-           }
-			else if (items.jinggao > 10 && items.jinggao <= 100) {
-               color = "'#FF6464'";
-           }else if(items.jinggao >100){
-				color = "'#FD0C06'";
-			}
-			var josnStr = "{" + items.cha + ":"+color+"}";
-           $('#china-map-markers').vectorMap('set', 'colors', eval('(' + josnStr + ')'));
-       });
-	   
-	   
-          function refleshChina(){
-        	  loadPage("/Monitor/poc/statusoverview"); 
-          }
+    <script>
           
-          function refleshOperate(code){
-        	  loadPage("/Monitor/poc/orderStatus/"+code); 
-          }
-          
-          function goProductStatus(){
-        	  loadPage('/Monitor/poc/productStatus');
-          }
-          
-          function goCartStatus(){
-        	  loadPage('/Monitor/poc/cartStatus');
+          function openExceptionLog(exception){
+        	  loadPage("/Monitor/poc/exceptionStatus?exception="+exception); 
           }
           
           //$("div.jvectormap-label").style.display="none";
+          
+  $(function () {
+    /* ChartJS
+     * -------
+     * Here we will create a few charts using ChartJS
+     */
+    
+   // var orderTotal = document.getElementById("totalprice").value
+
+    var areaChartData = {
+      labels  : ['10:00', '10:10', '10:20', '10:30', '10:40', '10:50'],
+      datasets: [
+         {
+           label               : '支付接口(ms)',
+           fillColor           : 'rgba(210, 214, 222, 1)',
+           strokeColor         : 'rgba(210, 214, 222, 1)',
+           pointColor          : 'rgba(210, 214, 222, 1)',
+           pointStrokeColor    : '#c1c7d1',
+           pointHighlightFill  : '#fff',
+           pointHighlightStroke: 'rgba(220,220,220,1)',
+           data                : [65, 59, 80, 81, 56, 55]
+         },
+        {
+          label               : '发货接口(ms)',
+          fillColor           : 'rgba(60,141,188,0.9)',
+          strokeColor         : 'rgba(60,141,188,0.8)',
+          pointColor          : '#3b8bba',
+          pointStrokeColor    : 'rgba(60,141,188,1)',
+          pointHighlightFill  : '#fff',
+          pointHighlightStroke: 'rgba(60,141,188,1)',
+          data                : [26, 67, 21, 78, 66, 33]
+        }
+      ]
+    }
+
+    var areaChartOptions = {
+      //Boolean - If we should show the scale at all
+      showScale               : true,
+      //Boolean - Whether grid lines are shown across the chart
+      scaleShowGridLines      : false,
+      //String - Colour of the grid lines
+      scaleGridLineColor      : 'rgba(0,0,0,.05)',
+      //Number - Width of the grid lines
+      scaleGridLineWidth      : 1,
+      //Boolean - Whether to show horizontal lines (except X axis)
+      scaleShowHorizontalLines: true,
+      //Boolean - Whether to show vertical lines (except Y axis)
+      scaleShowVerticalLines  : true,
+      //Boolean - Whether the line is curved between points
+      bezierCurve             : true,
+      //Number - Tension of the bezier curve between points
+      bezierCurveTension      : 0.3,
+      //Boolean - Whether to show a dot for each point
+      pointDot                : false,
+      //Number - Radius of each point dot in pixels
+      pointDotRadius          : 4,
+      //Number - Pixel width of point dot stroke
+      pointDotStrokeWidth     : 1,
+      //Number - amount extra to add to the radius to cater for hit detection outside the drawn point
+      pointHitDetectionRadius : 20,
+      //Boolean - Whether to show a stroke for datasets
+      datasetStroke           : true,
+      //Number - Pixel width of dataset stroke
+      datasetStrokeWidth      : 2,
+      //Boolean - Whether to fill the dataset with a color
+      datasetFill             : true,
+      //String - A legend template
+      legendTemplate          : '<ul class="<%=name.toLowerCase()%>-legend"><% for (var i=0; i<datasets.length; i++){%><li><span style="background-color:<%=datasets[i].lineColor%>"></span><%if(datasets[i].label){%><%=datasets[i].label%><%}%></li><%}%></ul>',
+      //Boolean - whether to maintain the starting aspect ratio or not when responsive, if set to false, will take up entire container
+      maintainAspectRatio     : true,
+      //Boolean - whether to make the chart responsive to window resizing
+      responsive              : true
+    }
+
+
+    //-------------
+    //- LINE CHART -
+    //--------------
+    var lineChartCanvas          = $('#lineChart').get(0).getContext('2d')
+    var lineChart                = new Chart(lineChartCanvas)
+    var lineChartOptions         = areaChartOptions
+    lineChartOptions.datasetFill = false
+    lineChart.Line(areaChartData, lineChartOptions)
+
+  })
 
 </script>

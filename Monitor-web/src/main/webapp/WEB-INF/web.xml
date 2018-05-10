@@ -57,6 +57,10 @@
 	<filter>
 		<filter-name>SystemFilter</filter-name>
 		<filter-class>com.monitor.framework.filter.SystemFilter</filter-class>
+		<init-param>
+			<param-name>resourcePath</param-name>
+			<param-value>/Monitor/resources</param-value>
+		</init-param>
 	</filter>
 	<filter-mapping>
 		<filter-name>SystemFilter</filter-name>

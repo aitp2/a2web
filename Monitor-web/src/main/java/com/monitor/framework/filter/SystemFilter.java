@@ -1,6 +1,7 @@
 package com.monitor.framework.filter;
 
 import java.io.IOException;
+import java.util.Date;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -14,15 +15,19 @@ import javax.servlet.http.HttpServletRequest;
  *
  */
 public class SystemFilter implements Filter {
+	
+	String resourcePath = "";
 
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException,
             ServletException {
 
         HttpServletRequest request = (HttpServletRequest) servletRequest;
-        System.out.println(request.getRequestURL());
+        System.out.println("SystemFilter begin time:"+new Date()+request.getRequestURL());
         String basePath = request.getContextPath();
         request.setAttribute("basePath", basePath);
+        request.setAttribute("resourcePath", resourcePath);
         filterChain.doFilter(request, servletResponse);
+        System.out.println("SystemFilter finish time:"+new Date()+request.getRequestURL());
     }
 
     @Override
@@ -34,9 +39,11 @@ public class SystemFilter implements Filter {
 
     @Override
     public void init(FilterConfig arg0) throws ServletException {
-
-        // TODO Auto-generated method stub
-
+    	resourcePath=arg0.getInitParameter("resourcePath");
+    }
+    
+    public static void main(String[] args) {
+    	System.out.println("time:"+new Date());
     }
 
 }

@@ -19,6 +19,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.TypeReference;
 import com.monitor.framework.base.pojo.ResultCode;
+import com.monitor.framework.dto.ExceptionAggs;
+import com.monitor.framework.dto.ExceptionEntity;
 import com.monitor.framework.dto.OrderStatusEntity;
 import com.monitor.framework.dto.OrderStatusMonitorDTO;
 import com.monitor.framework.dto.ProductOrder;
@@ -40,6 +42,7 @@ public class PocController {
 	private static final String ORDERSTATUS = "poc/orderStatus";
 	private static final String PRODUCTSTATUS = "poc/productStatus";
 	private static final String ORDERSTATUS_DATA = "poc/orderStatus_data";
+	private static final String EXCEPTIONSTATUS = "poc/exceptionStatus";
 
 	private static final String queryByTracknumAndTime = "queryByTracknumAndTime";
 	private static final String queryJinggaoData = "queryJinggaoData";
@@ -48,7 +51,8 @@ public class PocController {
 	private static final String queryAllOrder = "queryAllOrder";
 	private static final String queryAllProduct = "queryAllProduct";
 	private static final String queryJinggaoShuliang ="queryJinggaoShuliang";
-	
+	private static final String queryExceptionByAggs ="queryExceptionByAggs";
+	private static final String queryException ="queryException";
 
 	@RequestMapping(value = "businessoverview", method = RequestMethod.GET)
 	public String businessoverview(Model model) {
@@ -257,7 +261,9 @@ public class PocController {
 
 	@RequestMapping(value = "systemoverview", method = RequestMethod.GET)
 	public String systemoverview(Model model,
-			@RequestParam(value = "province", required = false) String province) {
+			@RequestParam(value = "province", required = false) String province,
+			@RequestParam(value = "starttime", required = false) String starttime,
+			@RequestParam(value = "endtime", required = false) String endtime) {
 		try {
 			if (province != null) {
 				province = java.net.URLDecoder.decode(province, "UTF-8");
@@ -307,6 +313,31 @@ public class PocController {
 			} else {
 				model.addAttribute("orderStatusList", null);
 			}
+			
+			//异常排行
+			model.addAttribute("starttime", starttime);
+			model.addAttribute("endtime", endtime);
+			if(starttime == null || starttime.equals("")){
+				starttime = "1997-01-01 00:00:00";
+			}
+			if(endtime == null || endtime.equals("")){
+				endtime = "2997-01-01 00:00:00";
+			}
+			starttime = starttime.replace("T", " ");
+			endtime = endtime.replace("T", " ");
+			Map<String, String> para = new HashMap<String, String>();
+			para.put("starttime", starttime);
+			para.put("endtime", endtime);
+			String result_queryExceptionAggs = HttpClientUtil.httpGet(
+					PropertiesUtil.getValue("microservice.url")
+							+ queryExceptionByAggs, para);
+			ResultData<List<ExceptionAggs>> parseObject_queryExceptionAggs = JSON
+					.parseObject(
+							result_queryExceptionAggs,
+							new TypeReference<ResultData<List<ExceptionAggs>>>() {
+							});
+			model.addAttribute("exceptionAggs", parseObject_queryExceptionAggs
+					.getSerializableData());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -375,6 +406,50 @@ public class PocController {
 		}
 		model.addAttribute("tracknum", tracknum);
 		return ORDERSTATUS_DATA;
+	}
+	
+	@RequestMapping(value = "exceptionStatus", method = RequestMethod.GET)
+	public String exceptionStatus(Model model,
+			@RequestParam(value = "exception", required = false) String exception,
+			@RequestParam(value = "starttime", required = false) String starttime,
+			@RequestParam(value = "endtime", required = false) String endtime) {
+		model.addAttribute("starttime", starttime);
+		model.addAttribute("endtime", endtime);
+		if(starttime == null || starttime.equals("")){
+			starttime = "1997-01-01 00:00:00";
+		}
+		if(endtime == null || endtime.equals("")){
+			endtime = "2997-01-01 00:00:00";
+		}
+		starttime = starttime.replace("T", " ");
+		endtime = endtime.replace("T", " ");
+		if (exception != null && !exception.equals("")) {
+			Map<String, String> para = new HashMap<String, String>();
+			para.put("exception", exception);
+			para.put("starttime", starttime);
+			para.put("endtime", endtime);
+			try {
+				String result = HttpClientUtil.httpGet(
+						PropertiesUtil.getValue("microservice.url")
+								+ queryException, para);
+				ResultData<List<ExceptionEntity>> parseObject = JSON
+						.parseObject(
+								result,
+								new TypeReference<ResultData<List<ExceptionEntity>>>() {
+								});
+				if (parseObject.getCode() > 0) {
+					model.addAttribute("loglist",
+							parseObject.getSerializableData());
+				} else {
+					model.addAttribute("loglist", null);
+				}
+
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		model.addAttribute("exception", exception);
+		return EXCEPTIONSTATUS;
 	}
 
 	@RequestMapping(value = "productStatus", method = RequestMethod.GET)

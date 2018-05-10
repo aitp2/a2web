@@ -6,12 +6,12 @@
 	<!-- Content Header (Page header) -->
 	<section class="content-header">
 		<h1>
-			订单查询 <small>日志</small>
+			异常查询 <small>日志</small>
 		</h1>
 		<ol class="breadcrumb">
 			<li><a href="${basePath}"><i class="fa fa-dashboard"></i> 首页</a></li>
 			<li><a href="#">监控查询</a></li>
-			<li class="active">订单查询</li>
+			<li class="active">异常查询</li>
 		</ol>
 	</section> 
 
@@ -22,7 +22,7 @@
 				<div class="box"><br>
 					<!-- /.box-header -->
 		  			<div class="col-md-3" style="width:25%;">
-						  <input type="text" name="message" id="tracknum" placeholder="订单编号 (必填)" class="form-control" value="${tracknum!}">
+						  <input type="text" name="message" id="exception" placeholder="异常信息 (必填)" class="form-control" value="${exception!}">
 		  			</div>
 		  			
 					<div class="col-md-3" style="width:25%;">
@@ -46,7 +46,6 @@
 		  			
 					
 					<div class="box-body">
-						liby订单日志查询示例单号：00707629、00484169、00520039
 						<table id="user_table" class="table table-bordered table-striped table-hover">
 						</table>
 					</div>
@@ -55,19 +54,23 @@
 						<ul class="timeline">
 					
 						    <!-- timeline time label -->
+						    <#if exception??>
 						    <li class="time-label">
 						        
 						            <#if loglist??>
 						            <span class="bg-green">
-						              ${tracknum!}  log event 
+						              ${exception!}  log event 
 						             </span>
 						             <#else>
-						             <span class="bg-red">
-						             	${tracknum!}  log event not exsit 
+						             <span class="bg-red"> 
+						             	
+						             	${exception!}  log event not exsit 
+						             	
 						             </span>
 						             </#if>
 						        
 						    </li>
+						    </#if>
 						    <!-- /.timeline-label -->
 						
 						    <!-- timeline item -->
@@ -82,13 +85,7 @@
 							            <h3 class="timeline-header"> 时间：${tracknumEntity.logtime} </h3>
 							
 							             <div class="box-body" > 
-							           <!-- <pre style="font-weight: 600;">-->
-							            	<#if tracknumEntity.error == 'true'>
-							            	<font color="red">${tracknumEntity.message}</font>
-							            	<#else>
-							            	${tracknumEntity.message}
-							            	</#if>
-							           <!--  </pre>    --> 
+							            	<pre><font color="red">${tracknumEntity.message}</font></pre>
 							            </div>
 							
 							        </div>
@@ -168,11 +165,11 @@
 			var action = $(this).attr('data-btn-type');
 			switch (action) {
 			case 'search':
-				if($("#tracknum").val() ==''){
-					alert("请输入订单编号");
+				if($("#exception").val() ==''){
+					alert("请输入异常信息");
 				}else{
 					console.log("GG" + $("#reservationtime").val());
-					loadPage("/Monitor/poc/orderStatus/"+$("#tracknum").val()+"?starttime="+starttime+"&endtime="+endtime);     
+					loadPage("/Monitor/poc/exceptionStatus?exception="+$("#exception").val()+"&starttime="+starttime+"&endtime="+endtime);     
 				}
 				break;
 			}
