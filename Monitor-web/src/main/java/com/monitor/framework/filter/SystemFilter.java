@@ -26,6 +26,7 @@ public class SystemFilter implements Filter {
         String basePath = request.getContextPath();
         request.setAttribute("basePath", basePath);
         request.setAttribute("resourcePath", resourcePath);
+        request.setAttribute("username", request.getSession().getAttribute("userName"));
         filterChain.doFilter(request, servletResponse);
         System.out.println("SystemFilter finish time:"+new Date()+request.getRequestURL());
     }

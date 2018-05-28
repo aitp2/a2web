@@ -1,6 +1,7 @@
 package com.monitor.framework.dto;
 
 import java.io.Serializable;
+import java.util.List;
 
 public class TracknumEntity implements Serializable{
 	
@@ -10,9 +11,13 @@ public class TracknumEntity implements Serializable{
 	
 	private String orderCode;
 	
+	private String productCode;
+	
 	private String message;
 	
 	private String error;
+	
+	private List<TracknumEntity> listTracknumEntity;//按时间聚合
 
 	public String getLogsource() {
 		return logsource;
@@ -53,5 +58,22 @@ public class TracknumEntity implements Serializable{
 	public void setError(String error) {
 		this.error = error;
 	}
+
+	public List<TracknumEntity> getListTracknumEntity() {
+		return listTracknumEntity;
+	}
+
+	public void setListTracknumEntity(List<TracknumEntity> listTracknumEntity) {
+		this.listTracknumEntity = listTracknumEntity;
+	}
+
+	public String getProductCode() {
+		return productCode;
+	}
+
+	public void setProductCode(String productCode) {
+		this.productCode = productCode;
+	}
+
 
 }

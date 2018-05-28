@@ -5,6 +5,8 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.subject.Subject;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -36,8 +38,24 @@ public class FunctionController {
     @RequestMapping(value = "/all", method = RequestMethod.POST)
     @ResponseBody
     public List<Function> getAll() {
-
+    	
         return functionService.getAll();
+    }
+    
+    @RequestMapping(value = "/auth_all", method = RequestMethod.POST)
+    @ResponseBody
+    public List<Function> getAuthAll() {
+
+    	Subject subject = SecurityUtils.getSubject();
+    	String username = (String) subject.getSession().getAttribute("userName");
+    	StringBuilder strb = new StringBuilder();
+    	strb.append("SELECT * FROM tbl_function ");
+    	strb.append("INNER JOIN tbl_role_function ON tbl_function.id = tbl_role_function.functionId ");
+    	strb.append("INNER JOIN tbl_user_role ON tbl_role_function.roleId = tbl_user_role.roleId ");
+    	strb.append("INNER JOIN tbl_user ON tbl_user.id = tbl_user_role.userId ");
+    	strb.append("WHERE tbl_user.login_name = " + "\'" + username + "\'");
+    	List<Function> lstFunc = functionService.findBySql(strb.toString(), Function.class);
+        return lstFunc;
     }
 
     /**

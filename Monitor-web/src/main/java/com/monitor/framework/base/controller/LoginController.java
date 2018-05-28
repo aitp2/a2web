@@ -82,6 +82,8 @@ public class LoginController {
                 Set<String> roles = roleService.getRoleCodeSet(userName);
                 if (!roles.isEmpty()) {
                     subject.getSession().setAttribute("isAuthorized", true);
+                    subject.getSession().setAttribute("userName", userName);
+                    
                     return MAIN_PAGE;
                 } else {//没有授权
                     msg = "您没有得到相应的授权！";

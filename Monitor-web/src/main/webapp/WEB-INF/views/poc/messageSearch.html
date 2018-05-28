@@ -1,4 +1,4 @@
-  <!-- daterange picker -->
+ 	  <!-- daterange picker -->
   <script src="${resourcePath}/adminlte/plugins/daterangepicker/moment.min.js"></script>
   <link rel="stylesheet" href="${resourcePath}/adminlte/plugins/daterangepicker/daterangepicker.css">
   <script src="${resourcePath}/adminlte/plugins/daterangepicker/daterangepicker.js"></script>
@@ -6,12 +6,12 @@
 	<!-- Content Header (Page header) -->
 	<section class="content-header">
 		<h1>
-			订单查询 <small>日志</small>
+			查询 <small>日志</small>
 		</h1>
 		<ol class="breadcrumb">
 			<li><a href="${basePath}"><i class="fa fa-dashboard"></i> 首页</a></li>
 			<li><a href="#">监控查询</a></li>
-			<li class="active">订单查询</li>
+			<li class="active">日志查询</li>
 		</ol>
 	</section> 
 
@@ -21,8 +21,8 @@
 			<div class="col-xs-12">
 				<div class="box"><br>
 					<!-- /.box-header -->
-					<div class="col-md-3" style="width:25%;">
-						  <input type="text" name="message" id="tracknum" placeholder="订单编号 (必填)" class="form-control">
+		  			<div class="col-md-3" style="width:25%;">
+						  <input type="text" name="message" id="message" placeholder="日志信息 " class="form-control" value="${message!}">
 		  			</div>
 		  			
 					<div class="col-md-3" style="width:25%;">
@@ -44,12 +44,59 @@
 						</div>
 		  			</div>
 		  			
-					<div class="box-body" id="logtimeline">
-						<!--liby订单日志查询示例单号：00707629、00484169、00520039-->
+					
+					<div class="box-body">
 						<table id="user_table" class="table table-bordered table-striped table-hover">
 						</table>
 					</div>
 					
+					<div id="logtimeline"  class="box-body">	
+						<ul class="timeline">
+					
+						    <!-- timeline time label -->
+						    <li class="time-label">
+						        
+						            <#if loglist??>
+						            <span class="bg-green">
+						              ${message!}  log event 
+						             </span>
+						             <#else>
+						            <#if init??> <span class="bg-red" style="display:none"> <#else>
+						            <span class="bg-red" style="display:"> </#if>
+						              
+						             	
+						             	  log event not exsit 
+						             	
+						             </span>
+						             </#if>
+						        
+						    </li>
+						    <!-- /.timeline-label -->
+						
+						    <!-- timeline item -->
+						    <#if loglist??>
+							    <#list loglist as tracknumEntity>
+							    <li>
+							        <!-- timeline icon -->
+							        <i class="fa fa-clock-o bg-gray"></i>
+							        <div class="timeline-item">
+							            <span class="time"><i class="fa fa-clock-o"></i> 系统来源：${tracknumEntity.logsource}</span>
+							
+							            <h3 class="timeline-header"> 时间：${tracknumEntity.logtime} </h3>
+							            <#if (tracknumEntity.listTracknumEntity)??>
+								             <div class="box-body" > 
+								            	<pre>${tracknumEntity.message}</pre>
+								            </div>
+										</#if>
+							        </div>
+							    </li>
+							    </#list> 
+						    </#if>
+						    <!-- END timeline item -->
+						
+						</ul>
+					
+					</div>
 					<!-- /.box-body -->
 				</div>
 			</div>
@@ -61,8 +108,7 @@
 					
 	</section>
 
-
-	<script>  
+		<script>  
 	
 	var formatDateTime = function (date) {  
         var y = date.getFullYear();  
@@ -80,15 +126,8 @@
     }; 
     
 	$(function() { 
-		 //var starttime = formatDateTime(new Date(
-		 //         new Date(new Date().toLocaleDateString()).getTime()
-		 //       )); // 当天0点
-		  //var endtime = formatDateTime(new Date( // 当天23:59
-		  //        new Date(new Date().toLocaleDateString()).getTime() +
-		   //         24 * 60 * 60 * 1000 -
-		    //        1
-		   //     ));
-		 var starttime = "",endtime="";
+		 var starttime = "${starttime!}"; // 当天0点
+		  var endtime =  "${endtime!}";
 		$('#reservationtime').daterangepicker({ 
 			timePicker: true, 
 			timePickerIncrement: 1, 
@@ -119,18 +158,18 @@
 		      endtime = "";
 		  });
 		if(starttime==""){
-			$("#reservationtime").val('');
+			$("#reservationtime").val('')
 		}
 		//button event
 		$('button[data-btn-type]').click(function() {
 			var action = $(this).attr('data-btn-type');
 			switch (action) {
 			case 'search':
-				if($("#tracknum").val() ==''){
-					alert("请输入订单编号");
+				if($("#exception").val() ==''){
+					alert("请输入异常信息");
 				}else{
 					console.log("GG" + $("#reservationtime").val());
-					loadPage("/Monitor/poc/orderStatus/"+$("#tracknum").val()+"?starttime="+starttime+"&endtime="+endtime);     
+					loadPage("/Monitor/poc/messageSearch?message="+$("#message").val()+"&starttime="+starttime+"&endtime="+endtime);     
 				}
 				break;
 			}

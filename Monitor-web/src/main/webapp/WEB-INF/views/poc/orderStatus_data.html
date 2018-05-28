@@ -46,7 +46,7 @@
 		  			
 					
 					<div class="box-body">
-						liby订单日志查询示例单号：00707629、00484169、00520039
+					<!-- 	liby订单日志查询示例单号：00707629、00484169、00520039 -->
 						<table id="user_table" class="table table-bordered table-striped table-hover">
 						</table>
 					</div>
@@ -79,16 +79,15 @@
 							        <div class="timeline-item">
 							            <span class="time"><i class="fa fa-clock-o"></i> 系统来源：${tracknumEntity.logsource}</span>
 							
-							            <h3 class="timeline-header"> 时间：${tracknumEntity.logtime} </h3>
-							
-							             <div class="box-body" > 
-							           <!-- <pre style="font-weight: 600;">-->
+							            <h3 class="timeline-header"> 时间：<a href="javascript:void(0);" onclick="openMessageSearch('${tracknumEntity.logtime}')" >${tracknumEntity.logtime}</a> </h3>
+							<div class="box-body" > 
+							            
 							            	<#if tracknumEntity.error == 'true'>
-							            	<font color="red">${tracknumEntity.message}</font>
+							            	<pre ><font color="red">${tracknumEntity.message}</font></pre>
 							            	<#else>
-							            	${tracknumEntity.message}
+							            	<pre >${tracknumEntity.message}</pre> 
 							            	</#if>
-							           <!--  </pre>    --> 
+							            
 							            </div>
 							
 							        </div>
@@ -112,6 +111,25 @@
 	</section>
 
 		<script>  
+		
+		 function openMessageSearch(t){var str1 = t.replace('/', '-').replace('/', '-');
+			 var startdate = new Date(str1.substring(0,19));
+			 var strDate = startdate.getFullYear()+"-"; 
+			 strDate += startdate.getMonth()+1+"-"; 
+			 strDate += startdate.getDate()+"T"; 
+			 strDate += startdate.getHours()+":"; 
+			 strDate += startdate.getMinutes()+":"; 
+			 strDate += startdate.getSeconds();
+			 var enddate = new Date(t);
+			 enddate.setSeconds(enddate.getSeconds()+1);
+			 var strDate_end = enddate.getFullYear()+"-"; 
+			 strDate_end += enddate.getMonth()+1+"-"; 
+			 strDate_end += enddate.getDate()+"T"; 
+			 strDate_end += enddate.getHours()+":"; 
+			 strDate_end += enddate.getMinutes()+":"; 
+			 strDate_end += enddate.getSeconds();
+       	  loadPage("/Monitor/poc/messageSearch?message=&starttime="+formatDateTime(startdate)+"&endtime="+formatDateTime(enddate)); 
+         }
 	
 	var formatDateTime = function (date) {  
         var y = date.getFullYear();  

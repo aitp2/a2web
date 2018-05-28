@@ -28,6 +28,18 @@ public class PageInfo {
 
     // 总页数
     private int pageCount;
+    
+    //当前页从哪条记录
+    private int numfrom;
+    
+    //当前页到哪条记录
+    private int numto;
+    
+    //上一页页数
+    private int lastPageNum;
+    
+    //下一页页数
+    private int nextPageNum;
 
     // 结果集
     List pojoList = new ArrayList();
@@ -80,5 +92,51 @@ public class PageInfo {
 
         this.pojoList = pojoList;
     }
+
+	public int getNumfrom() {
+		numfrom = (pageNum-1) *pageSize  + 1;
+		return numfrom;
+	}
+
+	public void setNumfrom(int numfrom) {
+		this.numfrom = numfrom;
+	}
+
+	public int getNumto() {
+		numto = (pageNum) * pageSize;
+		return numto;
+	}
+
+	public void setNumto(int numto) {
+		this.numto = numto;
+	}
+
+	public void setPageCount(int pageCount) {
+		this.pageCount = pageCount;
+	}
+
+	public int getLastPageNum() {
+		lastPageNum = this.pageNum - 1;
+		if(lastPageNum == 0){
+			lastPageNum = 1;
+		}
+		return lastPageNum;
+	}
+
+	public void setLastPageNum(int lastPageNum) {
+		this.lastPageNum = lastPageNum;
+	}
+
+	public int getNextPageNum() {
+		nextPageNum = this.pageNum + 1;
+		if(nextPageNum > this.getPageCount()){
+			nextPageNum = this.getPageCount();
+		}
+		return nextPageNum;
+	}
+
+	public void setNextPageNum(int nextPageNum) {
+		this.nextPageNum = nextPageNum;
+	}
 
 }

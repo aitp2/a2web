@@ -2,11 +2,15 @@ package com.monitor.poc.controller;
 
 import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -18,11 +22,15 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.TypeReference;
+import com.monitor.framework.base.pojo.PageInfo;
 import com.monitor.framework.base.pojo.ResultCode;
+import com.monitor.framework.dto.DFSOrderDTO;
 import com.monitor.framework.dto.ExceptionAggs;
 import com.monitor.framework.dto.ExceptionEntity;
+import com.monitor.framework.dto.LibyOrderDTO;
 import com.monitor.framework.dto.OrderStatusEntity;
 import com.monitor.framework.dto.OrderStatusMonitorDTO;
+import com.monitor.framework.dto.PageableEntity;
 import com.monitor.framework.dto.ProductOrder;
 import com.monitor.framework.dto.ProductTotal;
 import com.monitor.framework.dto.ProvinceOrder;
@@ -43,6 +51,10 @@ public class PocController {
 	private static final String PRODUCTSTATUS = "poc/productStatus";
 	private static final String ORDERSTATUS_DATA = "poc/orderStatus_data";
 	private static final String EXCEPTIONSTATUS = "poc/exceptionStatus";
+	
+	private static final String DFSSYSTEMOVERVIEW = "poc/dfsSystemOverview";
+	private static final String LIBYSYSTEMOVERVIEW = "poc/libySystemOverview";
+	private static final String MESSAGESEARCH = "poc/messageSearch";
 
 	private static final String queryByTracknumAndTime = "queryByTracknumAndTime";
 	private static final String queryJinggaoData = "queryJinggaoData";
@@ -53,6 +65,10 @@ public class PocController {
 	private static final String queryJinggaoShuliang ="queryJinggaoShuliang";
 	private static final String queryExceptionByAggs ="queryExceptionByAggs";
 	private static final String queryException ="queryException";
+	private static final String queryDFSOperatorByTime ="queryDFSOperatorByTime";
+	private static final String queryAllMessage = "queryAllMessage";
+	
+	private static final int PAGESIZE = 10;
 
 	@RequestMapping(value = "businessoverview", method = RequestMethod.GET)
 	public String businessoverview(Model model) {
@@ -269,51 +285,7 @@ public class PocController {
 				province = java.net.URLDecoder.decode(province, "UTF-8");
 				model.addAttribute("province", province);
 			}
-			// queryOrderStatusData
-			String result_OrderStatusData = HttpClientUtil.httpGet(
-					PropertiesUtil.getValue("microservice.url")
-							+ queryOrderStatusData, null);
-			ResultData<List<OrderStatusEntity>> parseObject_OrderStatusData = JSON
-					.parseObject(
-							result_OrderStatusData,
-							new TypeReference<ResultData<List<OrderStatusEntity>>>() {
-							});
-			if (parseObject_OrderStatusData.getCode() > 0) {
-				for (OrderStatusEntity OrderStatusEntity : parseObject_OrderStatusData
-						.getSerializableData()) {
-					model.addAttribute(OrderStatusEntity.getStatus(),
-							OrderStatusEntity.getNum());
-				}
-				model.addAttribute("orderStatusDataList",
-						parseObject_OrderStatusData.getSerializableData());
-			} else {
-				model.addAttribute("orderStatusDataList", null);
-			}
-
-			// queryJinggaoData
-			String result_queryJinggaoData = HttpClientUtil.httpGet(
-					PropertiesUtil.getValue("microservice.url")
-							+ queryJinggaoData, null);
-			model.addAttribute("jinggaoData", result_queryJinggaoData);
-
-			// queryJinggaoDataByProvince
-			String result_queryJinggaoDataByProvince = HttpClientUtil.httpGet(
-					PropertiesUtil.getValue("microservice.url")
-							+ queryJinggaoDataByProvince + "?province="
-							+ (province == null ? "" : province), null);
-			ResultData<List<OrderStatusMonitorDTO>> parseObject_queryJinggaoDataByProvince = JSON
-					.parseObject(
-							result_queryJinggaoDataByProvince,
-							new TypeReference<ResultData<List<OrderStatusMonitorDTO>>>() {
-							});
-			if (parseObject_queryJinggaoDataByProvince.getCode() > 0) {
-				model.addAttribute("orderStatusList",
-						parseObject_queryJinggaoDataByProvince
-								.getSerializableData());
-			} else {
-				model.addAttribute("orderStatusList", null);
-			}
-			
+						
 			//异常排行
 			model.addAttribute("starttime", starttime);
 			model.addAttribute("endtime", endtime);
@@ -451,11 +423,302 @@ public class PocController {
 		model.addAttribute("exception", exception);
 		return EXCEPTIONSTATUS;
 	}
+	
+	@RequestMapping(value = "messageSearch", method = RequestMethod.GET)
+	public String messageSearch(Model model,
+			@RequestParam(value = "message", required = false) String message,
+			@RequestParam(value = "starttime", required = false) String starttime,
+			@RequestParam(value = "endtime", required = false) String endtime) {
+		if(message != null || starttime != null){
+			model.addAttribute("starttime", starttime);
+			model.addAttribute("endtime", endtime);
+			if(starttime == null || starttime.equals("")){
+				starttime = "1997-01-01 00:00:00";
+			}
+			if(endtime == null || endtime.equals("")){
+				endtime = "2997-01-01 00:00:00";
+			}
+			starttime = starttime.replace("T", " ");
+			endtime = endtime.replace("T", " ");
+			
+				Map<String, String> para = new HashMap<String, String>();
+				para.put("message", message==null?"":message);
+				para.put("starttime", starttime);
+				para.put("endtime", endtime);
+				try {
+					String result = HttpClientUtil.httpGet(
+							PropertiesUtil.getValue("microservice.url")
+									+ queryAllMessage, para);
+					ResultData<List<TracknumEntity>> parseObject = JSON
+							.parseObject(
+									result,
+									new TypeReference<ResultData<List<TracknumEntity>>>() {
+									});
+					if (parseObject.getCode() > 0) {
+						//处理相同时间
+						
+						
+						Map<String,List<TracknumEntity>> map = new TreeMap<String,List<TracknumEntity>>(new  
+							     Comparator<String>() {  
+							     public int compare(String obj1, String obj2) {  
+							    	 SimpleDateFormat sdf=new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+							    	 
+							     try {
+									return sdf.parse(obj1).compareTo(sdf.parse(obj2));
+								} catch (ParseException e) {
+									e.printStackTrace();
+									return 0;
+								}  
+							     }  
+							     }); 
+						for(TracknumEntity msg:parseObject.getSerializableData()){
+							if(map.get(msg.getLogtime())==null){
+								List<TracknumEntity> list_te = new ArrayList<TracknumEntity>();
+								list_te.add(msg);
+								map.put(msg.getLogtime(), list_te);
+							}else{
+								map.get(msg.getLogtime()).add(msg);
+							}
+						}
+						List<TracknumEntity> list_bytime = new ArrayList<TracknumEntity>();
+						for(String time:map.keySet()){
+							TracknumEntity newtt = new TracknumEntity();
+							newtt.setLogtime(time.substring(0, time.indexOf(".")));
+							newtt.setLogsource(map.get(time).get(0).getLogsource());
+							for(TracknumEntity aa:map.get(time)){
+								if(newtt.getMessage()==null){
+									newtt.setMessage(aa.getMessage()+"\n");
+								}else{
+									newtt.setMessage(newtt.getMessage()+aa.getMessage()+"\n");
+								}
+							}
+							
+							newtt.setListTracknumEntity(map.get(time));
+							list_bytime.add(newtt);
+						}
+						
+						model.addAttribute("loglist",
+								list_bytime);
+					} else {
+						model.addAttribute("loglist", null);
+					}
+
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			
+			model.addAttribute("message", message);
+		}else{
+			model.addAttribute("init", "true");
+		}
+		
+		return MESSAGESEARCH;
+	}
 
 	@RequestMapping(value = "productStatus", method = RequestMethod.GET)
 	public String productStatus() {
 
 		return PRODUCTSTATUS;
+	}
+	
+	/**
+	 * DFS systemoverview
+	 * @return
+	 */
+	@RequestMapping(value = "dfsSystemOverview", method = RequestMethod.GET)
+	public String dfsSystemOverview(Model model,
+			@RequestParam(value = "productCode", required = false) String productCode,
+			@RequestParam(value = "orderCode", required = false) String orderCode,
+			@RequestParam(value = "starttime", required = false) String starttime,
+			@RequestParam(value = "endtime", required = false) String endtime,
+			@RequestParam(value = "productExceptionPagenum", required = false) String productExceptionPagenum,
+			@RequestParam(value = "pendingtype", required = false) String pendingtype) {
+
+		try {
+			model.addAttribute("starttime", starttime);
+			model.addAttribute("endtime", endtime);
+			if(starttime == null || starttime.equals("")){
+				starttime = "1997-01-01 00:00:00";
+			}
+			if(endtime == null || endtime.equals("")){
+				endtime = "2997-01-01 00:00:00";
+			}
+			if(orderCode == null){
+				orderCode = "";
+			}
+			starttime = starttime.replace("T", " ");
+			endtime = endtime.replace("T", " ");
+			
+			Map<String, String> para = new HashMap<String, String>();
+			para.put("orderCode", orderCode);
+			para.put("starttime", starttime);
+			para.put("endtime", endtime);
+			
+			String result_queryDFSOrder = HttpClientUtil.httpGet(
+					PropertiesUtil.getValue("microservice.url")
+							+ queryDFSOperatorByTime, para);
+			ResultData<List<DFSOrderDTO>> parseObject_queryDFSOrderDTO = JSON
+					.parseObject(
+							result_queryDFSOrder,
+							new TypeReference<ResultData<List<DFSOrderDTO>>>() {
+							});
+			
+			if (parseObject_queryDFSOrderDTO.getCode() > 0) {
+				model.addAttribute("dfsOrderlist",
+						parseObject_queryDFSOrderDTO.getSerializableData());
+			} else {
+				model.addAttribute("dfsOrderlist", null);
+			}
+			model.addAttribute("orderCode", orderCode);
+			
+			//异常排行
+			
+			String result_queryExceptionAggs = HttpClientUtil.httpGet(
+					PropertiesUtil.getValue("microservice.url")
+							+ queryExceptionByAggs, para);
+			ResultData<List<ExceptionAggs>> parseObject_queryExceptionAggs = JSON
+					.parseObject(
+							result_queryExceptionAggs,
+							new TypeReference<ResultData<List<ExceptionAggs>>>() {
+							});
+			model.addAttribute("exceptionAggs", parseObject_queryExceptionAggs
+					.getSerializableData());
+			
+			//产品异常
+			PageInfo pageInfo = new PageInfo(PAGESIZE);
+			if(productExceptionPagenum == null){
+				productExceptionPagenum = "1";
+			}
+			pageInfo.setPageNum(new Integer(productExceptionPagenum));
+			Map<String, String> para_product = new HashMap<String, String>();
+			para_product.put("productCode", productCode);
+			para_product.put("starttime", starttime);
+			para_product.put("endtime", endtime);
+			para_product.put("from", new Integer(pageInfo.getNumfrom()-1).toString());
+			para_product.put("size", new Integer(pageInfo.getPageSize()).toString());
+			if(pendingtype == null || pendingtype.equals("0")){
+				para_product.put("pendingtypeCondition", "(message:\\\"com.dfs.jms.exception.DFSProductFeedPendingException\\\" OR message:\\\"Not pending\\\")");
+			}else if(pendingtype.equals("1")){
+				para_product.put("pendingtypeCondition", "(message:\\\"com.dfs.jms.exception.DFSProductFeedPendingException\\\" )");
+			}else if(pendingtype.equals("2")){
+				para_product.put("pendingtypeCondition", "(message:\\\"Not pending\\\")");
+			}
+			para_product.put("size", new Integer(pageInfo.getPageSize()).toString());
+			
+			//para_product.put("pageInfo",pageInfo);
+			String result = HttpClientUtil.httpGet(
+					PropertiesUtil.getValue("microservice.url")
+							+ "queryDFSProductByTime", para_product);
+			ResultData<PageableEntity> parseObject = JSON
+					.parseObject(
+							result,
+							new TypeReference<ResultData<PageableEntity>>() {
+							});
+			if (parseObject.getCode() > 0) {
+				for(TracknumEntity TracknumEntity_product:parseObject.getSerializableData().getList()){
+					if(TracknumEntity_product.getMessage().contains("Not pending Exception")){
+						TracknumEntity_product.setOrderCode("Not pendding Exception");
+					}else{
+						TracknumEntity_product.setOrderCode("pendding exception");
+					}
+					TracknumEntity_product.setError(TracknumEntity_product.getMessage().substring(TracknumEntity_product.getMessage().indexOf("Exception:"), TracknumEntity_product.getMessage().length()));
+				}
+				
+				pageInfo.setCount(new Long(parseObject.getSerializableData().getTotal()).intValue());
+				model.addAttribute("productExceptonList",
+						parseObject.getSerializableData().getList());
+				model.addAttribute("pageInfo", pageInfo);
+			} else {
+				model.addAttribute("productExceptonList", null);
+			}
+			model.addAttribute("productCode", productCode);
+			model.addAttribute("pendingtype", pendingtype==null?"0":pendingtype);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return DFSSYSTEMOVERVIEW;
+	}
+	
+	/**
+	 * Liby systemoverview
+	 * @return
+	 */
+	@RequestMapping(value = "libySystemOverview", method = RequestMethod.GET)
+	public String libySystemOverview(Model model,
+			@RequestParam(value = "orderCode", required = false) String orderCode,
+			@RequestParam(value = "starttime", required = false) String starttime,
+			@RequestParam(value = "endtime", required = false) String endtime) {
+
+		try {
+			model.addAttribute("starttime", starttime);
+			model.addAttribute("endtime", endtime);
+			if(starttime == null || starttime.equals("")){
+				starttime = "1997-01-01 00:00:00";
+			}
+			if(endtime == null || endtime.equals("")){
+				endtime = "2997-01-01 00:00:00";
+			}
+			if(orderCode == null){
+				orderCode = "";
+			}
+			starttime = starttime.replace("T", " ");
+			endtime = endtime.replace("T", " ");
+			Map<String, String> para = new HashMap<String, String>();
+			para.put("orderCode", orderCode);
+			para.put("starttime", starttime);
+			para.put("endtime", endtime);
+			
+			String result_querylibyOrder = HttpClientUtil.httpGet(
+					PropertiesUtil.getValue("microservice.url")
+							+ "queryLibyOperatorByTime", para);
+			ResultData<List<LibyOrderDTO>> parseObject_querylibyOrderDTO = JSON
+					.parseObject(
+							result_querylibyOrder,
+							new TypeReference<ResultData<List<LibyOrderDTO>>>() {
+							});
+			
+			if (parseObject_querylibyOrderDTO.getCode() > 0) {
+				List<LibyOrderDTO> list = new ArrayList<LibyOrderDTO>();
+				for(LibyOrderDTO libyOrDTO:parseObject_querylibyOrderDTO.getSerializableData()){
+					for(Object a:libyOrDTO.getList_splittime()){
+						libyOrDTO.setSplittime((libyOrDTO.getSplittime()==null?"":libyOrDTO.getSplittime()) +"  " +(String)a);
+					}
+					for(Object b:libyOrDTO.getList_sendsaptime()){
+						libyOrDTO.setSendsaptime((libyOrDTO.getSendsaptime()==null?"":libyOrDTO.getSendsaptime()) +"  " + (String)b);
+					}
+					for(Object c:libyOrDTO.getList_sapreturntime()){
+						libyOrDTO.setSapreturntime((libyOrDTO.getSapreturntime()==null?"":libyOrDTO.getSapreturntime()) + "  " +(String)c);
+					}
+					for(Object d:libyOrDTO.getList_dealtime()){
+						libyOrDTO.setDealtime((libyOrDTO.getDealtime()==null?"":libyOrDTO.getDealtime()) + "  " +(String)d);
+					}
+					list.add(libyOrDTO);
+				}
+				
+				model.addAttribute("libyOrderlist",list);
+			} else {
+				model.addAttribute("libyOrderlist", null);
+			}
+			model.addAttribute("orderCode", orderCode);
+			
+			//异常排行
+			
+			String result_queryExceptionAggs = HttpClientUtil.httpGet(
+					PropertiesUtil.getValue("microservice.url")
+							+ queryExceptionByAggs, para);
+			ResultData<List<ExceptionAggs>> parseObject_queryExceptionAggs = JSON
+					.parseObject(
+							result_queryExceptionAggs,
+							new TypeReference<ResultData<List<ExceptionAggs>>>() {
+							});
+			model.addAttribute("exceptionAggs", parseObject_queryExceptionAggs
+					.getSerializableData());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return LIBYSYSTEMOVERVIEW;
 	}
 
 }
