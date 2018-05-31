@@ -5,51 +5,53 @@ import java.io.Serializable;
 @SuppressWarnings("serial")
 public class ResultData<T> implements Serializable {
 
-	private boolean isSuccessful;
-	
-	private int code;
-	
-	private T serializableData;
-	
-	private String messageEnum;
-	
-	private String message;
-
-	public ResultData() {
-		
+	public ResultData(String message, boolean isSucessful) {
+		super();
+		this.message = message;
+		this.isSucessful = isSucessful;
 	}
 	
-
-	public boolean isSuccessful() {
-		return isSuccessful;
-	}
-
-	public void setSuccessful(boolean isSuccessful) {
-		this.isSuccessful = isSuccessful;
-	}
-
-	public int getCode() {
-		return code;
-	}
-
-	public void setCode(int code) {
+	public ResultData(String message, boolean isSucessful, Integer code) {
+		super();
+		this.message = message;
+		this.isSucessful = isSucessful;
 		this.code = code;
 	}
 
-	public void setSerializableData(T serializableData) {
+	/**
+	 *  百万序列号
+	 */
+	private static final long serialVersionUID = 1000000L;
+	
+	private boolean isSucessful;
+
+	private String message;
+	
+	private Integer code;
+	
+	private T serializableData;
+
+	public ResultData(boolean isSucessful, String message, Integer code, T serializableData) {
+		super();
+		this.isSucessful = isSucessful;
+		this.message = message;
+		this.code = code;
 		this.serializableData = serializableData;
 	}
 
-	public String getMessageEnum() {
-		return messageEnum;
+	public ResultData(boolean isSucessful, String message, Integer code) {
+		super();
+		this.isSucessful = isSucessful;
+		this.message = message;
+		this.code = code;
 	}
 
-	public void setMessageEnum(String messageEnum) {
-		this.messageEnum = messageEnum;
+	public boolean isSucessful() {
+		return isSucessful;
 	}
 
-	public T getSerializableData() {
-		return serializableData;
+	public void setSucessful(boolean isSucessful) {
+		this.isSucessful = isSucessful;
 	}
 
 	public String getMessage() {
@@ -59,6 +61,21 @@ public class ResultData<T> implements Serializable {
 	public void setMessage(String message) {
 		this.message = message;
 	}
-	
-	
+
+	public Integer getCode() {
+		return code;
+	}
+
+	public void setCode(Integer code) {
+		this.code = code;
+	}
+
+	public T getSerializableData() {
+		return serializableData;
+	}
+
+	public void setSerializableData(T serializableData) {
+		this.serializableData = serializableData;
+	}
+
 }

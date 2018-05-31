@@ -1015,3 +1015,42 @@ INSERT INTO `tbl_user_role` VALUES ('8a8a859359927a930159927c2a96001d', '2017-01
 INSERT INTO `tbl_user_role` VALUES ('8a8a859359927a930159927c2a96001e', '2017-01-12 19:42:08', null, '2017-01-12 19:42:08', '0', 'bc4d163c5880ab4901588b6681e50003', '275a01e2321411e6a46d10a0f3df85fa');
 INSERT INTO `tbl_user_role` VALUES ('8a8a859359927a930159927c2a960020', '2017-01-12 19:42:08', null, '2017-01-12 19:42:08', '0', 'bc4d163c5880ab4901588b6681e50003', '8afa96f6564a787601564a79fd970000');
 INSERT INTO `tbl_user_role` VALUES ('8a8a859359927a930159927c2a960021', '2017-01-12 19:42:08', null, '2017-01-12 19:42:08', '0', 'bc4d163c5880ab4901588b6681e50003', '254f9b64321411e6a46d10a0f3df85fa');
+
+
+
+DROP TABLE IF EXISTS `tbl_alert_rule`;
+CREATE TABLE `tbl_alert_rule` (
+  `id` varchar(36) NOT NULL,
+  `create_date_time` datetime DEFAULT NULL,
+  `deleted` int(11) DEFAULT NULL,
+  `update_date_time` datetime DEFAULT NULL,
+  `version` int(11) DEFAULT NULL,
+  `name` varchar(255) DEFAULT NULL,
+  `description` varchar(255) DEFAULT NULL,
+  `status` varchar(255) DEFAULT NULL,
+  `cron` varchar(255) DEFAULT NULL,
+  `textCondition` varchar(255) DEFAULT NULL,
+  `timeRange` varchar(255) DEFAULT NULL,
+  `resultNumCompareFlag` varchar(255) DEFAULT NULL,
+  `resultNumCompareNum` varchar(255) DEFAULT NULL,
+  `email_to` varchar(255) DEFAULT NULL,
+  `email_subject` varchar(255) DEFAULT NULL,
+  `email_body` varchar(255) DEFAULT NULL,
+  `restrain` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `tbl_alert_history`;
+CREATE TABLE `tbl_alert_history` (
+  `id` varchar(36) NOT NULL,
+  `create_date_time` datetime DEFAULT NULL,
+  `deleted` int(11) DEFAULT NULL,
+  `update_date_time` datetime DEFAULT NULL,
+  `version` int(11) DEFAULT NULL,
+  `id_alert_rule` varchar(255) DEFAULT NULL,
+  `rule_name` varchar(255) DEFAULT NULL,
+  `email_to` varchar(255) DEFAULT NULL,
+  `email_subject` varchar(255) DEFAULT NULL,
+  `email_body` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
