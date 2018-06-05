@@ -4,6 +4,10 @@ import java.io.Serializable;
 
 @SuppressWarnings("serial")
 public class ResultData<T> implements Serializable {
+	
+	public ResultData() {
+		
+	}
 
 	public ResultData(String message, boolean isSucessful) {
 		super();
@@ -26,6 +30,8 @@ public class ResultData<T> implements Serializable {
 	private boolean isSucessful;
 
 	private String message;
+	
+	private String messageEnum;
 	
 	private Integer code;
 	
@@ -76,6 +82,14 @@ public class ResultData<T> implements Serializable {
 
 	public void setSerializableData(T serializableData) {
 		this.serializableData = serializableData;
+	}
+
+	public String getMessageEnum() {
+		return messageEnum;
+	}
+
+	public void setMessageEnum(String messageEnum) {
+		this.messageEnum = messageEnum;
 	}
 
 }
