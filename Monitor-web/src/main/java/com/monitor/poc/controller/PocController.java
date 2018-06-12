@@ -39,6 +39,8 @@ import com.monitor.framework.dto.TracknumEntity;
 import com.monitor.framework.util.HttpClientUtil;
 import com.monitor.framework.utils.PropertiesUtil;
 
+import freemarker.template.utility.StringUtil;
+
 @Controller
 @RequestMapping("poc")
 public class PocController {
@@ -55,6 +57,7 @@ public class PocController {
 	private static final String DFSSYSTEMOVERVIEW = "poc/dfsSystemOverview";
 	private static final String LIBYSYSTEMOVERVIEW = "poc/libySystemOverview";
 	private static final String MESSAGESEARCH = "poc/messageSearch";
+	private static final String CUSTOMSYSTEMFLOW = "poc/customSystemFlow";
 
 	private static final String queryByTracknumAndTime = "queryByTracknumAndTime";
 	private static final String queryJinggaoData = "queryJinggaoData";
@@ -428,7 +431,8 @@ public class PocController {
 	public String messageSearch(Model model,
 			@RequestParam(value = "message", required = false) String message,
 			@RequestParam(value = "starttime", required = false) String starttime,
-			@RequestParam(value = "endtime", required = false) String endtime) {
+			@RequestParam(value = "endtime", required = false) String endtime,
+			@RequestParam(value = "server", required = false) String server) {
 		if(message != null || starttime != null){
 			model.addAttribute("starttime", starttime);
 			model.addAttribute("endtime", endtime);
@@ -442,7 +446,12 @@ public class PocController {
 			endtime = endtime.replace("T", " ");
 			
 				Map<String, String> para = new HashMap<String, String>();
-				para.put("message", message==null?"":message);
+				if(server == null || server.equals("")){
+					para.put("message", message==null?"":"*"+message+"*");
+				}else{
+					String msg = "*"+message+"*" + " AND logsource:("+StringUtil.replace(server, ",", " OR ")+")";
+					para.put("message", msg);
+				}
 				para.put("starttime", starttime);
 				para.put("endtime", endtime);
 				try {
@@ -508,6 +517,13 @@ public class PocController {
 				}
 			
 			model.addAttribute("message", message);
+			model.addAttribute("orignalserver", server);
+			if(server != null && !server.equals("")){
+				server = "[\""+StringUtil.replace(server, ",", "\",\"")+"\"]";
+			}else{
+				server = "";
+			}
+			model.addAttribute("server", server);
 		}else{
 			model.addAttribute("init", "true");
 		}
@@ -640,6 +656,92 @@ public class PocController {
 		return DFSSYSTEMOVERVIEW;
 	}
 	
+	
+	/**
+	 * DFS dfsProductException
+	 * @return
+	 */
+	@RequestMapping(value = "dfsProductException", method = RequestMethod.GET)
+	public String dfsProductException(Model model,
+			@RequestParam(value = "productCode", required = false) String productCode,
+			@RequestParam(value = "starttime", required = false) String starttime,
+			@RequestParam(value = "endtime", required = false) String endtime,
+			@RequestParam(value = "pagenum", required = false) String pagenum,
+			@RequestParam(value = "pendingtype", required = false) String pendingtype) {
+
+		try {
+			model.addAttribute("starttime", starttime);
+			model.addAttribute("endtime", endtime);
+			if(starttime == null || starttime.equals("")){
+				starttime = "1997-01-01 00:00:00";
+			}
+			if(endtime == null || endtime.equals("")){
+				endtime = "2997-01-01 00:00:00";
+			}
+			starttime = starttime.replace("T", " ");
+			endtime = endtime.replace("T", " ");
+			
+			Map<String, String> para = new HashMap<String, String>();
+			para.put("starttime", starttime);
+			para.put("endtime", endtime);
+			
+			
+			//产品异常
+			PageInfo pageInfo = new PageInfo(PAGESIZE);
+			if(pagenum == null){
+				pagenum = "1";
+			}
+			pageInfo.setPageNum(new Integer(pagenum));
+			Map<String, String> para_product = new HashMap<String, String>();
+			para_product.put("productCode", productCode);
+			para_product.put("starttime", starttime);
+			para_product.put("endtime", endtime);
+			para_product.put("from", new Integer(pageInfo.getNumfrom()-1).toString());
+			para_product.put("size", new Integer(pageInfo.getPageSize()).toString());
+			if(pendingtype == null || pendingtype.equals("0")){
+				para_product.put("pendingtypeCondition", "(message:\\\"com.dfs.jms.exception.DFSProductFeedPendingException\\\" OR message:\\\"Not pending\\\")");
+			}else if(pendingtype.equals("1")){
+				para_product.put("pendingtypeCondition", "(message:\\\"com.dfs.jms.exception.DFSProductFeedPendingException\\\" )");
+			}else if(pendingtype.equals("2")){
+				para_product.put("pendingtypeCondition", "(message:\\\"Not pending\\\")");
+			}
+			para_product.put("size", new Integer(pageInfo.getPageSize()).toString());
+			
+			//para_product.put("pageInfo",pageInfo);
+			String result = HttpClientUtil.httpGet(
+					PropertiesUtil.getValue("microservice.url")
+							+ "queryDFSProductByTime", para_product);
+			ResultData<PageableEntity> parseObject = JSON
+					.parseObject(
+							result,
+							new TypeReference<ResultData<PageableEntity>>() {
+							});
+			if (parseObject.getCode() > 0) {
+				for(TracknumEntity TracknumEntity_product:parseObject.getSerializableData().getList()){
+					if(TracknumEntity_product.getMessage().contains("Not pending Exception")){
+						TracknumEntity_product.setOrderCode("Not pendding Exception");
+					}else{
+						TracknumEntity_product.setOrderCode("pendding exception");
+					}
+					TracknumEntity_product.setError(TracknumEntity_product.getMessage().substring(TracknumEntity_product.getMessage().indexOf("Exception:"), TracknumEntity_product.getMessage().length()));
+				}
+				
+				pageInfo.setCount(new Long(parseObject.getSerializableData().getTotal()).intValue());
+				model.addAttribute("productExceptonList",
+						parseObject.getSerializableData().getList());
+				model.addAttribute("pageInfo", pageInfo);
+			} else {
+				model.addAttribute("productExceptonList", null);
+			}
+			model.addAttribute("productCode", productCode);
+			model.addAttribute("pendingtype", pendingtype==null?"0":pendingtype);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return "poc/dfsProductException";
+	}
+	
 	/**
 	 * Liby systemoverview
 	 * @return
@@ -719,6 +821,66 @@ public class PocController {
 		}
 		
 		return LIBYSYSTEMOVERVIEW;
+	}
+	
+	
+	/**
+	 * customSystemFlow
+	 * @return
+	 */
+	@RequestMapping(value = "customSystemFlow", method = RequestMethod.GET)
+	public String customSystemFlow(Model model,
+			@RequestParam(value = "tracknumtype", required = false) String tracknumtype,
+			@RequestParam(value = "starttime", required = false) String starttime,
+			@RequestParam(value = "endtime", required = false) String endtime,
+			@RequestParam(value = "pagenum", required = false) String pagenum,
+			@RequestParam(value = "tracknum", required = false) String tracknum) {
+		
+		model.addAttribute("starttime", starttime);
+		model.addAttribute("endtime", endtime);
+		if(starttime == null || starttime.equals("")){
+			starttime = "1997-01-01 00:00:00";
+		}
+		if(endtime == null || endtime.equals("")){
+			endtime = "2997-01-01 00:00:00";
+		}
+		starttime = starttime.replace("T", " ");
+		endtime = endtime.replace("T", " ");
+		
+		PageInfo pageInfo = new PageInfo(PAGESIZE);
+		if(pagenum == null){
+			pagenum = "1";
+		}
+		pageInfo.setPageNum(new Integer(pagenum));
+		Map<String, String> para_product = new HashMap<String, String>();
+		para_product.put("tracknumtype", tracknumtype);
+		para_product.put("starttime", starttime);
+		para_product.put("endtime", endtime);
+		para_product.put("from", new Integer(pageInfo.getNumfrom()-1).toString());
+		para_product.put("size", new Integer(pageInfo.getPageSize()).toString());
+		para_product.put("tracknum", tracknum);
+		
+		String result;
+		try {
+			result = HttpClientUtil.httpGet(
+					PropertiesUtil.getValue("microservice.url")
+							+ "querySystemFlowByTracknum", para_product);
+		
+		ResultData<PageableEntity> parseObject = JSON
+				.parseObject(
+						result,
+						new TypeReference<ResultData<PageableEntity>>() {
+						});
+		pageInfo.setCount(new Long(parseObject.getSerializableData().getTotal()).intValue());
+		model.addAttribute("SystemFlowTracknumList",
+				parseObject.getSerializableData().getList_systemFlowTracknum());
+		model.addAttribute("pageInfo", pageInfo);
+		
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return CUSTOMSYSTEMFLOW;
+		
 	}
 
 }

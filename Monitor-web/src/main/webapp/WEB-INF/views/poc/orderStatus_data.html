@@ -128,7 +128,7 @@
 			 strDate_end += enddate.getHours()+":"; 
 			 strDate_end += enddate.getMinutes()+":"; 
 			 strDate_end += enddate.getSeconds();
-       	  loadPage("/Monitor/poc/messageSearch?message=&starttime="+formatDateTime(startdate)+"&endtime="+formatDateTime(enddate)); 
+       	  loadPage("${basePath}/poc/messageSearch?message=&starttime="+formatDateTime(startdate)+"&endtime="+formatDateTime(enddate)); 
          }
 	
 	var formatDateTime = function (date) {  
@@ -190,7 +190,7 @@
 					alert("请输入订单编号");
 				}else{
 					console.log("GG" + $("#reservationtime").val());
-					loadPage("/Monitor/poc/orderStatus/"+$("#tracknum").val()+"?starttime="+starttime+"&endtime="+endtime);     
+					loadPage("${basePath}/poc/orderStatus/"+$("#tracknum").val()+"?starttime="+starttime+"&endtime="+endtime);     
 				}
 				break;
 			}

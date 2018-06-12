@@ -199,19 +199,19 @@
     <script>
           
           function openExceptionLog(exception){
-        	  loadPage("/Monitor/poc/exceptionStatus?exception="+exception); 
+        	  loadPage("${basePath}/poc/exceptionStatus?exception="+exception); 
           }
           
           function refleshOperate(code){
-        	  loadPage("/Monitor/poc/orderStatus/"+code); 
+        	  loadPage("${basePath}/poc/orderStatus/"+code); 
           }
           
           function refleshOverviewByOrderCode(){
-        	  loadPage("/Monitor/poc/libySystemOverview?orderCode="+$("#searchOrderCode").val()); 
+        	  loadPage("${basePath}/poc/libySystemOverview?orderCode="+$("#searchOrderCode").val()); 
           }
           
           function refleshOverviewAllOrderCode(){
-        	  loadPage("/Monitor/poc/libySystemOverview?orderCode=all"); 
+        	  loadPage("${basePath}/poc/libySystemOverview?orderCode=all"); 
           }
           
           //$("div.jvectormap-label").style.display="none";

@@ -43,7 +43,7 @@
 				/login=anon
 				/logout=anon
 				/register=anon
-				/alertapi/**=anon
+				/api/**=anon
 				/oauth/**=anon
 				/resources/**=anon
 				/**=authc

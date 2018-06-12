@@ -389,7 +389,7 @@
 			    $.each(dataStatus, function (i, items) {
 		　　　　　　　　if ((code == items.cha) && (items.jinggao > 0)) {
 					$("div.jvectormap-label").remove();
-		　　　　　　　　　　loadPage("/Monitor/poc/statusoverview?province="+encodeURI(encodeURI(items.name)));
+		　　　　　　　　　　loadPage("${basePath}/poc/statusoverview?province="+encodeURI(encodeURI(items.name)));
 		　　　　　　　　}
 		　　　　　　});
 			}
@@ -415,19 +415,19 @@
 	   
 	   
           function refleshChina(){
-        	  loadPage("/Monitor/poc/statusoverview"); 
+        	  loadPage("${basePath}/poc/statusoverview"); 
           }
           
           function refleshOperate(code){
-        	  loadPage("/Monitor/poc/orderStatus/"+code); 
+        	  loadPage("${basePath}/poc/orderStatus/"+code); 
           }
           
           function goProductStatus(){
-        	  loadPage('/Monitor/poc/productStatus');
+        	  loadPage('${basePath}/poc/productStatus');
           }
           
           function goCartStatus(){
-        	  loadPage('/Monitor/poc/cartStatus');
+        	  loadPage('${basePath}/poc/cartStatus');
           }
           
           //$("div.jvectormap-label").style.display="none";

@@ -130,7 +130,7 @@
 					alert("请输入订单编号");
 				}else{
 					console.log("GG" + $("#reservationtime").val());
-					loadPage("/Monitor/poc/orderStatus/"+$("#tracknum").val()+"?starttime="+starttime+"&endtime="+endtime);     
+					loadPage("${basePath}/poc/orderStatus/"+$("#tracknum").val()+"?starttime="+starttime+"&endtime="+endtime);     
 				}
 				break;
 			}

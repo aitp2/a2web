@@ -1,0 +1,122 @@
+   
+<section class="content-header">
+		<h1>
+			产品异常查询 <small></small>
+		</h1>
+		<ol class="breadcrumb">
+			<li><a href="${basePath}"><i class="fa fa-dashboard"></i> 首页</a></li>
+			<li><a href="#">监控查询</a></li>
+			<li class="active">产品异常查询</li>
+		</ol>
+	</section> 
+	<br>
+    <!-- Main content -->
+    <section class="content">
+   
+        <div class="row">
+          
+          <div class="col-md-12">
+           <div class="box box-danger">
+            <div class="box-header with-border">
+              
+              <div class="col-md-3" style="width:25%;">
+						  <input type="text" name="table_search" id="searchProductCode" class="form-control pull-right" placeholder="productCode" value="${(productCode)!}">
+		  			</div>
+		  			
+					<div class="col-md-3" style="width:25%;">
+						 <div class="input-group">
+				                  <div class="input-group-addon">异常类型
+				                  </div>
+				                  <select name="example1_length" aria-controls="example1" class="form-control input-sm" id="pendingtype">
+				              	<#if pendingtype =='0'>
+				              	<option value="0" selected="selected">all</option>
+				              	<option value="1" >pending exception</option>
+				              	<option value="2" >not pending exception</option>
+				              	</#if>
+				              	<#if pendingtype =='1'>
+				              	<option value="0" >all</option>
+				              	<option value="1" selected="selected">pending exception</option>
+				              	<option value="2" >not pending exception</option>
+				              	</#if>
+				              	<#if pendingtype =='2'>
+				              	<option value="0" >all</option>
+				              	<option value="1" >pending exception</option>
+				              	<option value="2" selected="selected">not pending exception</option>
+				              	</#if>
+				              	</select>
+			              </div>
+		  			</div>
+		  			
+		  			<div class="col-md-1" style="width:10%;">
+						<div class="input-group">
+							  <span class="input-group-btn">
+								<button type="submit" class="btn btn-primary btn-flat" style="background-color:#3c8dbc;" data-btn-type="search" onclick="refleshProductExceptionByProductCode()"><i class="fa fa-search"></i></button>
+							  	
+							  </span>
+							  <span class="input-group-btn">
+								<button type="button" class="btn btn-primary btn-flat" style="background-color:#3c8dbc;" data-btn-type="search" onclick="openSaveQuery()"><i class="fa fa-save"></i></button>
+							  	
+							  </span>
+						</div>
+		  			</div>
+		  			
+            </div>
+            <div class="box-body">
+               <table class="table table-bordered">
+                <tr>
+                  <th style="width: 15%">时间</th>
+                  <th style="width: 10%">产品</th>
+                  <th style="width: 15%">类型</th>
+                  <th style="width: 60%">异常</th>
+                </tr>
+                <#list productExceptonList as productExcepton>
+                <tr>
+                  <td>
+                  ${(productExcepton.logtime)!}
+				</td>
+                  <td>${(productExcepton.productCode)!}</td>
+                  <td>${(productExcepton.orderCode)!}</td>
+                  <td><font color="red">${(productExcepton.error)!}</font></td>
+                </tr>
+                </#list> 
+              </table>
+            </div>
+            <div class="box-footer clearfix">
+              <ul class="pagination pagination-sm no-margin pull-left">
+               		第${(pageInfo.numfrom)!} 至 ${(pageInfo.numto)!} 项记录，共 ${(pageInfo.count)!} 项
+              </ul>
+              <ul class="pagination pagination-sm no-margin pull-right">
+                <li><a href="javascript:void(0);" onclick="refleshProductCodeByPage(${(pageInfo.lastPageNum)!})">上一页</a></li>
+                <li><a href="#">第${(pageInfo.pageNum)!}页</a></li>
+                <li><a href="javascript:void(0);" onclick="refleshProductCodeByPage(${(pageInfo.nextPageNum)!})">下一页</a></li>
+              </ul>
+            </div>
+          </div>
+          </div>
+    </div>
+      
+	
+    </section>
+      </div>
+    </section>
+    <!-- /.content -->
+
+    <script>
+          
+          function refleshProductExceptionByProductCode(){
+        	  loadPage("${basePath}/poc/dfsProductException?productCode="+$("#searchProductCode").val()+"&pendingtype="+$("#pendingtype").val()); 
+          }
+          function refleshProductCodeByPage(pagenum){
+        	  loadPage("${basePath}/poc/dfsProductException?pagenum="+pagenum+"&pendingtype="+$("#pendingtype").val()); 
+          }
+          //$("div.jvectormap-label").style.display="none";
+		  function openSaveQuery(){
+			 var url = "${basePath}/poc/dfsProductException?productCode="+$("#searchProductCode").val()+"&pendingtype="+$("#pendingtype").val();
+	          modals.openWin({
+                 	winId:"entryWin",
+                 	title:'新增SavedQuery配置',
+                 	width:'900px',
+                 	url:basePath+"/savedQuery/edit?url="+encodeURIComponent(url)
+                 });
+		  }
+</script>

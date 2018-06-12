@@ -44,6 +44,7 @@
   <link rel="stylesheet" href="${resourcePath}/adminlte/dist/css/AdminLTE.min.css">
   <link rel="stylesheet" href="${resourcePath}/adminlte/dist/css/skins/_all-skins.css">
   <link rel="stylesheet" href="${resourcePath}/common/css/antdesign.css">
+  <link rel="stylesheet" href="${resourcePath}/common/css/highlight.css">
   <style type="text/css">
   //
 // Code (inline and block)
@@ -114,17 +115,41 @@ pre {
   max-height: @pre-scrollable-max-height;
   overflow-y: scroll;
 }
-  
+
+.log-textarea {
+	width: 100%;
+	/*min-height: 26px;
+	line-height: 20px;
+	_height: 30px;
+	 max-height: 150px;
+	margin-left: auto;
+	margin-right: auto;
+	padding: 3px;
+	outline: 0;
+	border: 1px solid #ccc;
+	font-size: 13px;
+	word-wrap: break-word;
+	overflow-x: hidden;
+	overflow-y: auto;
+	
+	border-radius: 4px;*/
+	-webkit-user-modify: read-write-plaintext-only;
+}
   </style>
 
 
 </head>
-<body class="hold-transition skin-blue sidebar-mini ">
+<body class="hold-transition skin-blue sidebar-mini " >
+
+
+
+
+
 <a name="main"></a>
 <div class="wrapper">
 
   <header class="main-header">
-
+  
     <!-- Logo -->
     <a href="${basePath}/main" class="logo">
       <!-- mini logo for sidebar mini 50x50 pixels -->
@@ -143,83 +168,31 @@ pre {
 
       <div class="navbar-custom-menu">
         <ul class="nav navbar-nav">
-          <!-- Messages: style can be found in dropdown.less-->
-          <li class="dropdown messages-menu">
+        
+        <li class="dropdown tasks-menu">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-              <i class="fa fa-envelope-o"></i>
-              <span class="label label-success">4</span>
+	            <i class="fa fa-wrench"></i>
             </a>
-            <ul class="dropdown-menu">
-              <li class="header">You have 4 messages</li>
+           <ul class="dropdown-menu">
+              <li class="header">便捷工具箱</li>
               <li>
                 <!-- inner menu: contains the actual data -->
                 <ul class="menu">
                   <li><!-- start message -->
-                    <a href="#">
-                      <div class="pull-left">
-                        <img src="${resourcePath}/adminlte/dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
-                      </div>
-                      <h4>
-                        Support Team
-                        <small><i class="fa fa-clock-o"></i> 5 mins</small>
-                      </h4>
-                      <p>Why not buy a new awesome theme?</p>
+                  <div class="pull-left">
+                    <a id="openModalBtn"  href="javascript:void(0);" onclick="openJsonFormat()"  role="button" class="btn" data-toggle="modal">
+                    json 格式化工具
                     </a>
+                    </div>
                   </li>
                   <!-- end message -->
-                  <li>
-                    <a href="#">
-                      <div class="pull-left">
-                        <img src="${resourcePath}/adminlte/dist/img/user3-128x128.jpg" class="img-circle" alt="User Image">
-                      </div>
-                      <h4>
-                        AdminLTE Design Team
-                        <small><i class="fa fa-clock-o"></i> 2 hours</small>
-                      </h4>
-                      <p>Why not buy a new awesome theme?</p>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#">
-                      <div class="pull-left">
-                        <img src="${resourcePath}/adminlte/dist/img/user4-128x128.jpg" class="img-circle" alt="User Image">
-                      </div>
-                      <h4>
-                        Developers
-                        <small><i class="fa fa-clock-o"></i> Today</small>
-                      </h4>
-                      <p>Why not buy a new awesome theme?</p>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#">
-                      <div class="pull-left">
-                        <img src="${resourcePath}/adminlte/dist/img/user3-128x128.jpg" class="img-circle" alt="User Image">
-                      </div>
-                      <h4>
-                        Sales Department
-                        <small><i class="fa fa-clock-o"></i> Yesterday</small>
-                      </h4>
-                      <p>Why not buy a new awesome theme?</p>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#">
-                      <div class="pull-left">
-                        <img src="${resourcePath}/adminlte/dist/img/user4-128x128.jpg" class="img-circle" alt="User Image">
-                      </div>
-                      <h4>
-                        Reviewers
-                        <small><i class="fa fa-clock-o"></i> 2 days</small>
-                      </h4>
-                      <p>Why not buy a new awesome theme?</p>
-                    </a>
-                  </li>
+                 
                 </ul>
               </li>
-              <li class="footer"><a href="#">See All Messages</a></li>
+           
             </ul>
-          </li>  
+        </li>
+
           <!-- Notifications: style can be found in dropdown.less -->
           <li class="dropdown notifications-menu">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
@@ -227,34 +200,13 @@ pre {
               <span class="label label-warning">10</span>
             </a>
             <ul class="dropdown-menu">
-              <li class="header">You have 10 notifications</li>
+              <li class="header">You have 1 notifications</li>
               <li>
                 <!-- inner menu: contains the actual data -->
                 <ul class="menu">
                   <li>
                     <a href="#">
-                      <i class="fa fa-users text-aqua"></i> 5 new members joined today
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#">
-                      <i class="fa fa-warning text-yellow"></i> Very long description here that may not fit into the
-                      page and may cause design problems
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#">
-                      <i class="fa fa-users text-red"></i> 5 new members joined
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#">
-                      <i class="fa fa-shopping-cart text-green"></i> 25 sales made
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#">
-                      <i class="fa fa-user text-red"></i> You changed your username
+                      <i class="fa fa-warning text-yellow"></i> 2018-6-11 13:25:10 告警通知
                     </a>
                   </li>
                 </ul>
@@ -262,80 +214,7 @@ pre {
               <li class="footer"><a href="#">View all</a></li>
             </ul>
           </li>
-          <!-- Tasks: style can be found in dropdown.less -->
-          <li class="dropdown tasks-menu">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-              <i class="fa fa-flag-o"></i>
-              <span class="label label-danger">9</span>
-            </a>
-            <ul class="dropdown-menu">
-              <li class="header">You have 9 tasks</li>
-              <li>
-                <!-- inner menu: contains the actual data -->
-                <ul class="menu">
-                  <li><!-- Task item -->
-                    <a href="#">
-                      <h3>
-                        Design some buttons
-                        <small class="pull-right">20%</small>
-                      </h3>
-                      <div class="progress xs">
-                        <div class="progress-bar progress-bar-aqua" style="width: 20%" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">
-                          <span class="sr-only">20% Complete</span>
-                        </div>
-                      </div>
-                    </a>
-                  </li>
-                  <!-- end task item -->
-                  <li><!-- Task item -->
-                    <a href="#">
-                      <h3>
-                        Create a nice theme
-                        <small class="pull-right">40%</small>
-                      </h3>
-                      <div class="progress xs">
-                        <div class="progress-bar progress-bar-green" style="width: 40%" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">
-                          <span class="sr-only">40% Complete</span>
-                        </div>
-                      </div>
-                    </a>
-                  </li>
-                  <!-- end task item -->
-                  <li><!-- Task item -->
-                    <a href="#">
-                      <h3>
-                        Some task I need to do
-                        <small class="pull-right">60%</small>
-                      </h3>
-                      <div class="progress xs">
-                        <div class="progress-bar progress-bar-red" style="width: 60%" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">
-                          <span class="sr-only">60% Complete</span>
-                        </div>
-                      </div>
-                    </a>
-                  </li>
-                  <!-- end task item -->
-                  <li><!-- Task item -->
-                    <a href="#">
-                      <h3>
-                        Make beautiful transitions
-                        <small class="pull-right">80%</small>
-                      </h3>
-                      <div class="progress xs">
-                        <div class="progress-bar progress-bar-yellow" style="width: 80%" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">
-                          <span class="sr-only">80% Complete</span>
-                        </div>
-                      </div>
-                    </a>
-                  </li>
-                  <!-- end task item -->
-                </ul>
-              </li>
-              <li class="footer">
-                <a href="#">View all tasks</a>
-              </li>
-            </ul>
-          </li>
+
           <!-- User Account: style can be found in dropdown.less -->
           <li class="dropdown user user-menu">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
@@ -353,20 +232,6 @@ pre {
                 </p>
               </li>
               <!-- Menu Body -->
-              <li class="user-body">
-                <div class="row">
-                  <div class="col-xs-4 text-center">
-                    <a href="#">Followers</a>
-                  </div>
-                  <div class="col-xs-4 text-center">
-                    <a href="#">Sales</a>
-                  </div>
-                  <div class="col-xs-4 text-center">
-                    <a href="#">Friends</a>
-                  </div>
-                </div>
-                <!-- /.row -->
-              </li>
               <!-- Menu Footer-->
               <li class="user-footer">
                 <div class="pull-left">
@@ -417,6 +282,20 @@ pre {
       </ul>
     </section>
     <!-- /.sidebar -->
+   <div class="input-group">
+          <div class="btn-group dropup" style="padding-left: 30px;">
+             <button type="button" class="btn btn-default" style="background-color: #374850;" onclick="openSavedQueryList()"><font style="color: #b8c7ce;">saved query</font></button>
+             <button type="button" class="btn btn-default dropdown-toggle" style="background-color: #b8c7ce;"  data-toggle="dropdown">
+               <span class="caret"></span>
+               <span class="sr-only">Toggle Dropdown</span>
+             </button>
+             <ul class="dropdown-menu" role="menu">
+             	<#list savedQueryList as savedQuery>
+             		<li><a href="#" onclick="openSavedQuery('${(savedQuery.url)!}')" >${(savedQuery.name)!}</a></li>
+             	</#list>
+             </ul>
+           </div>
+     </div>
   </aside>
 
   <!-- Content Wrapper. Contains page content -->
@@ -622,6 +501,8 @@ pre {
   <div class="control-sidebar-bg"></div> 
   
 </div>
+
+
 <!-- ./wrapper -->
 <script type="text/javascript">
 var basePath="${basePath}";//给外部js文件传递路径参数
@@ -635,8 +516,8 @@ var basePath="${basePath}";//给外部js文件传递路径参数
 <script src="${resourcePath}/adminlte/dist/js/adminlte.min.js"></script>
 <!-- FastClick -->
 <script src="${resourcePath}/adminlte/plugins/fastclick/fastclick.js"></script>
-<!-- AdminLTE App -->
-<script src="${resourcePath}/adminlte/dist/js/app.min.js"></script>
+<!-- AdminLTE App 
+<script src="${resourcePath}/adminlte/dist/js/app.min.js"></script>-->
 
 <!-- dataTable -->
 <script src="${resourcePath}/adminlte/plugins/datatables/jquery.dataTables.js"></script>
@@ -658,14 +539,21 @@ var basePath="${basePath}";//给外部js文件传递路径参数
 <script type="text/javascript" src="${resourcePath}/common/js/base-modal.js"></script>
 <script type="text/javascript" src="${resourcePath}/common/js/base-form.js"></script>
 <script type="text/javascript" src="${resourcePath}/common/js/base-datasource.js"></script>
+
+<script type="text/javascript"  src="${resourcePath}/common/js/highlight.js"></script>
 <!-- ChartJS 1.0.1 -->
 <script type="text/javascript"  src="${resourcePath}/adminlte/plugins/chartjs/Chart.min.js"></script>
- <!-- <script type="text/javascript" src="${resourcePath}/adminlte/plugins/jvectormap/jquery-1.6.min.js"></script> -->  
+
+
+ <!-- <script type="text/javascript" src="${resourcePath}/adminlte/plugins/jvectormap/jquery-1.6.min.js"></script>
+ <script type='text/javascript' src='http://libs.baidu.com/jquery/1.9.1/jquery.min.js?ver=lastest'></script>
+	<script type="text/javascript" src="http://caibaojian.com/bootstrap/assets/js/bootstrap-modal.js"></script> -->  
+	
  
 <!-- 加入页面的的脚本 -->
 <script>
    //加载菜单auth_
-   ajaxPost(basePath+"/function/all",null,function(data){
+   ajaxPost(basePath+"/function/auth_all",null,function(data){
 	  var $li,$menu_f_ul;
 	  $.each(data,function(index,item){
 		  if(item.levelCode.length==6){	
@@ -690,7 +578,7 @@ var basePath="${basePath}";//给外部js文件传递路径参数
    $(function(){ 
 	   //首页默认加载
         //loadPage("${basePath}/homePage");
-	   loadPage("/Monitor/poc/dfsSystemOverview");
+	   loadPage("${basePath}/poc/businessoverview");
         //loadPage("${basePath}/generator/setting");
 	   //loadPage("${basePath}/markdown/preview?id=402880e958ecdff60158ed0c62ba0001")
 	   $("a[data-url]").click(function(evt){
@@ -700,8 +588,26 @@ var basePath="${basePath}";//给外部js文件传递路径参数
 	   });
 	   
    });
+   
+   function openSavedQueryList(){
+	 	  loadPage("${basePath}/savedQuery/list"); 
+	   }
+   
+   function openSavedQuery(url){
+ 	  loadPage(url); 
+   }
+   
+   function openJsonFormat(){
+	   modals.openWin({
+        	winId:"JsonFormatWin",
+        	title:'json格式化工具',
+        	width:'1175px',
+        	url:basePath+"/jsonformat"
+        });
+   }
 
 </script>
+
 </body>
 
 </html>

@@ -3,6 +3,106 @@
   <link rel="stylesheet" href="${resourcePath}/adminlte/plugins/daterangepicker/daterangepicker.css">
   <script src="${resourcePath}/adminlte/plugins/daterangepicker/daterangepicker.js"></script>
   
+  
+  <script type="text/javascript" src="${resourcePath}/common/js/hsCheckData.js"></script>
+      <style>
+        ::-webkit-scrollbar
+        {
+            width: 9px;
+            height: 9px;
+        }
+        ::-webkit-scrollbar-track-piece
+        {
+            background-color: #ebebeb;
+            -webkit-border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:vertical
+        {
+            height: 32px;
+            background-color: #ccc;
+            -webkit-border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:horizontal
+        {
+            width: 32px;
+            background-color: #ccc;
+            -webkit-border-radius: 4px;
+        }
+        ul,li{padding: 0;margin: 0}
+        .mySelect{
+            position: relative;
+        }
+        .mySelect .inputWrap{
+            width:100%;
+            min-height: 34px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+            position: relative;
+            cursor: pointer;
+        }
+        .mySelect ul{
+            padding:0 5px ;
+            margin: 0;
+            padding-right: 35px;
+        }
+        .mySelect ul,li{
+            list-style: none;
+        }
+        .mySelect li{
+            display: inline-block;
+            background: #eaeaea;
+            padding: 5px;
+            margin: 1px 1px 1px 0;
+            border-radius: 5px;
+        }
+        .mySelect .fa-close{
+            cursor: pointer;
+        }
+        .mySelect .fa-close:hover{
+            color: #237eff;
+        }
+        .mySelect .mySelect-option{
+        	z-index:1; 
+            width: 100%;
+            border: 1px solid #ccc;
+            max-height: 200px;
+            overflow-y: scroll;
+            position: absolute;
+            height: 0;
+            opacity: 0;
+            background:#EAEAEA
+        }
+        .mySelect .mySelect-option div{
+            padding: 10px;
+        }
+        .mySelect .inputWrap>i{
+            position: absolute;
+            padding: 13px;
+            right: 0;
+            top: 0;
+        }
+        .mySelect-option div{
+            cursor: pointer;
+            border-bottom: 1px solid #e7e7e7;
+            margin: 5px;
+        }
+        .mySelect-option div i{
+            float: right;
+            color: #ffffff;
+        }
+        .mySelect-option div.selected{
+            background: #237eff;
+            color: #ffffff;
+            border-radius: 5px;
+        }
+        .mySelect-option div:hover{
+            /*background: #9ec6ff;*/
+            color: #9ec6ff;
+            border-bottom: 1px solid #9ec6ff;
+        }
+    </style>
+  
+  
 	<!-- Content Header (Page header) -->
 	<section class="content-header">
 		<h1>
@@ -17,7 +117,7 @@
 
 	<!-- Main content -->
 	<section class="content">
-		<div class="row">
+		<div class="row" id="hightlight-main">
 			<div class="col-xs-12">
 				<div class="box"><br>
 					<!-- /.box-header -->
@@ -34,13 +134,28 @@
 		                </div>
 		  			</div>
 		  			
+		  			<div class="col-md-3" style="width:25%;">
+						 <div class="input-group">
+		                  <div class="input-group-addon">
+		                    <i class="fa fa-server"></i>
+		                  </div>
+		                 
+		                  <div id="mySelect" class="mySelect" style="width: 345px;float: left"></div>
+		                  <input type="hidden" id="server" value="${orignalserver!}"/>
+		                </div>
+		                
+		  			</div>
+		  			
 		  			<div class="col-md-1" style="width:10%;">
 						<div class="input-group">
 							  <span class="input-group-btn">
 								<button type="submit" class="btn btn-primary btn-flat" style="background-color:#3c8dbc;" data-btn-type="search" ><i class="fa fa-search"></i></button>
 							  	
 							  </span>
-							  
+							  <span class="input-group-btn">
+								<button type="button" class="btn btn-primary btn-flat" style="background-color:#3c8dbc;" data-btn-type="savequery" ><i class="fa fa-save"></i></button>
+							  	
+							  </span>
 						</div>
 		  			</div>
 		  			
@@ -63,10 +178,7 @@
 						             <#else>
 						            <#if init??> <span class="bg-red" style="display:none"> <#else>
 						            <span class="bg-red" style="display:"> </#if>
-						              
-						             	
 						             	  log event not exsit 
-						             	
 						             </span>
 						             </#if>
 						        
@@ -85,7 +197,7 @@
 							            <h3 class="timeline-header"> 时间：${tracknumEntity.logtime} </h3>
 							            <#if (tracknumEntity.listTracknumEntity)??>
 								             <div class="box-body" > 
-								            	<pre>${tracknumEntity.message}</pre>
+								            	<div class="log-textarea2" id="logvalue" style="display:block;word-break: break-all;word-wrap: break-word;" contenteditable="plaintext-only" >${tracknumEntity.message}</div>
 								            </div>
 										</#if>
 							        </div>
@@ -109,7 +221,7 @@
 	</section>
 
 		<script>  
-	
+	//格式化日期
 	var formatDateTime = function (date) {  
         var y = date.getFullYear();  
         var m = date.getMonth() + 1;  
@@ -165,17 +277,53 @@
 			var action = $(this).attr('data-btn-type');
 			switch (action) {
 			case 'search':
-				if($("#exception").val() ==''){
-					alert("请输入异常信息");
+				if($("#message").val() =='' && $("#reservationtime").val() ==''){
+					alert("请至少输入关键字或时间范围");
 				}else{
 					console.log("GG" + $("#reservationtime").val());
-					loadPage("/Monitor/poc/messageSearch?message="+$("#message").val()+"&starttime="+starttime+"&endtime="+endtime);     
+					loadPage("${basePath}/poc/messageSearch?message="+$("#message").val()+"&starttime="+starttime+"&endtime="+endtime+"&server="+$("#server").val());     
 				}
+				break;
+			case 'savequery':
+				var url = "${basePath}/poc/messageSearch?message="+$("#message").val()+"&starttime="+starttime+"&endtime="+endtime+"&server="+$("#server").val();   
+		          modals.openWin({
+		                       	winId:"entryWin",
+		                       	title:'新增SavedQuery配置',
+		                       	width:'900px',
+		                       	url:basePath+"/savedQuery/edit?url="+encodeURIComponent(url)
+		                       });
 				break;
 			}
 
 		});
 		//form_init();
+		
+		//hightlight
+		var searchTerm = $("#message").val();
+		if(searchTerm) {
+			$("#hightlight-main").highlight(searchTerm);
+		}
+	
+		 var mySelect= $("#mySelect").mySelect({
+	          mult:true,//true为多选,false为单选
+	          option:[//选项数据
+	              {label:"server01",value:"server01"},
+	              {label:"server08",value:"server08"},
+	              {label:"server09",value:"server09"}
+	          ],
+	          onChange:function(res){//选择框值变化返回结果
+	            console.log(res)
+	            $("#server").val(res);
+	          }
+	      });
+		 var serv = $("#server").val();
+		 if (serv.replace(/(^s*)|(s*$)/g, "").length ==0) 
+		 { 
+		 
+		 }else{
+			 mySelect.setResult(${server!});
+		 }
+
 	})
 	
 	</script>

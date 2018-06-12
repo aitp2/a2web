@@ -326,21 +326,21 @@
     <script>
           
           function openExceptionLog(exception){
-        	  loadPage("/Monitor/poc/exceptionStatus?exception="+exception); 
+        	  loadPage("${basePath}/poc/exceptionStatus?exception="+exception); 
           }
           
           function refleshOperate(code){
-        	  loadPage("/Monitor/poc/orderStatus/"+code); 
+        	  loadPage("${basePath}/poc/orderStatus/"+code); 
           }
           
           function refleshOverviewByOrderCode(){
-        	  loadPage("/Monitor/poc/dfsSystemOverview?orderCode="+$("#searchOrderCode").val()); 
+        	  loadPage("${basePath}/poc/dfsSystemOverview?orderCode="+$("#searchOrderCode").val()); 
           }
           function refleshOverviewByProductCode(){
-        	  loadPage("/Monitor/poc/dfsSystemOverview?productCode="+$("#searchProductCode").val()+"&pendingtype="+$("#pendingtype").val()); 
+        	  loadPage("${basePath}/poc/dfsSystemOverview?productCode="+$("#searchProductCode").val()+"&pendingtype="+$("#pendingtype").val()); 
           }
           function refleshProductCodeByPage(pagenum){
-        	  loadPage("/Monitor/poc/dfsSystemOverview?productExceptionPagenum="+pagenum+"&pendingtype="+$("#pendingtype").val()); 
+        	  loadPage("${basePath}/poc/dfsSystemOverview?productExceptionPagenum="+pagenum+"&pendingtype="+$("#pendingtype").val()); 
           }
           //$("div.jvectormap-label").style.display="none";
           

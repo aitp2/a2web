@@ -30,6 +30,43 @@
 	    <column key="resultNumCompareNum" header="查询数量比较值" operator="eq" width="50" align="center" />
 	</query>
 	
+	<!-- 告警历史列表 -->
+	<query id="alert_history_list" key="id" tableName="告警历史列表" className="com.monitor.framework.base.entity.AlertHistory"
+		pageSize="10"  widthType="px" order="updateDateTime desc">
+		<column key="rowIndex" header="序号" width="50" allowSort="false"/>
+		<column key="id" header="id" hidden="true"/>
+		<column key="version" header="version" hidden="true"/>
+		<column key="ruleName" header="规则名称" operator="like" width="150" allowSort="true" />
+		<column key="createDateTime" header="发送时间" operator="like" width="100" />
+		<column key="emailTo" header="收件人邮箱" operator="like" width="100" />
+		<column key="emailSubject" header="邮件标题" operator="like" width="250" />
+		<column key="emailBody" header="邮件信息" align="left" operator="eq" width="250"  />
+	</query>
+	
+	<!-- 系统流程配置列表 -->
+	<query id="system_flow_list" key="id" tableName="系统流程配置列表" className="com.monitor.framework.base.entity.SystemFlow"
+		pageSize="10"  widthType="px" order="updateDateTime desc">
+		<column key="rowIndex" header="序号" width="50" allowSort="false"/>
+		<column key="id" header="id" hidden="true"/>
+		<column key="version" header="version" hidden="true"/>
+		<column key="tracknumtype" header="track类型" operator="like" width="150" allowSort="true" />
+		<column key="nodeno" header="节点序号" operator="eq" width="50" allowSort="true" />
+		<column key="name" header="节点名称" operator="like" width="100" />
+		<column key="nomarl_pattern" header="正常匹配规则" align="left" operator="like" width="250" />
+		<column key="exception_pattern" header="异常匹配规则" align="left" operator="eq" width="250"  />
+	</query>
+	
+	<!-- savedQeury列表 -->
+	<query id="saved_query_list" key="id" tableName="SavedQeury列表" className="com.monitor.framework.base.entity.SavedQuery"
+		pageSize="10"  widthType="px" order="updateDateTime desc">
+		<column key="rowIndex" header="序号" width="50" allowSort="false"/>
+		<column key="id" header="id" hidden="true"/>
+		<column key="version" header="version" hidden="true"/>
+		<column key="username" header="用户名称" operator="like" width="100" />
+		<column key="name" header="名称" operator="like" width="100" />
+		<column key="url" header="url" align="left" operator="like" width="500" />
+	</query>
+	
 	<!-- 角色列表 -->
 	<query id="role_list" key="id" tableName="角色列表" className="com.monitor.framework.base.entity.Role"
 		pageSize="10"  widthType="px" order="sort asc" allowPaging="false">

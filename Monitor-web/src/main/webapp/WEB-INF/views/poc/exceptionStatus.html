@@ -169,7 +169,7 @@
 					alert("请输入异常信息");
 				}else{
 					console.log("GG" + $("#reservationtime").val());
-					loadPage("/Monitor/poc/exceptionStatus?exception="+$("#exception").val()+"&starttime="+starttime+"&endtime="+endtime);     
+					loadPage("${basePath}/poc/exceptionStatus?exception="+$("#exception").val()+"&starttime="+starttime+"&endtime="+endtime);     
 				}
 				break;
 			}

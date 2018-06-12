@@ -10,15 +10,20 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.monitor.framework.base.entity.AlertRule;
+import com.monitor.framework.base.entity.SystemFlow;
 import com.monitor.framework.base.service.AlertRuleService;
+import com.monitor.framework.base.service.SystemFlowService;
 import com.monitor.framework.dto.ResultData;
 
 @RestController
-@RequestMapping("/alertapi")
-public class AlertRestfullController {
-	
+@RequestMapping("/api")
+public class RestfullController {
+
 	@Resource
 	public AlertRuleService alertRuleService;
+	
+	@Resource
+	public SystemFlowService systemFlowService;
 	
 	@RequestMapping(value="/getAllAlertRules", method=RequestMethod.GET)
     public ResultData<List<AlertRule>> queryExceptionByAggs(){
@@ -30,5 +35,10 @@ public class AlertRestfullController {
     public ResultData<AlertRule> getAlertRule(@RequestParam(value = "id", required = true) String id){
 		return new ResultData<AlertRule>(true, "success", 20000, alertRuleService.get(AlertRule.class, id));
 	}
-
+	
+	@RequestMapping(value="/getSystemFlow", method=RequestMethod.GET)
+    public ResultData<List<SystemFlow>> getSystemFlow(@RequestParam(value = "tracknumtype", required = true) String tracknumtype){
+		return new ResultData<List<SystemFlow>>(true, "success", 20000, systemFlowService.getSystemFlowsByTracktype(tracknumtype));
+	}
+	
 }

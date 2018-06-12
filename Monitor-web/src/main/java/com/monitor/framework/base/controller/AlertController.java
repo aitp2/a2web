@@ -45,6 +45,15 @@ public class AlertController {
 
 		return "base/alert/alertRule_list";
 	}
+	
+	/**
+	 * 告警规则列表
+	 */
+	@RequestMapping(method = RequestMethod.GET, value = "/alertHistoryList")
+	private String alertHistoryList() {
+
+		return "base/alert/alertHistory_list";
+	}
 
 	/**
 	 * 告警规则编辑
