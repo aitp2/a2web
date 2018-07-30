@@ -1,0 +1,244 @@
+   
+<section class="content-header">
+		<h1>
+			A5 事件查询 <small></small>
+		</h1>
+		<ol class="breadcrumb">
+			<li><a href="${basePath}"><i class="fa fa-dashboard"></i> 首页</a></li>
+			<li><a href="#">监控查询</a></li>
+		</ol>
+	</section> 
+	<br>
+    <!-- Main content -->
+    <section class="content">
+   
+        <div class="row">
+          
+          <div class="col-md-12">
+           <div class="box box-danger">
+            <div class="box-header with-border">
+              
+              		<div class="col-md-2" style="width:30%;">
+						  <input type="text" name="table_search" id="module" class="form-control pull-right" placeholder="module" value="${(module)!}">
+		  			</div>
+		  			<div class="col-md-2" style="width:30%;">
+						  <input type="text" name="table_search" id="moduleEntryId" class="form-control pull-right" placeholder="moduleEntryId" value="${(moduleEntryId)!}">
+		  			</div>
+		  			<div class="col-md-2" style="width:40%;">
+						  <input type="text" name="table_search" id="moduleEntryTitle" class="form-control pull-right" placeholder="moduleEntryTitle" value="${(moduleEntryTitle)!}">
+		  			</div>
+		  			</div><div class="box-header with-border">
+		  			<div class="col-md-2" style="width:30%;">
+						  <input type="text" name="table_search" id="operator" class="form-control pull-right" placeholder="operator" value="${(operator)!}">
+		  			</div>
+		  			<div class="col-md-2" style="width:30%;">
+						  <input type="text" name="table_search" id="starttime" class="form-control pull-right" placeholder="operatorTime start:yyyy-MM-dd HH:mm:ss" value="${(starttime)!}">
+		  			</div>
+		  			<div class="col-md-2" style="width:40%;">
+						  <input type="text" name="table_search" id="endtime" class="form-control pull-right" placeholder="operatorTime end:yyyy-MM-dd HH:mm:ss" value="${(endtime)!}">
+		  			</div>
+		  			</div><div class="box-header with-border">
+		  			<div class="col-md-2" style="width:30%;">
+						  <input type="text" name="table_search" id="nickname" class="form-control pull-right" placeholder="nickname" value="${(nickname)!}">
+		  			</div>
+					<div class="col-md-2" style="width:30%;">
+						  <input type="text" name="table_search" id="sex" class="form-control pull-right" placeholder="sex" value="${(sex)!}">
+		  			</div>
+		  			<div class="col-md-2" style="width:30%;">
+						  <input type="text" name="table_search" id="pagesize" class="form-control pull-right" placeholder="size" value="${(pagesize)!}">
+		  			</div>
+		  			
+		  			<div class="col-md-1" style="width:10%;">
+						<div class="input-group">
+							  <span class="input-group-btn">
+								<button type="submit" class="btn btn-primary btn-flat" style="background-color:#3c8dbc;" data-btn-type="search" onclick="search()"><i class="fa fa-search"></i></button>
+							  	
+							  </span>
+							  <span class="input-group-btn">
+								<button type="button" class="btn btn-primary btn-flat" style="background-color:#3c8dbc;" data-btn-type="search" onclick="openSaveQuery()"><i class="fa fa-save"></i></button>
+							  	
+							  </span>
+						</div>
+		  			</div>
+		  			
+            </div>
+            <div class="box-body">
+               <table class="table table-bordered">
+                <tr>
+                  <th style="width: 10%">module</th>
+                  <th style="width: 10%">moduleEntryId</th>
+                  <th style="width: 25%">moduleEntryTitle</th>
+                  <th style="width: 15%">operator</th>
+                  <th style="width: 15%">operatorTime</th>
+                  <th style="width: 15%">nickname</th>
+                  <th style="width: 10%">sex</th>
+                </tr>
+                <#if eventList??>
+	                <#list eventList as event>
+	                <tr>
+	                  <td>${(event.module)!}</td>
+	                  <td>${(event.moduleEntryId)!}</td>
+	                  <td>${(event.moduleEntryTitle)!}</td>
+	                  <td>${(event.operator)!}</td>
+	                  <td>${(event.operatorTime)!}</td>
+	                  <td>${(event.nickname)!}</td>
+	                  <td>${(event.sex)!}</td>
+	                </tr>
+	                </#list> 
+	                </#if>
+              </table>
+            </div>
+            <div class="box-footer clearfix">
+              <ul class="pagination pagination-sm no-margin pull-left">
+               		第${(pageInfo.numfrom)!} 至 ${(pageInfo.numto)!} 项记录，共 ${(pageInfo.count)!} 项
+              </ul>
+              <ul class="pagination pagination-sm no-margin pull-right">
+                <li><a href="javascript:void(0);" onclick="searchByPage(${(pageInfo.lastPageNum)!})">上一页</a></li>
+                <li><a href="#">第${(pageInfo.pageNum)!}页</a></li>
+                <li><a href="javascript:void(0);" onclick="searchByPage(${(pageInfo.nextPageNum)!})">下一页</a></li>
+              </ul>
+            </div>
+          </div>
+          </div>
+    </div>
+      
+	
+    </section>
+      </div>
+    </section>
+    <!-- /.content -->
+
+    <script>
+    
+	  
+	  function Base64() {
+		  
+			// private property
+			_keyStr = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
+		 
+			// public method for encoding
+			this.encode = function (input) {
+				var output = "";
+				var chr1, chr2, chr3, enc1, enc2, enc3, enc4;
+				var i = 0;
+				input = _utf8_encode(input);
+				while (i < input.length) {
+					chr1 = input.charCodeAt(i++);
+					chr2 = input.charCodeAt(i++);
+					chr3 = input.charCodeAt(i++);
+					enc1 = chr1 >> 2;
+					enc2 = ((chr1 & 3) << 4) | (chr2 >> 4);
+					enc3 = ((chr2 & 15) << 2) | (chr3 >> 6);
+					enc4 = chr3 & 63;
+					if (isNaN(chr2)) {
+						enc3 = enc4 = 64;
+					} else if (isNaN(chr3)) {
+						enc4 = 64;
+					}
+					output = output +
+					_keyStr.charAt(enc1) + _keyStr.charAt(enc2) +
+					_keyStr.charAt(enc3) + _keyStr.charAt(enc4);
+				}
+				return output;
+			}
+		 
+			// public method for decoding
+			this.decode = function (input) {
+				var output = "";
+				var chr1, chr2, chr3;
+				var enc1, enc2, enc3, enc4;
+				var i = 0;
+				input = input.replace(/[^A-Za-z0-9\+\/\=]/g, "");
+				while (i < input.length) {
+					enc1 = _keyStr.indexOf(input.charAt(i++));
+					enc2 = _keyStr.indexOf(input.charAt(i++));
+					enc3 = _keyStr.indexOf(input.charAt(i++));
+					enc4 = _keyStr.indexOf(input.charAt(i++));
+					chr1 = (enc1 << 2) | (enc2 >> 4);
+					chr2 = ((enc2 & 15) << 4) | (enc3 >> 2);
+					chr3 = ((enc3 & 3) << 6) | enc4;
+					output = output + String.fromCharCode(chr1);
+					if (enc3 != 64) {
+						output = output + String.fromCharCode(chr2);
+					}
+					if (enc4 != 64) {
+						output = output + String.fromCharCode(chr3);
+					}
+				}
+				output = _utf8_decode(output);
+				return output;
+			}
+		 
+			// private method for UTF-8 encoding
+			_utf8_encode = function (string) {
+				string = string.replace(/\r\n/g,"\n");
+				var utftext = "";
+				for (var n = 0; n < string.length; n++) {
+					var c = string.charCodeAt(n);
+					if (c < 128) {
+						utftext += String.fromCharCode(c);
+					} else if((c > 127) && (c < 2048)) {
+						utftext += String.fromCharCode((c >> 6) | 192);
+						utftext += String.fromCharCode((c & 63) | 128);
+					} else {
+						utftext += String.fromCharCode((c >> 12) | 224);
+						utftext += String.fromCharCode(((c >> 6) & 63) | 128);
+						utftext += String.fromCharCode((c & 63) | 128);
+					}
+		 
+				}
+				return utftext;
+			}
+		 
+			// private method for UTF-8 decoding
+			_utf8_decode = function (utftext) {
+				var string = "";
+				var i = 0;
+				var c = c1 = c2 = 0;
+				while ( i < utftext.length ) {
+					c = utftext.charCodeAt(i);
+					if (c < 128) {
+						string += String.fromCharCode(c);
+						i++;
+					} else if((c > 191) && (c < 224)) {
+						c2 = utftext.charCodeAt(i+1);
+						string += String.fromCharCode(((c & 31) << 6) | (c2 & 63));
+						i += 2;
+					} else {
+						c2 = utftext.charCodeAt(i+1);
+						c3 = utftext.charCodeAt(i+2);
+						string += String.fromCharCode(((c & 15) << 12) | ((c2 & 63) << 6) | (c3 & 63));
+						i += 3;
+					}
+				}
+				return string;
+			}
+		}
+	  
+          function search(){
+        	  var moduleEntryTitlebase = new Base64();
+        	  var nicknamebase = new Base64();
+        	  loadPage("${basePath}/a5/a5Event?module="+$("#module").val()+"&moduleEntryId="+$("#moduleEntryId").val()+"&moduleEntryTitle="+moduleEntryTitlebase.encode($("#moduleEntryTitle").val())
+        			  +"&operator="+$("#operator").val()+"&starttime="+$("#starttime").val().replace(' ',"T")+"&endtime="+$("#endtime").val().replace(' ',"T")+"&nickname="+nicknamebase.encode($("#nickname").val())+"&sex="+$("#sex").val()+"&pagesize="+$("#pagesize").val()); 
+          }
+          function searchByPage(pagenum){
+        	  var moduleEntryTitlebase = new Base64();
+        	  var nicknamebase = new Base64();
+        	  loadPage("${basePath}/a5/a5Event?module="+$("#module").val()+"&moduleEntryId="+$("#moduleEntryId").val()+"&moduleEntryTitle="+moduleEntryTitlebase.encode($("#moduleEntryTitle").val())
+        			  +"&operator="+$("#operator").val()+"&starttime="+$("#starttime").val().replace(' ',"T")+"&endtime="+$("#endtime").val().replace(' ',"T")+"&nickname="+nicknamebase.encode($("#nickname").val())+"&sex="+$("#sex").val()+"&pagesize="+$("#pagesize").val()+"&pagenum="+pagenum);
+          }
+		  function openSaveQuery(){
+			  var moduleEntryTitlebase = new Base64();
+        	  var nicknamebase = new Base64();
+			 var url = "${basePath}/a5/a5Event?module="+$("#module").val()+"&moduleEntryId="+$("#moduleEntryId").val()+"&moduleEntryTitle="+moduleEntryTitlebase.encode($("#moduleEntryTitle").val())
+       			  +"&operator="+$("#operator").val()+"&starttime="+$("#starttime").val().replace(' ',"T")+"&endtime="+$("#endtime").val().replace(' ',"T")+"&nickname="+nicknamebase.encode($("#nickname").val())+"&sex="+$("#sex").val()+"&pagesize="+$("#pagesize").val();
+	          modals.openWin({
+                 	winId:"entryWin",
+                 	title:'新增SavedQuery配置',
+                 	width:'900px',
+                 	url:basePath+"/savedQuery/edit?url="+encodeURIComponent(url)
+                 });
+		  }
+
+
+</script>
