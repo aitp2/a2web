@@ -1,6 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <queryContext xmlns="http://www.example.org/query" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://www.example.org/query query.xsd ">
+	
+	<!-- a5 log列表 -->
+	<query id="a5log_list" key="id" tableName="a5log列表" className="com.monitor.framework.base.entity.A5Log"
+		pageSize="10"  widthType="px" order="operatorTime desc">
+		<column key="rowIndex" header="序号" width="50" allowSort="false"/>
+		<column key="id" header="id" hidden="true"/>
+		<column key="version" header="version" hidden="true"/>
+		<column key="module" header="模块" operator="like" width="100" allowSort="true" />
+		<column key="moduleEntryId" header="活动id" operator="like" width="100" allowSort="true" />
+		<column key="moduleEntryTitle" header="活动标题" operator="like" width="300" allowSort="true" />
+		<column key="operator" header="操作" operator="like" width="100" allowSort="true" align="center"/>
+		<column key="operatorTime" header="操作时间" operator="between" width="100" allowSort="true" />
+		<column key="nickname" header="昵称" operator="like" width="150" allowSort="true" align="center"/>
+		<column key="sex" header="性别" operator="like" width="100" allowSort="true" align="center"/>
+	</query>
+	
 	<!-- 用户列表 -->
 	<query id="user_list" key="id" tableName="用户列表" className="com.monitor.framework.base.entity.User"
 		pageSize="10"  widthType="px" order="updateDateTime desc">

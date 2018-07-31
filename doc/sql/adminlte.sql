@@ -1082,3 +1082,21 @@ CREATE TABLE `tbl_system_flow` (
   `url` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `tbl_a5_log`;
+CREATE TABLE `tbl_a5_log` (
+  `id` VARCHAR(36) NOT NULL,
+  `create_date_time` datetime DEFAULT NULL,
+   deleted` int(11) DEFAULT NULL,
+  `update_date_time` datetime DEFAULT NULL,
+  `version` int(11) DEFAULT NULL,
+  `module` VARCHAR(255) NULL,
+  `moduleEntryId` VARCHAR(36) NULL,
+  `moduleEntryTitle` VARCHAR(1024) NULL,
+  `operator` VARCHAR(255) NULL,
+  `operatorTime` VARCHAR(36) NULL,
+  `nickname` VARCHAR(255) NULL,
+  `sex` VARCHAR(36) NULL,
+  PRIMARY KEY (`id`)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;;
+

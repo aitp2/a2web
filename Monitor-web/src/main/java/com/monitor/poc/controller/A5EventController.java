@@ -1,7 +1,14 @@
 package com.monitor.poc.controller;
 
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+
+import javax.annotation.Resource;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -11,6 +18,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.TypeReference;
+import com.monitor.demos.service.A5LogService;
+import com.monitor.framework.base.entity.A5Log;
+import com.monitor.framework.base.entity.Function;
 import com.monitor.framework.base.pojo.PageInfo;
 import com.monitor.framework.dto.A5EventEntity;
 import com.monitor.framework.dto.PageableEntity;
@@ -23,6 +33,56 @@ import com.monitor.framework.utils.PropertiesUtil;
 @RequestMapping("a5")
 public class A5EventController {
 	
+	@Resource
+	private A5LogService a5LogService;
+	
+	/**
+	 * 列表
+	 */
+	@RequestMapping(method = RequestMethod.GET, value = "/list")
+	private String list() {
+		this.syncA5Log();
+		return "base/a5Log/list";
+	}
+	
+	/**
+	 * dashboard
+	 * @param model
+	 * @return
+	 */
+	@RequestMapping(value = "a5Overview", method = RequestMethod.GET)
+	public String a5Overview(Model model,
+			@RequestParam(value = "timerange", required = true) String timerange) {
+		this.syncA5Log();
+		//设置时间范围：当天 前两天 前三天 本周 本月
+		String starttime  = "",endtime="";
+		if(timerange == null || timerange.equals("") || timerange.equals("today")){
+			
+		}
+		
+		//查询活跃人次、活跃人数 打卡人数
+		
+		//按小时统计活跃人数与活跃人次曲线图
+		
+		//活跃人排行 top10 low10      
+		return "poc/a5Overview";
+	}
+	
+	/**
+	 * 直接es查询a5 log 
+	 * @param model
+	 * @param module
+	 * @param moduleEntryId
+	 * @param moduleEntryTitle
+	 * @param operator
+	 * @param starttime
+	 * @param endtime
+	 * @param nickname
+	 * @param sex
+	 * @param pagesize
+	 * @param pagenum
+	 * @return
+	 */
 	@RequestMapping(value = "a5Event", method = RequestMethod.GET)
 	public String a5Event(Model model,
 			@RequestParam(value = "module", required = false) String module,
@@ -126,5 +186,62 @@ public class A5EventController {
 		
 		return "poc/a5Event";
 	}
-
+	
+	private void syncA5Log() {
+		try {
+			A5Log a5log_temp = new A5Log();
+			StringBuilder strb = new StringBuilder();
+	    	strb.append("select * from tbl_a5_log ");
+	    	Object maxvalue = a5LogService.getMaxByExample(a5log_temp, "operatorTime", "", false);
+	    	String starttime = "1997-01-01 00:00:00";
+	    	if(maxvalue != null) {
+	    		starttime = (String)maxvalue;
+	    	}
+	    	Date day=new Date();    
+	    	SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); 
+	    	Map<String, String> para_product = new HashMap<String, String>();
+			para_product.put("query", "");
+			para_product.put("starttime", starttime);
+			para_product.put("endtime", df.format(day));
+			para_product.put("from", "0");
+			para_product.put("size", "10000");
+			
+			String result = HttpClientUtil.httpGet(
+					PropertiesUtil.getValue("microservice.url")
+							+ "querya5event", para_product);
+			ResultData<PageableEntity> parseObject = JSON
+					.parseObject(
+							result,
+							new TypeReference<ResultData<PageableEntity>>() {
+							});
+			
+			List<A5Log> list_a5log = new ArrayList<A5Log> ();
+			for(A5EventEntity a5EventEntity:parseObject.getSerializableData().getList_a5EventEntity()) {
+				list_a5log.add(new A5Log(a5EventEntity));
+			}
+			a5LogService.batchSave(list_a5log);
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	private Date getStartTime() {
+		Calendar todayStart = Calendar.getInstance();
+		todayStart.set(Calendar.HOUR, 0);
+		todayStart.set(Calendar.MINUTE, 0);
+		todayStart.set(Calendar.SECOND, 0);
+		todayStart.set(Calendar.MILLISECOND, 0);
+		return todayStart.getTime();
+	}
+ 
+	private Date getEndTime() {
+		Calendar todayEnd = Calendar.getInstance();
+		todayEnd.set(Calendar.HOUR, 23);
+		todayEnd.set(Calendar.MINUTE, 59);
+		todayEnd.set(Calendar.SECOND, 59);
+		todayEnd.set(Calendar.MILLISECOND, 999);
+		return todayEnd.getTime();
+	}
+	
 }
