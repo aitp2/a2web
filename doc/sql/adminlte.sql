@@ -1071,7 +1071,7 @@ CREATE TABLE `tbl_system_flow` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS `tbl_saved_query`;
-CREATE TABLE `tbl_system_flow` (
+CREATE TABLE `tbl_saved_query` (
   `id` varchar(36) NOT NULL,
   `create_date_time` datetime DEFAULT NULL,
   `deleted` int(11) DEFAULT NULL,
