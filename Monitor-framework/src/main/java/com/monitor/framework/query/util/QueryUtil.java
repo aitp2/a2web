@@ -461,7 +461,7 @@ public class QueryUtil {
             }
             String operatorStr = getOperatorStr(map, column);
             logger.debug("condition:"+key+" "+operatorStr+" "+ value);
-
+            
             ConditionOperator operator = getOperator(operatorStr);
 
             Class clazz;
@@ -608,6 +608,10 @@ public class QueryUtil {
             }
             String operatorStr = getOperatorStr(map, column);
             logger.debug("condition:"+key+" "+operatorStr+" "+ value);
+          //针对a5log base64 加密处理
+            if(query.getId().equals("a5log_list") && (key.equals("nickname") || key.equals("moduleEntryTitle"))) {
+            	value = QueryUtil.baseEncoder((String)value);
+            }
             ConditionOperator operator = getOperator(operatorStr);
             //类型处理
             Class clazz;
@@ -637,4 +641,14 @@ public class QueryUtil {
     }
 
 
+    public static String baseEncoder(String text){
+        final Base64.Encoder encoder = Base64.getEncoder();
+        String encoderData=text;
+        try {
+            final byte[] textByte = text.getBytes("UTF-8");
+            encoderData=encoder.encodeToString(textByte);
+        } catch (Exception e) {
+        }
+        return encoderData;
+    }
 }

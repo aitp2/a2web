@@ -354,4 +354,5 @@ public interface BaseService {
 
     Object getMaxByExample(Object exampleEntity, String maxProperty, String condition, boolean enableLike);
 
+    public List<Object[]> querySql(String sql);
 }

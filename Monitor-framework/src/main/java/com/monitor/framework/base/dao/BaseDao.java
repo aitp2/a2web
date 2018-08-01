@@ -358,4 +358,6 @@ public interface BaseDao {
     List findByExample(Object example, String condition, boolean enableLike);
 
     Object getMaxByExample(Object exampleEntity, String maxProperty, String condition, boolean enableLike);
+    
+    public List<Object[]> querySql(String sql);
 }

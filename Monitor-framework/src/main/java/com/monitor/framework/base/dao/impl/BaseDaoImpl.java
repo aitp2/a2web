@@ -454,4 +454,9 @@ public class BaseDaoImpl implements BaseDao {
         }
         return executableCriteria.uniqueResult();
     }
+    
+    public List<Object[]> querySql(String sql){
+    	SQLQuery sqlQuery = this.getCurrentSession().createSQLQuery(sql);
+    	return sqlQuery.list();
+    }
 }
