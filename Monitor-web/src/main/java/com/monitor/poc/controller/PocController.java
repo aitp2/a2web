@@ -5,8 +5,10 @@ import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -447,7 +449,7 @@ public class PocController {
 			
 				Map<String, String> para = new HashMap<String, String>();
 				if(server == null || server.equals("")){
-					para.put("message", message==null?"":"*"+message+"*");
+					para.put("message", message==null?"":""+message.replace(" ", "%20")+"");
 				}else{
 					String msg = "*"+message+"*" + " AND logsource:("+StringUtil.replace(server, ",", " OR ")+")";
 					para.put("message", msg);
@@ -470,10 +472,24 @@ public class PocController {
 						Map<String,List<TracknumEntity>> map = new TreeMap<String,List<TracknumEntity>>(new  
 							     Comparator<String>() {  
 							     public int compare(String obj1, String obj2) {  
-							    	 SimpleDateFormat sdf=new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-							    	 
+							    	 SimpleDateFormat sdf1=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+							    	 SimpleDateFormat sdf2=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
+							    	 Date date1 = new Date(),date2= new Date();
 							     try {
-									return sdf.parse(obj1).compareTo(sdf.parse(obj2));
+							    	 if(obj1.length()==19) {
+							    		 date1 = sdf1.parse(obj1);
+							    	 }
+							    	 if(obj2.length()==19) {
+							    		 date2 = sdf1.parse(obj2);
+							    	 }
+							    	 if(obj1.length()==23) {
+							    		 date1 = sdf2.parse(obj1);
+							    	 }
+							    	 if(obj2.length()==23) {
+							    		 date2 = sdf2.parse(obj2);
+							    	 }
+							    	 return date1.compareTo(date2);
+									
 								} catch (ParseException e) {
 									e.printStackTrace();
 									return 0;
@@ -492,7 +508,12 @@ public class PocController {
 						List<TracknumEntity> list_bytime = new ArrayList<TracknumEntity>();
 						for(String time:map.keySet()){
 							TracknumEntity newtt = new TracknumEntity();
-							newtt.setLogtime(time.substring(0, time.indexOf(".")));
+							if(time.indexOf(".")>0) {
+								newtt.setLogtime(time.substring(0, time.indexOf(".")));
+							}else {
+								newtt.setLogtime(time);
+							}
+							
 							newtt.setLogsource(map.get(time).get(0).getLogsource());
 							for(TracknumEntity aa:map.get(time)){
 								if(newtt.getMessage()==null){
@@ -526,6 +547,11 @@ public class PocController {
 			model.addAttribute("server", server);
 		}else{
 			model.addAttribute("init", "true");
+			SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); 
+			starttime = df.format(this.getTodayStartTime());
+			endtime = df.format(this.getTodayEndTime());
+			model.addAttribute("starttime", starttime);
+			model.addAttribute("endtime", endtime);
 		}
 		
 		return MESSAGESEARCH;
@@ -882,5 +908,25 @@ public class PocController {
 		return CUSTOMSYSTEMFLOW;
 		
 	}
+	
+	//当天开始时间
+	private Date getTodayStartTime() {
+		Calendar todayStart = Calendar.getInstance();
+		todayStart.set(Calendar.HOUR_OF_DAY, 0);
+		todayStart.set(Calendar.MINUTE, 0);
+		todayStart.set(Calendar.SECOND, 0);
+		todayStart.set(Calendar.MILLISECOND, 0);
+		return todayStart.getTime();
+	}
+	
+	//当天结束时间
+		private Date getTodayEndTime() {
+			Calendar todayEnd = Calendar.getInstance();
+			todayEnd.set(Calendar.HOUR_OF_DAY, 23);
+			todayEnd.set(Calendar.MINUTE, 59);
+			todayEnd.set(Calendar.SECOND, 59);
+			todayEnd.set(Calendar.MILLISECOND, 999);
+			return todayEnd.getTime();
+		}
 
 }

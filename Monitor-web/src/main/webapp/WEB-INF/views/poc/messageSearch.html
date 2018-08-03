@@ -105,14 +105,14 @@
   
 	<!-- Content Header (Page header) -->
 	<section class="content-header">
-		<h1>
-			查询 <small>日志</small>
-		</h1>
+		<h3>
+			日志查询<small></small>
+		</h3>
 		<ol class="breadcrumb">
-			<li><a href="${basePath}"><i class="fa fa-dashboard"></i> 首页</a></li>
-			<li><a href="#">监控查询</a></li>
-			<li class="active">日志查询</li>
-		</ol>
+        <li><a href="javascript:void(0);" onclick="loadPage('${basePath}/a5/overview?timerange=today')"><i class="fa fa-money"></i>dashboard</a></li>
+        <li class="active"><a href="javascript:void(0);" onclick="loadPage('${basePath}/a5/list')">事件监控</a></li>
+        <li class="active"><a href="javascript:void(0);" onclick="loadPage('${basePath}/poc/messageSearch')"><font style=" font-weight:bold">日志查询</font></a></li>
+      </ol>
 	</section> 
 
 	<!-- Main content -->
@@ -121,11 +121,11 @@
 			<div class="col-xs-12">
 				<div class="box"><br>
 					<!-- /.box-header -->
-		  			<div class="col-md-3" style="width:25%;">
+		  			<div class="col-lg-3 col-xs-6">
 						  <input type="text" name="message" id="message" placeholder="日志信息 " class="form-control" value="${message!}">
 		  			</div>
 		  			
-					<div class="col-md-3" style="width:25%;">
+					<div class="col-lg-3 col-xs-6">
 						 <div class="input-group">
 		                  <div class="input-group-addon">
 		                    <i class="fa fa-clock-o"></i>
@@ -134,26 +134,28 @@
 		                </div>
 		  			</div>
 		  			
-		  			<div class="col-md-3" style="width:25%;">
+		  			<div class="col-lg-3 col-xs-6">
 						 <div class="input-group">
 		                  <div class="input-group-addon">
 		                    <i class="fa fa-server"></i>
 		                  </div>
 		                 
-		                  <div id="mySelect" class="mySelect" style="width: 345px;float: left"></div>
+		                  <div id="mySelect" class="mySelect" style="width: 150px;float: left;z-index:0"></div>
 		                  <input type="hidden" id="server" value="${orignalserver!}"/>
 		                </div>
 		                
 		  			</div>
 		  			
-		  			<div class="col-md-1" style="width:10%;">
-						<div class="input-group">
+		  			
+		  			
+		  			<div class="col-lg-3 col-xs-6">
+						<div class="input-group" style="width:20%;">
 							  <span class="input-group-btn">
-								<button type="submit" class="btn btn-primary btn-flat" style="background-color:#3c8dbc;" data-btn-type="search" ><i class="fa fa-search"></i></button>
+								<button type="submit" class="btn btn-primary btn-flat" style="background-color:#3c8dbc;" data-btn-type="search" >查询</button>
 							  	
 							  </span>
 							  <span class="input-group-btn">
-								<button type="button" class="btn btn-primary btn-flat" style="background-color:#3c8dbc;" data-btn-type="savequery" ><i class="fa fa-save"></i></button>
+								<button type="button" class="btn btn-default" data-btn-type="savequery" >保存</button>
 							  	
 							  </span>
 						</div>
@@ -281,11 +283,11 @@
 					alert("请至少输入关键字或时间范围");
 				}else{
 					console.log("GG" + $("#reservationtime").val());
-					loadPage("${basePath}/poc/messageSearch?message="+$("#message").val()+"&starttime="+starttime+"&endtime="+endtime+"&server="+$("#server").val());     
+					loadPage("${basePath}/poc/messageSearch?message="+encodeURIComponent($("#message").val())+"&starttime="+starttime+"&endtime="+endtime+"&server="+encodeURIComponent($("#server").val()));     
 				}
 				break;
 			case 'savequery':
-				var url = "${basePath}/poc/messageSearch?message="+$("#message").val()+"&starttime="+starttime+"&endtime="+endtime+"&server="+$("#server").val();   
+				var url = "${basePath}/poc/messageSearch?message="+encodeURIComponent($("#message").val())+"&starttime="+starttime+"&endtime="+endtime+"&server="+encodeURIComponent($("#server").val());   
 		          modals.openWin({
 		                       	winId:"entryWin",
 		                       	title:'新增SavedQuery配置',
@@ -307,9 +309,7 @@
 		 var mySelect= $("#mySelect").mySelect({
 	          mult:true,//true为多选,false为单选
 	          option:[//选项数据
-	              {label:"server01",value:"server01"},
-	              {label:"server08",value:"server08"},
-	              {label:"server09",value:"server09"}
+	              {label:"a5log",value:"a5log"}
 	          ],
 	          onChange:function(res){//选择框值变化返回结果
 	            console.log(res)

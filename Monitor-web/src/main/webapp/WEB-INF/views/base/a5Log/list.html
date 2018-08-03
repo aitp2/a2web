@@ -1,12 +1,14 @@
 	<!-- Content Header (Page header) -->
 	<section class="content-header">
-		<h1>
-			操作日志 <small>列表</small>
-		</h1>
+		<h3>
+			事件监控<small></small>
+		</h3>
 		<ol class="breadcrumb">
-			<li><a href="${basePath}"><i class="fa fa-dashboard"></i> 首页</a></li>
-			<li><a href="#">操作日志</a></li>
-		</ol>
+        <li><a href="javascript:void(0);" onclick="loadPage('${basePath}/a5/overview?timerange=today')"><i class="fa fa-money"></i>dashboard</a></li>
+        <li class="active"><a href="javascript:void(0);" onclick="loadPage('${basePath}/a5/list')"><font style=" font-weight:bold">事件监控</font></a></li>
+        <li class="active"><a href="javascript:void(0);" onclick="loadPage('${basePath}/poc/messageSearch')">日志查询</a></li>
+      </ol>
+      
 	</section> 
 
 	<!-- Main content -->

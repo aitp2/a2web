@@ -1087,7 +1087,7 @@ DROP TABLE IF EXISTS `tbl_a5_log`;
 CREATE TABLE `tbl_a5_log` (
   `id` VARCHAR(36) NOT NULL,
   `create_date_time` datetime DEFAULT NULL,
-   deleted` int(11) DEFAULT NULL,
+  `deleted` int(11) DEFAULT NULL,
   `update_date_time` datetime DEFAULT NULL,
   `version` int(11) DEFAULT NULL,
   `module` VARCHAR(255) NULL,
@@ -1098,5 +1098,5 @@ CREATE TABLE `tbl_a5_log` (
   `nickname` VARCHAR(255) NULL,
   `sex` VARCHAR(36) NULL,
   PRIMARY KEY (`id`)
-)ENGINE=InnoDB DEFAULT CHARSET=utf8;;
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
