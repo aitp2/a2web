@@ -1,6 +1,6 @@
 
-<!-- Content Header (Page header) -->
-<section class="content-header">
+	<!-- Main content -->
+	<section class="content">
 	<h1>
 		操作日志 <small>列表</small>
 	</h1>
@@ -33,9 +33,7 @@
 					<div class="btn-group">
 						<button type="button" class="btn btn-primary"
 							data-btn-type="search">查询</button>
-						<button type="button" class="btn btn-default"
-							data-btn-type="reset">重置</button>
-					</div>
+						<button type="button" class="btn btn-default" onclick="openSaveQuery()">保存</button></div>
 				</div>
 				<div class="box-body">
 					<div id="barChart"
@@ -62,7 +60,6 @@
 			</div>
 		</div>
 		<!-- /.col -->
-	</div>
 	<!-- /.row -->
 </section>
 
@@ -434,5 +431,17 @@
 				});
 
 		//form_init();
+
+
+function openSaveQuery(){
+			 var url = "${basePath}/a5/list?module="+$("#module").val()+"&moduleEntryId="+$("#moduleEntryId").val()+"&moduleEntryTitle="+$("#moduleEntryTitle").val()
+       			  +"&operator="+$("#operator").val()+"&starttime="+$("#starttime").val().replace(' ',"T")+"&endtime="+$("#endtime").val().replace(' ',"T")+"&nickname="+$("#nickname").val()+"&sex="+$("#sex").val();
+	          modals.openWin({
+                 	winId:"entryWin",
+                 	title:'新增SavedQuery配置',
+                 	width:'900px',
+                 	url:basePath+"/savedQuery/edit?url="+encodeURIComponent(url)
+                 });
+		  }
 	})
 </script>

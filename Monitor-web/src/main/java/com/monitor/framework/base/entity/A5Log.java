@@ -46,6 +46,38 @@ public class A5Log extends BaseEntity{
     @Column(name = "sex")
 	private String sex;
 
+	
+private String hour;
+	
+	private Long countVisit;
+	
+	private Long countUser;
+
+	public String getHour() {
+		return hour;
+	}
+
+	public void setHour(String hour) {
+		this.hour = hour;
+	}
+
+	public Long getCountVisit() {
+		return countVisit;
+	}
+
+	public void setCountVisit(Long countVisit) {
+		this.countVisit = countVisit;
+	}
+
+	public Long getCountUser() {
+		return countUser;
+	}
+
+	public void setCountUser(Long countUser) {
+		this.countUser = countUser;
+	}
+
+	
 	public String getModule() {
 		return module;
 	}

@@ -252,4 +252,8 @@ public class BaseServiceImpl implements BaseService {
     public Object getMaxByExample(Object exampleEntity, String maxProperty, String condition, boolean enableLike){
         return baseDao.getMaxByExample(exampleEntity,maxProperty,condition,enableLike);
     }
+    
+    public List<Object[]> querySql(String sql){
+    	return baseDao.querySql(sql);
+    }
 }
