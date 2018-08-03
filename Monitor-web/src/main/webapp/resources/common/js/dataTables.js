@@ -16,7 +16,7 @@ function CommonTable(tableId, queryId, searchDiv,config) {
 	this.data = null;
 	this.loaded = false;
 	this.config=config;
-
+	this.fillDataCallBack=config.fillDataCallBack;
 	// 用作缓存一些数据
 	var dataCache = $("#dataCache" + tableId);
 	if (dataCache.length == 0) {
@@ -470,6 +470,9 @@ CommonTable.prototype.fillDataTable = function(sSource, aoData, fnCallback, oSet
 	obj["iTotalRecords"] = result.pageInfo.count;
 	obj["iTotalDisplayRecords"] = result.pageInfo.count;
 	fnCallback(obj);
+	if(this.fillDataCallBack!=null){
+	this.fillDataCallBack(sSource, result);
+	}
 	//序号排序  
 	$("table.table thead tr").each(function(){
 		$(this).find("th").eq(0).removeClass("sorting_asc").addClass("sorting_disabled");

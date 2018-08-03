@@ -20,7 +20,6 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.TypeReference;
 import com.monitor.demos.service.A5LogService;
 import com.monitor.framework.base.entity.A5Log;
-import com.monitor.framework.base.entity.Function;
 import com.monitor.framework.base.pojo.PageInfo;
 import com.monitor.framework.dto.A5EventEntity;
 import com.monitor.framework.dto.PageableEntity;
