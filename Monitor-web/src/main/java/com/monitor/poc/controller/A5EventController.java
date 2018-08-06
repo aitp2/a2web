@@ -27,6 +27,7 @@ import com.monitor.framework.dto.A5TopDTO;
 import com.monitor.framework.dto.A5EventEntity;
 import com.monitor.framework.dto.PageableEntity;
 import com.monitor.framework.dto.ResultData;
+import com.monitor.framework.dto.TracknumEntity;
 import com.monitor.framework.util.HttpClientUtil;
 import com.monitor.framework.util.HttpUtil;
 import com.monitor.framework.utils.PropertiesUtil;
@@ -107,18 +108,37 @@ public class A5EventController {
 		model.addAttribute("usersCount", a5LogService.getUsersCountByTimerange(starttime, endtime,apprange)); 
 		model.addAttribute("newUsersCount", a5LogService.getNewUsersCountByTimerange(starttime, endtime,apprange)); 
 		
+		String message = "Internal Server Error";
+		Map<String, String> para = new HashMap<String, String>();
+		para.put("message", message==null?"":""+message.replace(" ", "%20")+"");
+		para.put("starttime", starttime);
+		para.put("endtime", endtime);
+		para.put("size", "0");
+		String result = "0";
+		try {
+			result = HttpClientUtil.httpGet(
+					PropertiesUtil.getValue("microservice.url")
+							+ "queryAllMessage", para);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		ResultData<List<TracknumEntity>> parseObject = JSON
+				.parseObject(
+						result,
+						new TypeReference<ResultData<List<TracknumEntity>>>() {
+						});
+		if (parseObject.getCode() > 0) {
+			model.addAttribute("errorNum", parseObject.getCode().toString()); 
+		}else {
+			model.addAttribute("errorNum", "0");
+		}
+		
 		//按小时统计活跃人数与活跃人次曲线图
 		Map<Integer,Integer> list_visitCount = a5LogService.getVisitCountByTimerangePerHour( starttime,  endtime,apprange);
 		Map<Integer,Integer> list_userCount = a5LogService.getUsersCountByTimerangePerHour( starttime,  endtime,apprange);
 		String visitArray = "";
 		for(int i=0;i<24;i++) {
-				if(i==23) {
-					if(list_visitCount.get(i) != null) {
-						visitArray = visitArray +","+ list_visitCount.get(i);
-					}else {
-						visitArray = "0";
-					}
-				}else if(i== 0){
+				if(i== 0){
 					if(list_visitCount.get(i) != null) {
 						visitArray = list_visitCount.get(i).toString();
 					}else {
@@ -134,13 +154,7 @@ public class A5EventController {
 		}
 		String userArray = "";
 		for(int i=0;i<24;i++) {
-			if(i==23) {
-				if(list_userCount.get(i) != null) {
-					userArray = userArray +","+ list_userCount.get(i);
-				}else {
-					userArray = "0";
-				}
-			}else if(i== 0) {
+			if(i== 0) {
 				if(list_userCount.get(i) != null) {
 					userArray = list_userCount.get(i).toString();
 				}else {

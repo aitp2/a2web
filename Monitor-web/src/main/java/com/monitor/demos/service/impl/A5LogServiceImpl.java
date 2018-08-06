@@ -40,8 +40,10 @@ public class A5LogServiceImpl extends BaseServiceImpl implements A5LogService {
     	List<Object[]> result = this.querySql(strb.toString());
     	List<String> list =  new ArrayList<String>();
     	for (Object[] objects : result) {
-			String appname = objects[0].toString();
-			list.add(appname);
+    		if(objects[0] != null) {
+    			String appname = objects[0].toString();
+    			list.add(appname);
+    		}
 		}
     	return list;
 	}

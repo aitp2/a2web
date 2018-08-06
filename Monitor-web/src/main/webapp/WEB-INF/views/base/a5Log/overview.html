@@ -1,7 +1,11 @@
 <section class="content-header">
+	   <h3>
+			dashboard<small></small>
+		</h3>
        <ol class="breadcrumb">
-        <li><a href="../starter.html"><i class="fa fa-money"></i> 主页</a></li>
-        <li class="active">监控总览</li>
+        <li><a href="javascript:void(0);" onclick="loadPage('${basePath}/a5/overview?timerange=today')"><i class="fa fa-money"></i><font style=" font-weight:bold">dashboard</font></a></li>
+        <li class="active"><a href="javascript:void(0);" onclick="loadPage('${basePath}/a5/list')">事件监控</a></li>
+        <li class="active"><a href="javascript:void(0);" onclick="loadPage('${basePath}/poc/messageSearch')">日志查询</a></li>
       </ol>
     </section>
 
@@ -9,7 +13,7 @@
     <section class="content-header">
 		<span class=" btn-default">时间范围:</span>
 		<div class="btn-group">
-                <button type="button" class="btn btn-default" style="<#if timerange =='today'>background-color:#00c0ef </#if>" onclick="changeTimeRange('today')">当日</button>
+                <button type="button" class="btn btn-default" style="<#if timerange =='today'>background-color:#00c0ef </#if>" onclick="changeTimeRange('today')">当天</button>
                 <button type="button" class="btn btn-default" style="<#if timerange =='todayAndBeforeOneDay'>background-color:#00c0ef </#if>" onclick="changeTimeRange('todayAndBeforeOneDay')">前两天</button>
                 <button type="button" class="btn btn-default" style="<#if timerange =='todayAndBeforeTwoDay'>background-color:#00c0ef </#if>" onclick="changeTimeRange('todayAndBeforeTwoDay')">前三天</button>
                 <button type="button" class="btn btn-default" style="<#if timerange =='thisWeek'>background-color:#00c0ef </#if>" onclick="changeTimeRange('thisWeek')">本周</button>
@@ -24,7 +28,8 @@
                 <button type="button" class="btn btn-default" style="<#if apprange =='all'>background-color:#00c0ef </#if>" onclick="changeAppRange('all')">全部</button>
                 
                 <#list appnameList as appname>
-                	<button type="button" class="btn btn-default" style="<#if apprange == appname>background-color:#00c0ef </#if>" onclick="changeAppRange('${appname}')">${appname}</button>
+                	<button type="button" class="btn btn-default" style="<#if apprange == appname>background-color:#00c0ef </#if>" onclick="changeAppRange('${appname}')">
+                	<#if appname?trim =='pinfan'>小邀约  <#elseif appname?trim =='fit'>小目标<#else>${appname}</#if></button>
                 </#list>
                 <input type="hidden" id="appRange" value="${apprange}"/>
         </div>
@@ -32,30 +37,41 @@
     <section class="content">
     <div class="row">
         <!-- ./col -->
-        <div class="col-lg-4 col-xs-6">
+        <div class="col-lg-3 col-xs-6">
           <!-- small box -->
           <div class="small-box bg-white">
-            <div >
-              <a id="openModalBtn"  href="javascript:void(0);" onclick="openSavedQuery('','','')" ><p class="box-title">活跃人次</p><h3>${visitCount!}</a></h3>
+            <div class="inner">
+              <a id="openModalBtn"  href="javascript:void(0);" onclick="openSavedQueryForA5('','','')" ><p class="box-title">活跃人次</p><h3>${visitCount!}</a></h3>
             </div>
           </div>
         </div>
         
-        <div class="col-lg-4 col-xs-6">
+        <div class="col-lg-3 col-xs-6">
           <!-- small box -->
           <div class="small-box bg-white">
-            <div >
-              <a id="openModalBtn"  href="javascript:void(0);" onclick="openSavedQuery('','','')" ><p>活跃人数</p><h3>${usersCount!}</a></h3>
+            <div class="inner">
+              <a id="openModalBtn"  href="javascript:void(0);" onclick="openSavedQueryForA5('','','')" ><p>活跃人数</p><h3>${usersCount!}</a></h3>
               
             </div>
           </div>
         </div>
         
-        <div class="col-lg-4 col-xs-6">
+        <div class="col-lg-3 col-xs-6">
           <!-- small box -->
           <div class="small-box bg-white">
-            <div >
-              <a id="openModalBtn"  href="javascript:void(0);" onclick="openSavedQuery('','','newJoin')" ><p>新用戶人数 </p><h3>${newUsersCount!}</a></h3>
+            <div class="inner">
+              <a id="openModalBtn"  href="javascript:void(0);" onclick="openSavedQueryForA5('','','newJoin')" ><p>新用戶人数 </p><h3>${newUsersCount!}</a></h3>
+              
+            </div>
+          </div>
+        </div>
+        
+        <div class="col-lg-3 col-xs-6">
+          <!-- small box -->
+          <div class="small-box bg-white">
+            <div class="inner">
+              <a id="openModalBtn"  href="javascript:void(0);" onclick="openSavedQueryForException()" ><p>异常数 </p><h3>
+               <#if errorNum == '0' > ${errorNum!} <#else> <font color="red">${errorNum!} </font> </#if></a></h3>
               
             </div>
           </div>
@@ -63,10 +79,9 @@
         <!-- ./col -->
       </div>
       
-          <div class="col-md-12">
           
         	<!-- LINE CHART -->
-          <div class="box box-info">
+          <div class="box box-info;col-md-12">
             <div class="box-header with-border">
               <h3 class="box-title">访问人次与人数</h3>
 
@@ -84,7 +99,6 @@
             <!-- /.box-body -->
           </div>
           <!-- /.box -->
-        </div>
        
         <div class="col-md-6">
 		 <div class="row">
@@ -110,7 +124,7 @@
 		                  <td>${visitCountUserTop10.no}.</td>
 		                  <td>${visitCountUserTop10.name}</td>
 		                  <td>
-		                    <a id="openModalBtn"  href="javascript:void(0);" onclick="openSavedQuery('${visitCountUserTop10.name}','','')"  role="button" class="btn" data-toggle="modal">${visitCountUserTop10.count}</a>
+		                    <a id="openModalBtn"  href="javascript:void(0);" onclick="openSavedQueryForA5('${visitCountUserTop10.name}','','')"  role="button" class="btn" data-toggle="modal">${visitCountUserTop10.count}</a>
 		                  </td>
 		                </tr>
 		                </#list>
@@ -130,7 +144,7 @@
 		                  <td>${commentUserTop10.no}.</td>
 		                  <td>${commentUserTop10.name}</td>
 		                  <td>
-		                    <a id="openModalBtn"  href="javascript:void(0);" onclick="openSavedQuery('${commentUserTop10.name}','','comment')"  role="button" class="btn" data-toggle="modal">${commentUserTop10.count}</a>
+		                    <a id="openModalBtn"  href="javascript:void(0);" onclick="openSavedQueryForA5('${commentUserTop10.name}','','comment')"  role="button" class="btn" data-toggle="modal">${commentUserTop10.count}</a>
 		                  </td>
 		                </tr>
 		                </#list>
@@ -168,7 +182,7 @@
 			                  <td>${visitCountModuleEntryTop10.no}.</td>
 			                  <td>${visitCountModuleEntryTop10.name}</td>
 			                  <td>
-			                    <a id="openModalBtn"  href="javascript:void(0);" onclick="openSavedQuery('','${visitCountModuleEntryTop10.name}','')"  role="button" class="btn" data-toggle="modal">${visitCountModuleEntryTop10.count}</a>
+			                    <a id="openModalBtn"  href="javascript:void(0);" onclick="openSavedQueryForA5('','${visitCountModuleEntryTop10.name}','')"  role="button" class="btn" data-toggle="modal">${visitCountModuleEntryTop10.count}</a>
 			                  </td>
 			                </tr>
 			                </#list>
@@ -188,7 +202,7 @@
 			                  <td>${commentModuleEntryTop10.no}.</td>
 			                  <td>${commentModuleEntryTop10.name}</td>
 			                  <td>
-			                    <a id="openModalBtn"  href="javascript:void(0);" onclick="openSavedQuery('','${commentModuleEntryTop10.name}','comment')"  role="button" class="btn" data-toggle="modal">${commentModuleEntryTop10.count}</a>
+			                    <a id="openModalBtn"  href="javascript:void(0);" onclick="openSavedQueryForA5('','${commentModuleEntryTop10.name}','comment')"  role="button" class="btn" data-toggle="modal">${commentModuleEntryTop10.count}</a>
 			                  </td>
 			                </tr>
 			                </#list>
@@ -209,7 +223,7 @@
 			                  <td>${clockModuleEntryTop10.no}.</td>
 			                  <td>${clockModuleEntryTop10.name}</td>
 			                  <td>
-			                    <a id="openModalBtn"  href="javascript:void(0);" onclick="openSavedQuery('','${clockModuleEntryTop10.name}','clock')"  role="button" class="btn" data-toggle="modal">${clockModuleEntryTop10.count}</a>
+			                    <a id="openModalBtn"  href="javascript:void(0);" onclick="openSavedQueryForA5('','${clockModuleEntryTop10.name}','clock')"  role="button" class="btn" data-toggle="modal">${clockModuleEntryTop10.count}</a>
 			                  </td>
 			                </tr>
 			                </#list>
@@ -327,10 +341,15 @@
   }
   
   
-  function openSavedQuery(nickname,moduleEntryTitle,operator){
-	  var url = "${basePath}/a5/list?module="+$("#appRange").val()+"&moduleEntryId=&moduleEntryTitle="+moduleEntryTitle+"&operator="+$("#operator").val()+"&starttime="+$("#starttime").val().replace(' ',"T")+"&endtime="+$("#endtime").val().replace(' ',"T")
-			  +"&nickname="+nickname+"&sex=";
- 	  loadPage(url); 
+  function openSavedQueryForA5(nickname,moduleEntryTitle,operator){
+	  var urlA5 = "${basePath}/a5/list?module="+$("#appRange").val()+"&moduleEntryId=&moduleEntryTitle="+moduleEntryTitle.replace(/ /g,"%20").replace(/(\s*$)/g,"")+"&operator="+operator+"&starttime="+$("#starttime").val().replace(' ',"%20")+"&endtime="+$("#endtime").val().replace(' ',"%20")
+			  +"&nickname="+encodeURIComponent(nickname)+"&sex=";
+	  console.log("urlA5:" + urlA5);
+ 	  loadPage(urlA5); 
+  }
+  
+  function openSavedQueryForException(){
+	  loadPage("${basePath}/poc/messageSearch?message="+encodeURIComponent("Internal Server Error")+"&starttime="+$("#starttime").val().replace(' ',"T")+"&endtime="+$("#endtime").val().replace(' ',"T")+"&server=");  
   }
   
   
