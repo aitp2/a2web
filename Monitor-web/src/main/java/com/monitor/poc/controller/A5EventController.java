@@ -22,6 +22,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.TypeReference;
 import com.monitor.demos.service.A5LogService;
 import com.monitor.framework.base.entity.A5Log;
+import com.monitor.framework.base.entity.Function;
 import com.monitor.framework.base.pojo.PageInfo;
 import com.monitor.framework.dto.A5TopDTO;
 import com.monitor.framework.dto.A5EventEntity;
@@ -77,7 +78,8 @@ public class A5EventController {
 	@RequestMapping(value = "overview", method = RequestMethod.GET)
 	public String overview(Model model,
 			@RequestParam(value = "timerange", required = false) String timerange,
-			@RequestParam(value = "apprange", required = false) String apprange) {
+			@RequestParam(value = "apprange", required = false) String apprange,
+			@RequestParam(value = "toprange", required = false) String toprange) {
 		this.syncA5Log();
 		//设置时间范围：当天 前两天 前三天 本周 本月
 		String starttime  = "",endtime="";
@@ -101,6 +103,10 @@ public class A5EventController {
 		
 		if(apprange == null || apprange.equals("") || apprange.equals("all")) {
 			apprange = "all";
+		}
+		
+		if(toprange == null || toprange.equals("")) {
+			toprange = "10";
 		}
 		
 		//查询活跃人次、活跃人数  新加入人数
@@ -175,16 +181,17 @@ public class A5EventController {
 		
 		//活跃人排行 top10 low10    
 		
-		model.addAttribute("visitCountUserTop10List", a5LogService.getVisitCountUserTop10(starttime, endtime,apprange)); 
-		model.addAttribute("visitCountModuleEntryTop10List", a5LogService.getVisitCountModuleEntryTop10(starttime, endtime,apprange)); 
-		model.addAttribute("commentUserTop10List", a5LogService.getCommentUserTop10(starttime, endtime,apprange)); 
-		model.addAttribute("commentModuleEntryTop10List", a5LogService.getCommentModuleEntryTop10(starttime, endtime,apprange)); 
-		model.addAttribute("clockModuleEntryTop10List", a5LogService.getClockModuleEntryTop10(starttime, endtime,apprange)); 
+		model.addAttribute("visitCountUserTop10List", a5LogService.getVisitCountUserTop10(starttime, endtime,apprange,toprange)); 
+		model.addAttribute("visitCountModuleEntryTop10List", a5LogService.getVisitCountModuleEntryTop10(starttime, endtime,apprange,toprange)); 
+		model.addAttribute("commentUserTop10List", a5LogService.getCommentUserTop10(starttime, endtime,apprange,toprange)); 
+		model.addAttribute("commentModuleEntryTop10List", a5LogService.getCommentModuleEntryTop10(starttime, endtime,apprange,toprange)); 
+		model.addAttribute("clockModuleEntryTop10List", a5LogService.getClockModuleEntryTop10(starttime, endtime,apprange,toprange)); 
 		
 		model.addAttribute("timerange",timerange);
 		model.addAttribute("starttime",starttime);
 		model.addAttribute("endtime",endtime);
 		model.addAttribute("apprange", apprange);
+		model.addAttribute("toprange", toprange);
 		model.addAttribute("appnameList", a5LogService.getAppNames());
 		return "base/a5Log/overview";
 	}
