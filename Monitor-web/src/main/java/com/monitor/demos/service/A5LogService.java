@@ -22,13 +22,13 @@ public interface A5LogService extends BaseService {
 	
 	public Map<Integer,Integer> getUsersCountByTimerangePerHour(String starttime, String endtime,String apprange);
 	
-	public List<A5TopDTO> getVisitCountUserTop10(String starttime, String endtime,String apprange);
+	public List<A5TopDTO> getVisitCountUserTop10(String starttime, String endtime,String apprange,String top);
 	
-	public List<A5TopDTO> getVisitCountModuleEntryTop10(String starttime, String endtime,String apprange);
+	public List<A5TopDTO> getVisitCountModuleEntryTop10(String starttime, String endtime,String apprange,String top);
 	
-	public List<A5TopDTO> getCommentUserTop10(String starttime, String endtime,String apprange);
+	public List<A5TopDTO> getCommentUserTop10(String starttime, String endtime,String apprange,String top);
 	
-	public List<A5TopDTO> getCommentModuleEntryTop10(String starttime, String endtime,String apprange);
+	public List<A5TopDTO> getCommentModuleEntryTop10(String starttime, String endtime,String apprange,String top);
 	
-	public List<A5TopDTO> getClockModuleEntryTop10(String starttime, String endtime,String apprange);
+	public List<A5TopDTO> getClockModuleEntryTop10(String starttime, String endtime,String apprange,String top);
 }

@@ -79,11 +79,18 @@ public class A5EventController {
 	public String overview(Model model,
 			@RequestParam(value = "timerange", required = false) String timerange,
 			@RequestParam(value = "apprange", required = false) String apprange,
-			@RequestParam(value = "toprange", required = false) String toprange) {
+			@RequestParam(value = "toprange", required = false) String toprange,
+			@RequestParam(value = "starttime", required = false) String starttime,
+			@RequestParam(value = "endtime", required = false) String endtime) {
 		this.syncA5Log();
 		//设置时间范围：当天 前两天 前三天 本周 本月
-		String starttime  = "",endtime="";
 		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); 
+		if(starttime != null && !starttime.equals("")) {
+			starttime = starttime.replace("T", " ");
+		}
+		if(endtime != null && !endtime.equals("")) {
+			endtime = endtime.replace("T", " ");
+		}
 		if(timerange == null || timerange.equals("") || timerange.equals("today")){
 			starttime = df.format(this.getTodayStartTime());
 			endtime = df.format(this.getTodayEndTime());

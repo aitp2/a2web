@@ -139,84 +139,84 @@ public class A5LogServiceImpl extends BaseServiceImpl implements A5LogService {
 	/**
 	 * 获取访问量top10 user
 	 */
-	public List<A5TopDTO> getVisitCountUserTop10(String starttime, String endtime,String apprange){
+	public List<A5TopDTO> getVisitCountUserTop10(String starttime, String endtime,String apprange,String top){
 		StringBuilder strb = new StringBuilder();
 		if(apprange.equals("all")) {
 			strb.append("SELECT nickname AS nickname, COUNT(nickname) AS visitCount FROM tbl_a5_log    WHERE  OPERATORTIME BETWEEN '"+starttime+"' AND '"+ endtime+"'"
-	    			+" GROUP BY nickname ORDER BY visitCount DESC LIMIT 10 ");
+	    			+" GROUP BY nickname ORDER BY visitCount DESC LIMIT "+top);
 		}else {
 			strb.append("SELECT nickname AS nickname, COUNT(nickname) AS visitCount FROM tbl_a5_log    WHERE  OPERATORTIME BETWEEN '"+starttime+"' AND '"+ endtime+"'"  +" AND MODULE IN ('"+apprange+"')"
-	    			+" GROUP BY nickname ORDER BY visitCount DESC LIMIT 10 ");
+	    			+" GROUP BY nickname ORDER BY visitCount DESC LIMIT "+top);
 		}
     	
-		return this.getTop10SearchWithBasedecode(strb.toString());
+		return this.getTop10SearchWithBasedecode(strb.toString(),top);
 	}
 
 	/**
 	 * 获取访问量 top10活动
 	 */
-	public List<A5TopDTO> getVisitCountModuleEntryTop10(String starttime, String endtime,String apprange){
+	public List<A5TopDTO> getVisitCountModuleEntryTop10(String starttime, String endtime,String apprange,String top){
 		StringBuilder strb = new StringBuilder();
 		if(apprange.equals("all")) {
 			strb.append("SELECT moduleEntryTitle AS moduleEntryTitle, COUNT(moduleEntryTitle) AS visitCount FROM tbl_a5_log    WHERE        OPERATORTIME BETWEEN '"+starttime+"' AND '"+ endtime+"'"
-	    			+" GROUP BY    moduleEntryTitle ORDER BY visitCount desc LIMIT 10 ");
+	    			+" GROUP BY    moduleEntryTitle ORDER BY visitCount desc LIMIT "+top);
 		}else {
 			strb.append("SELECT moduleEntryTitle AS moduleEntryTitle, COUNT(moduleEntryTitle) AS visitCount FROM tbl_a5_log    WHERE        OPERATORTIME BETWEEN '"+starttime+"' AND '"+ endtime+"'"  +" AND MODULE IN ('"+apprange+"')"
-	    			+" GROUP BY    moduleEntryTitle ORDER BY visitCount desc LIMIT 10 ");
+	    			+" GROUP BY    moduleEntryTitle ORDER BY visitCount desc LIMIT "+top);
 		}
     	
-		return this.getTop10SearchWithBasedecode(strb.toString());
+		return this.getTop10SearchWithBasedecode(strb.toString(),top);
 	}
 	
 	/**
 	 * 获取评论量  top10 user
 	 */
-	public List<A5TopDTO> getCommentUserTop10(String starttime, String endtime,String apprange){
+	public List<A5TopDTO> getCommentUserTop10(String starttime, String endtime,String apprange,String top){
 		StringBuilder strb = new StringBuilder();
 		if(apprange.equals("all")) {
 			strb.append("SELECT nickname AS nickname, COUNT(nickname) AS visitCount FROM tbl_a5_log    WHERE OPERATOR='comment' AND  OPERATORTIME BETWEEN '"+starttime+"' AND '"+ endtime+"'"
-	    			+" GROUP BY nickname ORDER BY visitCount DESC LIMIT 10 ");
+	    			+" GROUP BY nickname ORDER BY visitCount DESC LIMIT "+top);
 		}else {
 			strb.append("SELECT nickname AS nickname, COUNT(nickname) AS visitCount FROM tbl_a5_log    WHERE OPERATOR='comment' AND OPERATORTIME BETWEEN '"+starttime+"' AND '"+ endtime+"'"  +" AND MODULE IN ('"+apprange+"')"
-	    			+" GROUP BY nickname ORDER BY visitCount DESC LIMIT 10 ");
+	    			+" GROUP BY nickname ORDER BY visitCount DESC LIMIT "+top);
 		}
     	
-    	return this.getTop10SearchWithBasedecode(strb.toString());
+    	return this.getTop10SearchWithBasedecode(strb.toString(),top);
 	}
 	
 	/**
 	 * 获取评论量 top10 活动
 	 */
-	public List<A5TopDTO> getCommentModuleEntryTop10(String starttime, String endtime,String apprange){
+	public List<A5TopDTO> getCommentModuleEntryTop10(String starttime, String endtime,String apprange,String top){
 		
 		StringBuilder strb = new StringBuilder();
 		if(apprange.equals("all")) {
 			strb.append("SELECT moduleEntryTitle AS moduleEntryTitle, COUNT(moduleEntryTitle) AS visitCount FROM tbl_a5_log    WHERE   OPERATOR='comment' AND     OPERATORTIME BETWEEN '"+starttime+"' AND '"+ endtime+"'"
-	    			+" GROUP BY    moduleEntryTitle ORDER BY visitCount desc LIMIT 10 ");
+	    			+" GROUP BY    moduleEntryTitle ORDER BY visitCount desc LIMIT "+top);
 		}else {
 			strb.append("SELECT moduleEntryTitle AS moduleEntryTitle, COUNT(moduleEntryTitle) AS visitCount FROM tbl_a5_log    WHERE    OPERATOR='comment' AND    OPERATORTIME BETWEEN '"+starttime+"' AND '"+ endtime+"'"  +" AND MODULE IN ('"+apprange+"')"
-	    			+" GROUP BY    moduleEntryTitle ORDER BY visitCount desc LIMIT 10 ");
+	    			+" GROUP BY    moduleEntryTitle ORDER BY visitCount desc LIMIT "+top);
 		}   	
-    	return this.getTop10SearchWithBasedecode(strb.toString());
+    	return this.getTop10SearchWithBasedecode(strb.toString(),top);
 	}
 	
 	/**
 	 * 获取打卡 top10 活动
 	 */
-	public List<A5TopDTO> getClockModuleEntryTop10(String starttime, String endtime,String apprange){
+	public List<A5TopDTO> getClockModuleEntryTop10(String starttime, String endtime,String apprange,String top){
 		
 		StringBuilder strb = new StringBuilder();
 		if(apprange.equals("all")) {
 			strb.append("SELECT moduleEntryTitle AS moduleEntryTitle, COUNT(moduleEntryTitle) AS visitCount FROM tbl_a5_log    WHERE   OPERATOR='clock' AND     OPERATORTIME BETWEEN '"+starttime+"' AND '"+ endtime+"'"
-	    			+" GROUP BY    moduleEntryTitle ORDER BY visitCount desc LIMIT 10 ");
+	    			+" GROUP BY    moduleEntryTitle ORDER BY visitCount desc LIMIT "+top);
 		}else {
 			strb.append("SELECT moduleEntryTitle AS moduleEntryTitle, COUNT(moduleEntryTitle) AS visitCount FROM tbl_a5_log    WHERE    OPERATOR='clock' AND    OPERATORTIME BETWEEN '"+starttime+"' AND '"+ endtime+"'"  +" AND MODULE IN ('"+apprange+"')"
-	    			+" GROUP BY    moduleEntryTitle ORDER BY visitCount desc LIMIT 10 ");
+	    			+" GROUP BY    moduleEntryTitle ORDER BY visitCount desc LIMIT "+top);
 		}   	
-    	return this.getTop10SearchWithBasedecode(strb.toString());
+    	return this.getTop10SearchWithBasedecode(strb.toString(),top);
 	}
 	
-	private List<A5TopDTO> getTop10SearchWithBasedecode(String sql){
+	private List<A5TopDTO> getTop10SearchWithBasedecode(String sql,String top){
 		List<Object[]> result = this.querySql(sql);
     	List<A5TopDTO> list =  new ArrayList<A5TopDTO>();
     	int i = 1;
@@ -233,8 +233,9 @@ public class A5LogServiceImpl extends BaseServiceImpl implements A5LogService {
     		}
 			
 		}
-    	if(i <= 10) {
-    		for(;i<11;i++) {
+    	Integer num = new Integer(top);
+    	if(i <= num) {
+    		for(;i<(num+1);i++) {
     			A5TopDTO a5TopDTO = new A5TopDTO();
     			a5TopDTO.setNo(i);
     			a5TopDTO.setName("");
