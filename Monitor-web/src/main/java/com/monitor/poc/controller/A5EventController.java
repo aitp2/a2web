@@ -1,6 +1,7 @@
 package com.monitor.poc.controller;
 
 import java.sql.Timestamp;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -81,8 +82,19 @@ public class A5EventController {
 			@RequestParam(value = "apprange", required = false) String apprange,
 			@RequestParam(value = "toprange", required = false) String toprange,
 			@RequestParam(value = "starttime", required = false) String starttime,
-			@RequestParam(value = "endtime", required = false) String endtime) {
+			@RequestParam(value = "endtime", required = false) String endtime,
+			@RequestParam(value = "counttype", required = false) String counttype,
+			@RequestParam(value = "nickname", required = false) String nickname,
+			@RequestParam(value = "entrytitle", required = false) String entrytitle) {
 		this.syncA5Log();
+		if(nickname != null && !nickname.equals("")) {
+			nickname = nickname.replace("%20", " ");
+			nickname = nickname.replace("%23", "#");
+		}
+		if(entrytitle != null && !entrytitle.equals("")) {
+			entrytitle = entrytitle.replace("%20", " ");
+			entrytitle = entrytitle.replace("%23", "#");
+		}
 		//设置时间范围：当天 前两天 前三天 本周 本月
 		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); 
 		if(starttime != null && !starttime.equals("")) {
@@ -117,9 +129,10 @@ public class A5EventController {
 		}
 		
 		//查询活跃人次、活跃人数  新加入人数
-		model.addAttribute("visitCount", a5LogService.getVisitCountByTimerange(starttime, endtime,apprange)); 
-		model.addAttribute("usersCount", a5LogService.getUsersCountByTimerange(starttime, endtime,apprange)); 
-		model.addAttribute("newUsersCount", a5LogService.getNewUsersCountByTimerange(starttime, endtime,apprange)); 
+		model.addAttribute("visitCount", a5LogService.getVisitCountByTimerange(starttime, endtime,apprange,nickname,entrytitle)); 
+		model.addAttribute("usersCount", a5LogService.getUsersCountByTimerange(starttime, endtime,apprange,nickname,entrytitle)); 
+		model.addAttribute("newUsersCount", a5LogService.getNewUsersCountByTimerange(starttime, endtime,apprange,nickname,entrytitle)); 
+		model.addAttribute("newActivityCount", a5LogService.getNewActivityCountByTimerange(starttime, endtime,apprange,nickname,entrytitle)); 
 		
 		String message = "Internal Server Error";
 		Map<String, String> para = new HashMap<String, String>();
@@ -147,59 +160,50 @@ public class A5EventController {
 		}
 		
 		//按小时统计活跃人数与活跃人次曲线图
-		Map<Integer,Integer> list_visitCount = a5LogService.getVisitCountByTimerangePerHour( starttime,  endtime,apprange);
-		Map<Integer,Integer> list_userCount = a5LogService.getUsersCountByTimerangePerHour( starttime,  endtime,apprange);
-		String visitArray = "";
-		for(int i=0;i<24;i++) {
-				if(i== 0){
-					if(list_visitCount.get(i) != null) {
-						visitArray = list_visitCount.get(i).toString();
-					}else {
-						visitArray = "0" +",";
-					}
-				}else {
-					if(list_visitCount.get(i) != null) {
-						visitArray = visitArray +","+ list_visitCount.get(i);
-					}else {
-						visitArray = visitArray+","+"0" ;
-					}
-				}
-		}
-		String userArray = "";
-		for(int i=0;i<24;i++) {
-			if(i== 0) {
-				if(list_userCount.get(i) != null) {
-					userArray = list_userCount.get(i).toString();
-				}else {
-					userArray = "0" +",";
-				}
-			}
-			else {
-				if(list_userCount.get(i) != null) {
-					userArray = userArray +","+ list_userCount.get(i);
-				}else {
-					userArray = userArray  +","+ "0";
-				}
-			}
-			
+		Map<Integer,Integer> list_visitCount = a5LogService.getVisitCountByTimerangeAndCounttype( starttime,  endtime,apprange,counttype,"",nickname,entrytitle);
+		Map<Integer,Integer> list_userCount = a5LogService.getVisitCountByTimerangeAndCounttype( starttime,  endtime,apprange,counttype,"DISTINCT",nickname,entrytitle);
+		String visitArray = "",userArray = "";
+		if(counttype == null ||counttype.equals("") || counttype.equals("hour")) {
+			visitArray = this.countVisthandle(list_visitCount, 23,0);
+			userArray = this.countVisthandle(list_userCount, 23,0);
+			model.addAttribute("horizontalArray", "'1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12','13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23', '24'");
+		}else if(counttype.equals("weekday")) {
+			visitArray = this.countVisthandle(list_visitCount, 6,0);
+			userArray = this.countVisthandle(list_userCount, 6,0);
+			model.addAttribute("horizontalArray", "'周日', '周一', '周二', '周三', '周四', '周五', '周六'");
+		}else if(counttype.equals("day")) {
+			List<String> array_day = this.getDayFromStartAndEndTime(starttime, endtime);
+			visitArray = this.countVisthandleDay(list_visitCount, array_day);
+			userArray = this.countVisthandleDay(list_userCount, array_day);
+			model.addAttribute("horizontalArray",this.getHorizontalArrayDay(array_day));
+		}else if(counttype.equals("month")) {
+			visitArray = this.countVisthandle(list_visitCount, 12,1);
+			userArray = this.countVisthandle(list_userCount, 12,1);
+			model.addAttribute("horizontalArray", "'1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'");
 		}
 		model.addAttribute("visitArray", visitArray); 
 		model.addAttribute("userArray", userArray); 
 		
 		//活跃人排行 top10 low10    
 		
-		model.addAttribute("visitCountUserTop10List", a5LogService.getVisitCountUserTop10(starttime, endtime,apprange,toprange)); 
-		model.addAttribute("visitCountModuleEntryTop10List", a5LogService.getVisitCountModuleEntryTop10(starttime, endtime,apprange,toprange)); 
-		model.addAttribute("commentUserTop10List", a5LogService.getCommentUserTop10(starttime, endtime,apprange,toprange)); 
-		model.addAttribute("commentModuleEntryTop10List", a5LogService.getCommentModuleEntryTop10(starttime, endtime,apprange,toprange)); 
-		model.addAttribute("clockModuleEntryTop10List", a5LogService.getClockModuleEntryTop10(starttime, endtime,apprange,toprange)); 
+		model.addAttribute("visitCountUserTop10List", a5LogService.getVisitCountUserTop10(starttime, endtime,apprange,toprange,nickname,entrytitle)); 
+		model.addAttribute("visitCountModuleEntryTop10List", a5LogService.getVisitCountModuleEntryTop10(starttime, endtime,apprange,toprange,nickname,entrytitle)); 
+		model.addAttribute("commentUserTop10List", a5LogService.getCommentUserTop10(starttime, endtime,apprange,toprange,nickname,entrytitle)); 
+		model.addAttribute("commentModuleEntryTop10List", a5LogService.getCommentModuleEntryTop10(starttime, endtime,apprange,toprange,nickname,entrytitle)); 
+		model.addAttribute("clockModuleEntryTop10List", a5LogService.getClockModuleEntryTop10(starttime, endtime,apprange,toprange,nickname,entrytitle)); 
 		
 		model.addAttribute("timerange",timerange);
 		model.addAttribute("starttime",starttime);
 		model.addAttribute("endtime",endtime);
 		model.addAttribute("apprange", apprange);
 		model.addAttribute("toprange", toprange);
-		model.addAttribute("appnameList", a5LogService.getAppNames());
+		model.addAttribute("counttype", counttype==null?"hour":counttype);
+		List<String> appnameList =  a5LogService.getAppNames();
+		model.addAttribute("appnameList", appnameList);
+		model.addAttribute("nickname", nickname);
+		model.addAttribute("entrytitle",entrytitle);
+		model.addAttribute("appHotLegend",this.getAppHotLegend(appnameList));
+		model.addAttribute("appHotData",this.getAppHotdata(a5LogService.getAppHot(starttime, endtime, apprange, nickname, entrytitle)));
 		return "base/a5Log/overview";
 	}
 	
@@ -366,7 +370,7 @@ public class A5EventController {
 	}
 	
 	//前一天开始时间
-		private Date getTodayBeforeOneDayStartTime() {
+	private Date getTodayBeforeOneDayStartTime() {
 			Calendar todayStart = Calendar.getInstance();
 			todayStart.set(Calendar.DAY_OF_MONTH, todayStart.get(Calendar.DAY_OF_MONTH) -1);
 			todayStart.set(Calendar.HOUR_OF_DAY, 0);
@@ -398,7 +402,7 @@ public class A5EventController {
 	}
 	
     //获取本周的开始时间
-    public Date getBeginDayOfWeek() {
+	private Date getBeginDayOfWeek() {
         Date date = new Date();
         if (date == null) {
             return null;
@@ -409,12 +413,12 @@ public class A5EventController {
         if (dayofweek == 1) {
             dayofweek += 7;
         }
-        cal.add(Calendar.DATE, 2 - dayofweek);
+        cal.add(Calendar.DATE, 1 - dayofweek);
         return getDayStartTime(cal.getTime());
     }
     
     //获取本周的结束时间
-    public Date getEndDayOfWeek(){
+	private Date getEndDayOfWeek(){
         Calendar cal = Calendar.getInstance();
         cal.setTime(getBeginDayOfWeek());  
         cal.add(Calendar.DAY_OF_WEEK, 6); 
@@ -423,13 +427,13 @@ public class A5EventController {
     }
     
     //获取本月的开始时间
-     public Date getBeginDayOfMonth() {
+	private Date getBeginDayOfMonth() {
             Calendar calendar = Calendar.getInstance();
             calendar.set(getNowYear(), getNowMonth() - 1, 1);
             return getDayStartTime(calendar.getTime());
         }
     //获取本月的结束时间
-     public Date getEndDayOfMonth() {
+	private Date getEndDayOfMonth() {
             Calendar calendar = Calendar.getInstance();
             calendar.set(getNowYear(), getNowMonth() - 1, 1);
             int day = calendar.getActualMaximum(5);
@@ -438,7 +442,7 @@ public class A5EventController {
         }
      
    //获取某个日期的开始时间
-     public Timestamp getDayStartTime(Date d) {
+	private Timestamp getDayStartTime(Date d) {
          Calendar calendar = Calendar.getInstance();
          if(null != d) calendar.setTime(d);
          calendar.set(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH),    calendar.get(Calendar.DAY_OF_MONTH), 0, 0, 0);
@@ -446,7 +450,7 @@ public class A5EventController {
          return new Timestamp(calendar.getTimeInMillis());
      }
      //获取某个日期的结束时间
-     public Timestamp getDayEndTime(Date d) {
+	private Timestamp getDayEndTime(Date d) {
          Calendar calendar = Calendar.getInstance();
          if(null != d) calendar.setTime(d);
          calendar.set(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH),    calendar.get(Calendar.DAY_OF_MONTH), 23, 59, 59);
@@ -455,7 +459,7 @@ public class A5EventController {
      }
      
      //获取今年是哪一年
-     public Integer getNowYear() {
+	private Integer getNowYear() {
              Date date = new Date();
             GregorianCalendar gc = (GregorianCalendar) Calendar.getInstance();
             gc.setTime(date);
@@ -463,11 +467,129 @@ public class A5EventController {
         }
      
      //获取本月是哪一月
-     public int getNowMonth() {
+	private int getNowMonth() {
              Date date = new Date();
             GregorianCalendar gc = (GregorianCalendar) Calendar.getInstance();
             gc.setTime(date);
             return gc.get(2) + 1;
-        }
+   }
 	
+	//处理统计数据
+	private String countVisthandle(Map<Integer,Integer> list,int horizontalNum,int start) {
+		String visitArray = "";
+		for(int i=start;i<=horizontalNum;i++) {
+				if(i== start){
+					if(list.get(i) != null) {
+						visitArray = list.get(i).toString();
+					}else {
+						visitArray = "0";
+					}
+				}else {
+					if(list.get(i) != null) {
+						visitArray = visitArray +","+ list.get(i);
+					}else {
+						visitArray = visitArray+","+"0" ;
+					}
+				}
+		}
+		return visitArray;
+	}
+	
+	private List<String> getDayFromStartAndEndTime(String starttime,String endtime){
+		List<String> list = new ArrayList<String>();
+		try {
+			Calendar cal = Calendar.getInstance();
+			SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd"); 
+			cal.setTime(df.parse(starttime));
+			while(1==1) {
+				list.add(df.format(cal.getTime()));
+				if(df.format(cal.getTime()).equals(endtime.substring(0, 10))) {
+					break;
+				}else {
+					cal.set(Calendar.DAY_OF_MONTH,cal.get(Calendar.DAY_OF_MONTH)+1);
+				}
+			}
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		List<String> list_return = new ArrayList<String>();
+		for(String s:list) {
+			String s_r = s.replace("-", "");
+			list_return.add(s_r);
+		}
+		return list_return;
+	}
+	
+	private String countVisthandleDay(Map<Integer,Integer> list,List<String> datelist) {
+		String visitArray = "";
+		for(int i=0;i<datelist.size();i++) {
+				if(i== 0){
+					if(list.get(new Integer(datelist.get(i))) != null) {
+						visitArray = list.get(new Integer(datelist.get(i))).toString();
+					}else {
+						visitArray = "0" +",";
+					}
+				}else {
+					if(list.get(new Integer(datelist.get(i))) != null) {
+						visitArray = visitArray +","+ list.get(new Integer(datelist.get(i)));
+					}else {
+						visitArray = visitArray+","+"0" ;
+					}
+				}
+		}
+		return visitArray;
+	}
+	
+	private String getHorizontalArrayDay(List<String> datelist) {
+		String array = "";
+		for(int i=0;i<datelist.size();i++) {
+			if(i == 0) {
+				array = "'"+datelist.get(i)+"'";
+			}else{
+				array = array+ ","+"'"+datelist.get(i)+"'";
+			}
+		}
+		return array;
+	}
+	
+	private String getAppHotLegend(List<String> appnames) {
+		int i = 0;
+		String legend=  "";
+		for(String app:appnames) {
+			if(app.equals("fit")) {
+				app = "小目标";
+			}
+			if(app.equals("pinfan")) {
+				app = "小邀约";
+			}
+			if(i==0) {
+				legend = "'"+app+"'";
+			}else {
+				legend = legend +","+"'"+app+"'";
+			}
+			i = i+1;
+		}
+		return legend;
+	}
+	
+	private String getAppHotdata(Map<String,Integer> appHotdata) {
+		int i = 0;
+		String legend=  "";
+		for(String app:appHotdata.keySet()) {
+			String appName = "";
+			if(app.equals("fit")) {
+				appName = "小目标";
+			}
+			if(app.equals("pinfan")) {
+				appName = "小邀约";
+			}
+			if(i==0) {
+				legend = "{value:"+appHotdata.get(app)+", name:'"+appName+"'}";
+			}else {
+				legend = legend +","+"{value:"+appHotdata.get(app)+", name:'"+appName+"'}";
+			}
+			i = i+1;
+		}
+		return legend;
+	}
 }

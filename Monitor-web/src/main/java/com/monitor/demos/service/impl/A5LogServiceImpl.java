@@ -49,60 +49,139 @@ public class A5LogServiceImpl extends BaseServiceImpl implements A5LogService {
 	}
 	
 	/**
+	 * app热度
+	 */
+	public Map<String,Integer> getAppHot(String starttime, String endtime,String apprange,String nickname,String entrytitle){
+		StringBuilder strb = new StringBuilder();
+		strb.append("SELECT MODULE AS module,COUNT(  nickname) countVisit FROM tbl_a5_log WHERE OPERATORTIME BETWEEN '"+starttime+"' AND '"+ endtime+"'");
+		if(!apprange.equals("all")) {
+			strb.append(" AND MODULE IN ('"+apprange+"')");
+		}
+		if(nickname != null && !nickname.equals("")) {
+    		strb.append(" AND NICKNAME = '"+HttpUtil.baseEncoder(nickname)+"'");
+    	}
+    	if(entrytitle != null && !entrytitle.equals("")) {
+    		strb.append(" AND MODULEENTRYTITLE = '"+HttpUtil.baseEncoder(entrytitle)+"'");
+    	}
+		strb.append(" GROUP BY module ORDER BY module ");
+		
+    	List<Object[]> result = this.querySql(strb.toString());
+    	Map<String,Integer> map = new HashMap<String,Integer>();
+    	for (Object[] objects : result) {
+			String app = objects[0].toString();
+			String countVisit = objects[1].toString();
+			map.put(app, new Integer(countVisit));
+		}
+    	return map;
+	}
+	
+	/**
 	 * 获取访问人次
 	 */
-	public Long getVisitCountByTimerange(String starttime, String endtime,String apprange) {
+	public Long getVisitCountByTimerange(String starttime, String endtime,String apprange,String nickname,String entrytitle) {
 		StringBuilder strb = new StringBuilder();
 		if(apprange.equals("all")) {
 			strb.append("SELECT COUNT(NICKNAME) FROM TBL_A5_LOG WHERE OPERATORTIME BETWEEN '"+starttime+"' AND '"+ endtime+"'");
 		}else {
 			strb.append("SELECT COUNT(NICKNAME) FROM TBL_A5_LOG WHERE OPERATORTIME BETWEEN '"+starttime+"' AND '"+ endtime+"'" +" AND MODULE IN ('"+apprange+"')");
 		}
-    	
+    	if(nickname != null && !nickname.equals("")) {
+    		strb.append(" AND NICKNAME = '"+HttpUtil.baseEncoder(nickname)+"'");
+    	}
+    	if(entrytitle != null && !entrytitle.equals("")) {
+    		strb.append(" AND MODULEENTRYTITLE = '"+HttpUtil.baseEncoder(entrytitle)+"'");
+    	}
     	return this.countBySql(strb.toString());
 	}
 	
 	/**
 	 * 获取访问人数
 	 */
-	public Long getUsersCountByTimerange(String starttime, String endtime,String apprange) {
+	public Long getUsersCountByTimerange(String starttime, String endtime,String apprange,String nickname,String entrytitle) {
 		StringBuilder strb = new StringBuilder();
 		if(apprange.equals("all")) {
 			strb.append("SELECT COUNT(DISTINCT NICKNAME) FROM TBL_A5_LOG WHERE OPERATORTIME BETWEEN '"+starttime+"' AND '"+ endtime+"'" );
 		}else {
 			strb.append("SELECT COUNT(DISTINCT NICKNAME) FROM TBL_A5_LOG WHERE OPERATORTIME BETWEEN '"+starttime+"' AND '"+ endtime+"'" +" AND MODULE IN ('"+apprange+"')");
 		}
-    	
+		if(nickname != null && !nickname.equals("")) {
+    		strb.append(" AND NICKNAME = '"+HttpUtil.baseEncoder(nickname)+"'");
+    	}
+    	if(entrytitle != null && !entrytitle.equals("")) {
+    		strb.append(" AND MODULEENTRYTITLE = '"+HttpUtil.baseEncoder(entrytitle)+"'");
+    	}
     	return this.countBySql(strb.toString());
 	}
 	
 	/**
 	 * 获取新加入人员
 	 */
-	public Long getNewUsersCountByTimerange(String starttime, String endtime,String apprange) {
+	public Long getNewUsersCountByTimerange(String starttime, String endtime,String apprange,String nickname,String entrytitle) {
 		StringBuilder strb = new StringBuilder();
 		if(apprange.equals("all")) {
 			strb.append("SELECT COUNT(DISTINCT NICKNAME) FROM TBL_A5_LOG WHERE OPERATOR='newJoin' AND OPERATORTIME BETWEEN '"+starttime+"' AND '"+ endtime+"'");
 		}else {
 			strb.append("SELECT COUNT(DISTINCT NICKNAME) FROM TBL_A5_LOG WHERE OPERATOR='newJoin' AND OPERATORTIME BETWEEN '"+starttime+"' AND '"+ endtime+"'" +" AND MODULE IN ('"+apprange+"')");
 		}
-    	
+		if(nickname != null && !nickname.equals("")) {
+    		strb.append(" AND NICKNAME = '"+HttpUtil.baseEncoder(nickname)+"'");
+    	}
+    	if(entrytitle != null && !entrytitle.equals("")) {
+    		strb.append(" AND MODULEENTRYTITLE = '"+HttpUtil.baseEncoder(entrytitle)+"'");
+    	}
     	return this.countBySql(strb.toString());
 	}
 	
 	/**
-	 * 计算每小时访问人次
+	 * 获取新活动数
+	 * @param starttime
+	 * @param endtime
+	 * @param apprange
+	 * @return
 	 */
-	public Map<Integer,Integer> getVisitCountByTimerangePerHour(String starttime, String endtime,String apprange){
+	public Long getNewActivityCountByTimerange(String starttime, String endtime,String apprange,String nickname,String entrytitle) {
 		StringBuilder strb = new StringBuilder();
 		if(apprange.equals("all")) {
-			strb.append("SELECT DATE_FORMAT( operatorTime, \"%H\" ) AS hours,COUNT(nickname) countVisit FROM TBL_A5_LOG WHERE OPERATORTIME BETWEEN '"+starttime+"' AND '"+ endtime+"'"
-	    			+" GROUP BY hours ORDER BY hours ");
+			strb.append("SELECT COUNT(DISTINCT MODULEENTRYTITLE) FROM TBL_A5_LOG WHERE OPERATOR='createActivity' AND OPERATORTIME BETWEEN '"+starttime+"' AND '"+ endtime+"'");
 		}else {
-			strb.append("SELECT DATE_FORMAT( operatorTime, \"%H\" ) AS hours,COUNT(nickname) countVisit FROM TBL_A5_LOG WHERE OPERATORTIME BETWEEN '"+starttime+"' AND '"+ endtime+"'"  +" AND MODULE IN ('"+apprange+"')"
-	    			+" GROUP BY hours ORDER BY hours ");
+			strb.append("SELECT COUNT(DISTINCT MODULEENTRYTITLE) FROM TBL_A5_LOG WHERE OPERATOR='createActivity' AND OPERATORTIME BETWEEN '"+starttime+"' AND '"+ endtime+"'" +" AND MODULE IN ('"+apprange+"')");
 		}
-    	
+		if(nickname != null && !nickname.equals("")) {
+    		strb.append(" AND NICKNAME = '"+HttpUtil.baseEncoder(nickname)+"'");
+    	}
+    	if(entrytitle != null && !entrytitle.equals("")) {
+    		strb.append(" AND MODULEENTRYTITLE = '"+HttpUtil.baseEncoder(entrytitle)+"'");
+    	}
+    	return this.countBySql(strb.toString());
+	}
+	
+	/**
+	 * 计算时、周天、天、月访问人次
+	 */
+	public Map<Integer,Integer> getVisitCountByTimerangeAndCounttype(String starttime, String endtime,String apprange,String counttype,String distinctUser,String nickname,String entrytitle){
+		String counttypecondition = "";
+		if(counttype == null ||counttype.equals("") || counttype.equals("hour")) {
+			counttypecondition = "DATE_FORMAT( operatorTime, \"%H\" )";
+		}else if(counttype.equals("weekday")) {
+			counttypecondition = "DATE_FORMAT( operatorTime, \"%w\" )";
+		}else if(counttype.equals("day")) {
+			counttypecondition = "DATE_FORMAT(operatorTime,\"%Y%m%d\")";
+		}else if(counttype.equals("month")) {
+			counttypecondition = "DATE_FORMAT(operatorTime,\"%c\")";
+		}
+		StringBuilder strb = new StringBuilder();
+		strb.append("SELECT "+counttypecondition+" AS counttype,COUNT( "+distinctUser+" nickname) countVisit FROM TBL_A5_LOG WHERE OPERATORTIME BETWEEN '"+starttime+"' AND '"+ endtime+"'");
+		if(!apprange.equals("all")) {
+			strb.append(" AND MODULE IN ('"+apprange+"')");
+		}
+		if(nickname != null && !nickname.equals("")) {
+    		strb.append(" AND NICKNAME = '"+HttpUtil.baseEncoder(nickname)+"'");
+    	}
+    	if(entrytitle != null && !entrytitle.equals("")) {
+    		strb.append(" AND MODULEENTRYTITLE = '"+HttpUtil.baseEncoder(entrytitle)+"'");
+    	}
+		strb.append(" GROUP BY counttype ORDER BY counttype ");
+		
     	List<Object[]> result = this.querySql(strb.toString());
     	Map<Integer,Integer> map = new HashMap<Integer,Integer>();
     	for (Object[] objects : result) {
@@ -112,107 +191,107 @@ public class A5LogServiceImpl extends BaseServiceImpl implements A5LogService {
 		}
     	return map;
 	}
-	
-	/**
-	 * 计算每小时访问人数
-	 */
-	public Map<Integer,Integer> getUsersCountByTimerangePerHour(String starttime, String endtime,String apprange){
-		StringBuilder strb = new StringBuilder();
-		if(apprange.equals("all")) {
-			strb.append("SELECT DATE_FORMAT( operatorTime, \"%H\" ) AS hours,COUNT(DISTINCT nickname) countUser FROM TBL_A5_LOG WHERE OPERATORTIME BETWEEN '"+starttime+"' AND '"+ endtime+"'"
-	    			+" GROUP BY hours ORDER BY hours ");
-		}else {
-			strb.append("SELECT DATE_FORMAT( operatorTime, \"%H\" ) AS hours,COUNT(DISTINCT nickname) countUser FROM TBL_A5_LOG WHERE OPERATORTIME BETWEEN '"+starttime+"' AND '"+ endtime+"'"  +" AND MODULE IN ('"+apprange+"')"
-	    			+" GROUP BY hours ORDER BY hours ");
-		}
-    	
-    	List<Object[]> result = this.querySql(strb.toString());
-    	Map<Integer,Integer> map = new HashMap<Integer,Integer>();
-    	for (Object[] objects : result) {
-			String hours = objects[0].toString();
-			String countUser = objects[1].toString();
-			map.put(new Integer(hours), new Integer(countUser));
-		}
-    	return map;
-	}
-	
+
+
 	/**
 	 * 获取访问量top10 user
 	 */
-	public List<A5TopDTO> getVisitCountUserTop10(String starttime, String endtime,String apprange,String top){
+	public List<A5TopDTO> getVisitCountUserTop10(String starttime, String endtime,String apprange,String top,String nickname,String entrytitle){
 		StringBuilder strb = new StringBuilder();
 		if(apprange.equals("all")) {
-			strb.append("SELECT nickname AS nickname, COUNT(nickname) AS visitCount FROM tbl_a5_log    WHERE  OPERATORTIME BETWEEN '"+starttime+"' AND '"+ endtime+"'"
-	    			+" GROUP BY nickname ORDER BY visitCount DESC LIMIT "+top);
+			strb.append("SELECT nickname AS nickname, COUNT(nickname) AS visitCount FROM tbl_a5_log    WHERE  OPERATORTIME BETWEEN '"+starttime+"' AND '"+ endtime+"'");
 		}else {
-			strb.append("SELECT nickname AS nickname, COUNT(nickname) AS visitCount FROM tbl_a5_log    WHERE  OPERATORTIME BETWEEN '"+starttime+"' AND '"+ endtime+"'"  +" AND MODULE IN ('"+apprange+"')"
-	    			+" GROUP BY nickname ORDER BY visitCount DESC LIMIT "+top);
+			strb.append("SELECT nickname AS nickname, COUNT(nickname) AS visitCount FROM tbl_a5_log    WHERE  OPERATORTIME BETWEEN '"+starttime+"' AND '"+ endtime+"'"  +" AND MODULE IN ('"+apprange+"')");
 		}
-    	
+		if(nickname != null && !nickname.equals("")) {
+    		strb.append(" AND NICKNAME = '"+HttpUtil.baseEncoder(nickname)+"'");
+    	}
+    	if(entrytitle != null && !entrytitle.equals("")) {
+    		strb.append(" AND MODULEENTRYTITLE = '"+HttpUtil.baseEncoder(entrytitle)+"'");
+    	}
+    	strb.append(" GROUP BY nickname ORDER BY visitCount DESC LIMIT "+top);
 		return this.getTop10SearchWithBasedecode(strb.toString(),top);
 	}
 
 	/**
 	 * 获取访问量 top10活动
 	 */
-	public List<A5TopDTO> getVisitCountModuleEntryTop10(String starttime, String endtime,String apprange,String top){
+	public List<A5TopDTO> getVisitCountModuleEntryTop10(String starttime, String endtime,String apprange,String top,String nickname,String entrytitle){
 		StringBuilder strb = new StringBuilder();
 		if(apprange.equals("all")) {
-			strb.append("SELECT moduleEntryTitle AS moduleEntryTitle, COUNT(moduleEntryTitle) AS visitCount FROM tbl_a5_log    WHERE        OPERATORTIME BETWEEN '"+starttime+"' AND '"+ endtime+"'"
-	    			+" GROUP BY    moduleEntryTitle ORDER BY visitCount desc LIMIT "+top);
+			strb.append("SELECT moduleEntryTitle AS moduleEntryTitle, COUNT(moduleEntryTitle) AS visitCount FROM tbl_a5_log    WHERE        OPERATORTIME BETWEEN '"+starttime+"' AND '"+ endtime+"'");
 		}else {
-			strb.append("SELECT moduleEntryTitle AS moduleEntryTitle, COUNT(moduleEntryTitle) AS visitCount FROM tbl_a5_log    WHERE        OPERATORTIME BETWEEN '"+starttime+"' AND '"+ endtime+"'"  +" AND MODULE IN ('"+apprange+"')"
-	    			+" GROUP BY    moduleEntryTitle ORDER BY visitCount desc LIMIT "+top);
+			strb.append("SELECT moduleEntryTitle AS moduleEntryTitle, COUNT(moduleEntryTitle) AS visitCount FROM tbl_a5_log    WHERE        OPERATORTIME BETWEEN '"+starttime+"' AND '"+ endtime+"'"  +" AND MODULE IN ('"+apprange+"')");
 		}
-    	
+		if(nickname != null && !nickname.equals("")) {
+    		strb.append(" AND NICKNAME = '"+HttpUtil.baseEncoder(nickname)+"'");
+    	}
+    	if(entrytitle != null && !entrytitle.equals("")) {
+    		strb.append(" AND MODULEENTRYTITLE = '"+HttpUtil.baseEncoder(entrytitle)+"'");
+    	}
+    	strb.append(" GROUP BY    moduleEntryTitle ORDER BY visitCount desc LIMIT "+top);
 		return this.getTop10SearchWithBasedecode(strb.toString(),top);
 	}
 	
 	/**
 	 * 获取评论量  top10 user
 	 */
-	public List<A5TopDTO> getCommentUserTop10(String starttime, String endtime,String apprange,String top){
+	public List<A5TopDTO> getCommentUserTop10(String starttime, String endtime,String apprange,String top,String nickname,String entrytitle){
 		StringBuilder strb = new StringBuilder();
 		if(apprange.equals("all")) {
-			strb.append("SELECT nickname AS nickname, COUNT(nickname) AS visitCount FROM tbl_a5_log    WHERE OPERATOR='comment' AND  OPERATORTIME BETWEEN '"+starttime+"' AND '"+ endtime+"'"
-	    			+" GROUP BY nickname ORDER BY visitCount DESC LIMIT "+top);
+			strb.append("SELECT nickname AS nickname, COUNT(nickname) AS visitCount FROM tbl_a5_log    WHERE OPERATOR='comment' AND  OPERATORTIME BETWEEN '"+starttime+"' AND '"+ endtime+"'");
 		}else {
-			strb.append("SELECT nickname AS nickname, COUNT(nickname) AS visitCount FROM tbl_a5_log    WHERE OPERATOR='comment' AND OPERATORTIME BETWEEN '"+starttime+"' AND '"+ endtime+"'"  +" AND MODULE IN ('"+apprange+"')"
-	    			+" GROUP BY nickname ORDER BY visitCount DESC LIMIT "+top);
+			strb.append("SELECT nickname AS nickname, COUNT(nickname) AS visitCount FROM tbl_a5_log    WHERE OPERATOR='comment' AND OPERATORTIME BETWEEN '"+starttime+"' AND '"+ endtime+"'"  +" AND MODULE IN ('"+apprange+"')");
 		}
-    	
+		if(nickname != null && !nickname.equals("")) {
+    		strb.append(" AND NICKNAME = '"+HttpUtil.baseEncoder(nickname)+"'");
+    	}
+    	if(entrytitle != null && !entrytitle.equals("")) {
+    		strb.append(" AND MODULEENTRYTITLE = '"+HttpUtil.baseEncoder(entrytitle)+"'");
+    	}
+    	strb.append(" GROUP BY nickname ORDER BY visitCount DESC LIMIT "+top);
     	return this.getTop10SearchWithBasedecode(strb.toString(),top);
 	}
 	
 	/**
 	 * 获取评论量 top10 活动
 	 */
-	public List<A5TopDTO> getCommentModuleEntryTop10(String starttime, String endtime,String apprange,String top){
+	public List<A5TopDTO> getCommentModuleEntryTop10(String starttime, String endtime,String apprange,String top,String nickname,String entrytitle){
 		
 		StringBuilder strb = new StringBuilder();
 		if(apprange.equals("all")) {
-			strb.append("SELECT moduleEntryTitle AS moduleEntryTitle, COUNT(moduleEntryTitle) AS visitCount FROM tbl_a5_log    WHERE   OPERATOR='comment' AND     OPERATORTIME BETWEEN '"+starttime+"' AND '"+ endtime+"'"
-	    			+" GROUP BY    moduleEntryTitle ORDER BY visitCount desc LIMIT "+top);
+			strb.append("SELECT moduleEntryTitle AS moduleEntryTitle, COUNT(moduleEntryTitle) AS visitCount FROM tbl_a5_log    WHERE   OPERATOR='comment' AND     OPERATORTIME BETWEEN '"+starttime+"' AND '"+ endtime+"'");
 		}else {
-			strb.append("SELECT moduleEntryTitle AS moduleEntryTitle, COUNT(moduleEntryTitle) AS visitCount FROM tbl_a5_log    WHERE    OPERATOR='comment' AND    OPERATORTIME BETWEEN '"+starttime+"' AND '"+ endtime+"'"  +" AND MODULE IN ('"+apprange+"')"
-	    			+" GROUP BY    moduleEntryTitle ORDER BY visitCount desc LIMIT "+top);
+			strb.append("SELECT moduleEntryTitle AS moduleEntryTitle, COUNT(moduleEntryTitle) AS visitCount FROM tbl_a5_log    WHERE    OPERATOR='comment' AND    OPERATORTIME BETWEEN '"+starttime+"' AND '"+ endtime+"'"  +" AND MODULE IN ('"+apprange+"')");
 		}   	
+		if(nickname != null && !nickname.equals("")) {
+    		strb.append(" AND NICKNAME = '"+HttpUtil.baseEncoder(nickname)+"'");
+    	}
+    	if(entrytitle != null && !entrytitle.equals("")) {
+    		strb.append(" AND MODULEENTRYTITLE = '"+HttpUtil.baseEncoder(entrytitle)+"'");
+    	}
+    	strb.append(" GROUP BY    moduleEntryTitle ORDER BY visitCount desc LIMIT "+top);
     	return this.getTop10SearchWithBasedecode(strb.toString(),top);
 	}
 	
 	/**
 	 * 获取打卡 top10 活动
 	 */
-	public List<A5TopDTO> getClockModuleEntryTop10(String starttime, String endtime,String apprange,String top){
+	public List<A5TopDTO> getClockModuleEntryTop10(String starttime, String endtime,String apprange,String top,String nickname,String entrytitle){
 		
 		StringBuilder strb = new StringBuilder();
 		if(apprange.equals("all")) {
-			strb.append("SELECT moduleEntryTitle AS moduleEntryTitle, COUNT(moduleEntryTitle) AS visitCount FROM tbl_a5_log    WHERE   OPERATOR='clock' AND     OPERATORTIME BETWEEN '"+starttime+"' AND '"+ endtime+"'"
-	    			+" GROUP BY    moduleEntryTitle ORDER BY visitCount desc LIMIT "+top);
+			strb.append("SELECT moduleEntryTitle AS moduleEntryTitle, COUNT(moduleEntryTitle) AS visitCount FROM tbl_a5_log    WHERE   OPERATOR='clock' AND     OPERATORTIME BETWEEN '"+starttime+"' AND '"+ endtime+"'");
 		}else {
-			strb.append("SELECT moduleEntryTitle AS moduleEntryTitle, COUNT(moduleEntryTitle) AS visitCount FROM tbl_a5_log    WHERE    OPERATOR='clock' AND    OPERATORTIME BETWEEN '"+starttime+"' AND '"+ endtime+"'"  +" AND MODULE IN ('"+apprange+"')"
-	    			+" GROUP BY    moduleEntryTitle ORDER BY visitCount desc LIMIT "+top);
+			strb.append("SELECT moduleEntryTitle AS moduleEntryTitle, COUNT(moduleEntryTitle) AS visitCount FROM tbl_a5_log    WHERE    OPERATOR='clock' AND    OPERATORTIME BETWEEN '"+starttime+"' AND '"+ endtime+"'"  +" AND MODULE IN ('"+apprange+"')");
 		}   	
+		if(nickname != null && !nickname.equals("")) {
+    		strb.append(" AND NICKNAME = '"+HttpUtil.baseEncoder(nickname)+"'");
+    	}
+    	if(entrytitle != null && !entrytitle.equals("")) {
+    		strb.append(" AND MODULEENTRYTITLE = '"+HttpUtil.baseEncoder(entrytitle)+"'");
+    	}
+    	strb.append(" GROUP BY    moduleEntryTitle ORDER BY visitCount desc LIMIT "+top);
     	return this.getTop10SearchWithBasedecode(strb.toString(),top);
 	}
 	
