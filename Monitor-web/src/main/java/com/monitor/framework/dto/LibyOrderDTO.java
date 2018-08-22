@@ -17,13 +17,13 @@ public class LibyOrderDTO  implements Comparable<LibyOrderDTO>{
 	
 	private String dealtime;
 	
-	private List list_splittime = new ArrayList<String>();
+	private List<String> list_splittime = new ArrayList<String>();
 	
-	private List list_sendsaptime= new ArrayList<String>();
+	private List<String> list_sendsaptime= new ArrayList<String>();
 	
-	private List list_sapreturntime= new ArrayList<String>();
+	private List<String> list_sapreturntime= new ArrayList<String>();
 	
-	private List list_dealtime= new ArrayList<String>();
+	private List<String> list_dealtime= new ArrayList<String>();
 
 	public String getSplittime() {
 		return splittime;

@@ -374,6 +374,7 @@ CommonTable.prototype.getServerData = function(pageInfo, tableId) {
 		sortInfo : dataCache.data("sortInfo"),
 		conditions : this.fnGetConditions(this.searchDiv)
 	};
+	this.config.reParam = reqParam;
 	dataCache.data("pageInfo",pageInfo);
 	var retData = null;
 	$.ajax({
@@ -471,7 +472,7 @@ CommonTable.prototype.fillDataTable = function(sSource, aoData, fnCallback, oSet
 	obj["iTotalDisplayRecords"] = result.pageInfo.count;
 	fnCallback(obj);
 	if(this.fillDataCallBack!=null){
-	this.fillDataCallBack(sSource, result);
+	this.fillDataCallBack(sSource, result,this.config.reParam);
 	}
 	//序号排序  
 	$("table.table thead tr").each(function(){

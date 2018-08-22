@@ -31,12 +31,6 @@
 							<button type="button" class="btn btn-default" onclick="openSaveQuery()">保存</button>
 						</div>
 					</div>
-				
-				<div class="box-body">
-					<table id="entry_table"
-						class="table table-bordered table-striped table-hover">
-					</table>
-				</div>
 				<div class="box-body">
 					<div id="barChart"
 						style="height: 400px; float: left; display: inline"
@@ -44,16 +38,12 @@
 					<div id="barChart1"
 						style=" height: 400px; float: left; display: inline"
 						class="col-lg-6 col-xs-12"></div>
-				</div>
+				</div>	
 				<div class="box-body">
-					<div id="barChart2"
-						style="height: 400px; float: left; display: inline"
-						class="col-lg-6 col-xs-12"></div>
-					<div id="barChart3"
-						style=" height: 400px; float: left; display: inline"
-						class="col-lg-6 col-xs-12"></div>
+					<table id="entry_table"
+						class="table table-bordered table-striped table-hover">
+					</table>
 				</div>
-				
 				<!-- /.box-body -->
 			</div>
 		</div>
@@ -74,356 +64,185 @@
 				"a5log_list",
 				"searchDiv",
 				{
-					"fillDataCallBack" : function(sSource, data) {
-						this.moduleArray = new Array();
-						this.activtyArray = new Array();
-						this.userArray = new Array();
-						this.operatorArray = new Array();
-						this.dat = new Object();
-						this.activiy = new Object();
-						this.user = new Object();
-						this.operator = new Object();
-						 console.log(JSON.stringify(data));
+					"fillDataCallBack" : function(sSource, data,parm) {
+						var pageInfo = {"pageSize":-1,"pageNum":1};
+						parm.pageInfo = pageInfo;
+						 console.log(JSON.stringify(parm));
+						$.ajax({
+							url : basePath + "/query/loadData",// 这个就是请求地址对应sAjaxSource
+							data : {
+								"reqObj" : JSON.stringify(parm)
+							},// 这个是把datatable的一些基本数据传给后台,比如起始位置,每页显示的行数
+							type : 'post',
+							dataType : 'json',
+							async : false,
+							success : function(result) {
+								data = result;
+								this.activtyArray = new Array();
+								this.activtyNameArray = new Array();
+								this.activtyArraySelected = new Array();
+								this.userName = new Array();
+								this.userValue = new Array();
+								this.userArray = new Array();
+								this.activiy = new Object();
+								this.user = new Object();
+								for ( var s in data.rows) {
+									if (data.rows[s].moduleEntryId != null
+											&& data.rows[s].moduleEntryId != "") {
+										if (this.activiy[data.rows[s].moduleEntryId] == null) {
+											this.activiy[data.rows[s].moduleEntryId] = new Object();
+											this.activiy[data.rows[s].moduleEntryId]["value"] = 0;
+											this.activiy[data.rows[s].moduleEntryId]["name"] = data.rows[s].moduleEntryTitle;
+										}
+										this.activiy[data.rows[s].moduleEntryId]["value"]++;
+									}
+									var nickName = new String();
+									 nickName = nickName+data.rows[s].nickname;
+									var nickNameBase64 = base64.encode(nickName);
+									if (this.user[nickNameBase64] == null) {
+										this.user[nickNameBase64] = new Object();
+										this.user[nickNameBase64]["value"] = 0;
+									}
+									this.user[nickNameBase64]["value"]++;
+								}
+								var i = 0;
+								for ( var name in this.activiy) {
+									i++;
+									var a = new Object();
+									a["name"] = this.activiy[name].name;
+									a["value"] = this.activiy[name].value;
+									this.activtyNameArray.push(this.activiy[name].name);
+									var isSelected = i<6;
+									this.activtyArraySelected.push(isSelected);
+									this.activtyArray.push(a);
+									
+								}
+								for ( var name in this.user) {
+									var u  = {};
+									u["name"] = base64.decode(name);
+									u["value"] = this.user[name].value;
+									this.userArray.push(u);
+								}
+								this.userArray.sort(function (a,b){
+									if(a.value<b.value){
+										return 1;
+									}else if(a.value>b.value){
+										return -1;
+									}else {
+										return 0;
+									}
+								});
+								 this.userArray = this.userArray.slice(0,10);
+								for(var key in this.userArray){
+									this.userName.push(this.userArray[key].name);
+									this.userValue.push(this.userArray[key].value);
+								}
+								var myChart = echarts.init(document
+										.getElementById('barChart'));
+
+								option = {
+								    title : {
+								        text: '活动热度统计图',
+								        subtext: '占比图',
+								        x:'center'
+								    },
+								    tooltip : {
+								        trigger: 'item',
+								        formatter: "{a} <br/>{b} : {c} ({d}%)"
+								    },
+								    legend: {
+								        type: 'scroll',
+								        orient: 'vertical',
+								        right: 10,
+								        top: 20,
+								        bottom: 20,
+								        data: this.activtyNameArray,
+
+								        selected: data.selected
+								    },
+								    series : [
+								        {
+								            name: '活动名称',
+								            type: 'pie',
+								            radius : '55%',
+								            center: ['40%', '50%'],
+								            data: this.activtyArray,
+								            itemStyle: {
+								                emphasis: {
+								                    shadowBlur: 10,
+								                    shadowOffsetX: 0,
+								                    shadowColor: 'rgba(0, 0, 0, 0.5)'
+								                }
+								            }
+								        }
+								    ]
+								};
+
+								myChart.setOption(option);
+								
+								var seriesLabel = {
+									    normal: {
+									        show: true,
+									        textBorderColor: '#FFFFF',
+									        textBorderWidth: 1
+									    }
+									}
+								
+								 myChart = echarts.init(document
+										.getElementById('barChart1'));
+								
+								option1 = {
+										title : {
+									        text: '人员访问量排名图',
+									        subtext: '排名',
+									        x:'center'
+									    },
+								    tooltip: {
+								        trigger: 'axis',
+								        axisPointer: {
+								            type: 'shadow'
+								        }
+								    },
+								    grid: {
+								        left: 100
+								    },
+								    toolbox: {
+								        show: true,
+								        feature: {
+								            saveAsImage: {}
+								        }
+								    },
+								    xAxis: {
+								        type: 'value',
+								        name: '访问量',
+								        axisLabel: {
+								            formatter: '{value}'
+								        }
+								    },
+								    yAxis: {
+								        type: 'category',
+								        inverse: true,
+								        data: this.userName
+								    },
+								    series: [
+								        {
+								            name: '访问量',
+								            type: 'bar',
+								            data: this.userValue,
+								            label: seriesLabel
+								        }
+								    ]
+								};
+								myChart.setOption(option1);
+								
+							},
+							error : function(msg) {
+								alert("状态码:" + msg.status + "   错误信息:" + msg.statusText);
+							}
+						});
 						
-						for ( var s in data.rows) {
-							if (this.dat[data.rows[s].module] == null) {
-								this.dat[data.rows[s].module] = new Object();
-								this.dat[data.rows[s].module]["value"] = 0;
-							}
-							this.dat[data.rows[s].module]["value"]++;
-							if (data.rows[s].moduleEntryId != null
-									&& data.rows[s].moduleEntryId != "") {
-								if (this.activiy[data.rows[s].moduleEntryId] == null) {
-									this.activiy[data.rows[s].moduleEntryId] = new Object();
-									this.activiy[data.rows[s].moduleEntryId]["value"] = 0;
-									this.activiy[data.rows[s].moduleEntryId]["name"] = data.rows[s].moduleEntryTitle;
-								}
-								this.activiy[data.rows[s].moduleEntryId]["value"]++;
-							}
-							var nickName = new String();
-							 nickName = nickName+data.rows[s].nickname;
-							var nickNameBase64 = base64.encode(nickName);
-							console.log(nickNameBase64);
-							if (this.user[nickNameBase64] == null) {
-								this.user[nickNameBase64] = new Object();
-								this.user[nickNameBase64]["value"] = 0;
-							}
-							this.user[nickNameBase64]["value"]++;
-
-							if (this.operator[data.rows[s].operator] == null) {
-								this.operator[data.rows[s].operator] = new Object();
-								this.operator[data.rows[s].operator]["value"] = 0;
-							}
-							this.operator[data.rows[s].operator]["value"]++;
-						}
-						for ( var name in this.dat) {
-							var m = new Object();
-							m["name"] = name;
-							m["value"] = this.dat[name].value;
-							this.moduleArray.push(m);
-						}
-						for ( var name in this.activiy) {
-							var a = new Object();
-							a["name"] = this.activiy[name].name;
-							a["value"] = this.activiy[name].value;
-							this.activtyArray.push(a);
-						}
-						for ( var name in this.user) {
-							var u = new Object();
-							console.log(name);
-							u["name"] = base64.decode(name);
-							u["value"] = this.user[name].value;
-							this.userArray.push(u);
-						}
-
-						for ( var name in this.operator) {
-							var o = new Object();
-							o["name"] = name;
-							o["value"] = this.operator[name].value;
-							this.operatorArray.push(o);
-						}
-
-					
-						var myChart = echarts.init(document
-								.getElementById('barChart'));
-						var option = {
-							backgroundColor : '#FFFFFF',
-
-							title : {
-								text : '模块热度图',
-								left : 'center',
-								top : 20,
-								textStyle : {
-									color : '#ccc'
-								}
-							},
-
-							tooltip : {
-								trigger : 'item',
-								formatter : "{a} <br/>{b} : {c} ({d}%)"
-							},
-
-							visualMap : {
-								show : false,
-								min : 80,
-								max : 600,
-								inRange : {
-									colorLightness : [ 0, 1 ]
-								}
-							},
-							series : [ {
-								name : '占比图',
-								type : 'pie',
-								radius : '55%',
-								center : [ '50%', '50%' ],
-								data : this.moduleArray.sort(function(a, b) {
-									return a.value - b.value;
-								}),
-								roseType : 'radius',
-								label : {
-									normal : {
-										textStyle : {
-											color : 'rgba(255, 255, 255, 0.3)'
-										}
-									}
-								},
-								labelLine : {
-									normal : {
-										lineStyle : {
-											color : 'rgba(255, 255, 255, 0.3)'
-										},
-										smooth : 0.2,
-										length : 10,
-										length2 : 20
-									}
-								},
-								itemStyle : {
-									normal : {
-										color : '#c23531',
-										shadowBlur : 200,
-										shadowColor : 'rgba(0, 0, 0, 0.5)'
-									}
-								},
-
-								animationType : 'scale',
-								animationEasing : 'elasticOut',
-								animationDelay : function(idx) {
-									return Math.random() * 200;
-								}
-							} ]
-						}
-						myChart.setOption(option);
-
-						var myChart = echarts.init(document
-								.getElementById('barChart1'));
-						var option1 = {
-							backgroundColor : '#2c343c',
-
-							title : {
-								text : '活动热度图',
-								left : 'center',
-								top : 20,
-								textStyle : {
-									color : '#ccc'
-								}
-							},
-
-							tooltip : {
-								trigger : 'item',
-								formatter : "{a} <br/>{b} : {c} ({d}%)"
-							},
-
-							visualMap : {
-								show : false,
-								min : 80,
-								max : 600,
-								inRange : {
-									colorLightness : [ 0, 1 ]
-								}
-							},
-							series : [ {
-								name : '占比图',
-								type : 'pie',
-								radius : '55%',
-								center : [ '50%', '50%' ],
-								data : this.activtyArray.sort(function(a, b) {
-									return a.value - b.value;
-								}),
-								roseType : 'radius',
-								label : {
-									normal : {
-										textStyle : {
-											color : 'rgba(255, 255, 255, 0.3)'
-										}
-									}
-								},
-								labelLine : {
-									normal : {
-										lineStyle : {
-											color : 'rgba(255, 255, 255, 0.3)'
-										},
-										smooth : 0.2,
-										length : 10,
-										length2 : 20
-									}
-								},
-								itemStyle : {
-									normal : {
-										color : '#c23531',
-										shadowBlur : 200,
-										shadowColor : 'rgba(0, 0, 0, 0.5)'
-									}
-								},
-
-								animationType : 'scale',
-								animationEasing : 'elasticOut',
-								animationDelay : function(idx) {
-									return Math.random() * 200;
-								}
-							} ]
-						}
-						myChart.setOption(option1);
-
-						var myChart = echarts.init(document
-								.getElementById('barChart2'));
-						var option2 = {
-							backgroundColor : '#2c343c',
-
-							title : {
-								text : '操作热度图',
-								left : 'center',
-								top : 20,
-								textStyle : {
-									color : '#ccc'
-								}
-							},
-
-							tooltip : {
-								trigger : 'item',
-								formatter : "{a} <br/>{b} : {c} ({d}%)"
-							},
-
-							visualMap : {
-								show : false,
-								min : 80,
-								max : 600,
-								inRange : {
-									colorLightness : [ 0, 1 ]
-								}
-							},
-							series : [ {
-								name : '占比图',
-								type : 'pie',
-								radius : '55%',
-								center : [ '50%', '50%' ],
-								data : this.operatorArray.sort(function(a, b) {
-									return a.value - b.value;
-								}),
-								roseType : 'radius',
-								label : {
-									normal : {
-										textStyle : {
-											color : 'rgba(255, 255, 255, 0.3)'
-										}
-									}
-								},
-								labelLine : {
-									normal : {
-										lineStyle : {
-											color : 'rgba(255, 255, 255, 0.3)'
-										},
-										smooth : 0.2,
-										length : 10,
-										length2 : 20
-									}
-								},
-								itemStyle : {
-									normal : {
-										color : '#c23531',
-										shadowBlur : 200,
-										shadowColor : 'rgba(0, 0, 0, 0.5)'
-									}
-								},
-
-								animationType : 'scale',
-								animationEasing : 'elasticOut',
-								animationDelay : function(idx) {
-									return Math.random() * 200;
-								}
-							} ]
-						}
-						myChart.setOption(option2);
-						
-						var myChart = echarts.init(document
-								.getElementById('barChart3'));
-						var option3 = {
-							backgroundColor : '#2c343c',
-
-							title : {
-								text : '活跃用户图',
-								left : 'center',
-								top : 20,
-								textStyle : {
-									color : '#ccc'
-								}
-							},
-
-							tooltip : {
-								trigger : 'item',
-								formatter : "{a} <br/>{b} : {c} ({d}%)"
-							},
-
-							visualMap : {
-								show : false,
-								min : 80,
-								max : 600,
-								inRange : {
-									colorLightness : [ 0, 1 ]
-								}
-							},
-							series : [ {
-								name : '占比图',
-								type : 'pie',
-								radius : '55%',
-								center : [ '50%', '50%' ],
-								data : this.userArray.sort(function(a, b) {
-									return a.value - b.value;
-								}),
-								roseType : 'radius',
-								label : {
-									normal : {
-										textStyle : {
-											color : 'rgba(255, 255, 255, 0.3)'
-										}
-									}
-								},
-								labelLine : {
-									normal : {
-										lineStyle : {
-											color : 'rgba(255, 255, 255, 0.3)'
-										},
-										smooth : 0.2,
-										length : 10,
-										length2 : 20
-									}
-								},
-								itemStyle : {
-									normal : {
-										color : '#c23531',
-										shadowBlur : 200,
-										shadowColor : 'rgba(0, 0, 0, 0.5)'
-									}
-								},
-
-								animationType : 'scale',
-								animationEasing : 'elasticOut',
-								animationDelay : function(idx) {
-									return Math.random() * 200;
-								}
-							} ]
-						}
-						myChart.setOption(option3);
 					}
+
 				});
 
 		//form_init();

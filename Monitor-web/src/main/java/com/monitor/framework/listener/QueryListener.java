@@ -5,6 +5,8 @@ import javax.servlet.ServletContextListener;
 
 import com.monitor.framework.query.pojo.QueryDefinition;
 
+
+
 public class QueryListener implements ServletContextListener {
 
     public void contextDestroyed(ServletContextEvent context) {
